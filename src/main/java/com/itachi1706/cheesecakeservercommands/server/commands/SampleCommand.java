@@ -6,6 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,15 +43,13 @@ public class SampleCommand implements ICommand {
     @Override
     public void processCommand(ICommandSender iCommandSender, String[] astring) {
 
-        EntityPlayer player;
-
         if(astring.length == 0)
         {
             iCommandSender.addChatMessage(new ChatComponentText("Invalid arguments"));
             return;
         }
 
-        iCommandSender.addChatMessage(new ChatComponentText("Sample: [" + astring[0] + "]"));
+        iCommandSender.addChatMessage(new ChatComponentText("Sample: " + EnumChatFormatting.AQUA + "[" + astring[0] + "]"));
 
     }
 

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeservercommands.server.commands;
+package com.itachi1706.cheesecakeservercommands.util;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
