@@ -7,7 +7,6 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.SampleCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -59,7 +58,7 @@ public class CheesecakeServerCommands {
         registerLoggers();
 
         //Register Commands
-        event.registerServerCommand(new SampleCommand());
+        //event.registerServerCommand(new SampleCommand());
         event.registerServerCommand(new CCLoggerCommand());
     }
 

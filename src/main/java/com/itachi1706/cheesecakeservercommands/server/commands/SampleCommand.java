@@ -3,8 +3,6 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -15,6 +13,7 @@ import java.util.List;
  * Created by Kenneth on 9/11/2015.
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
  */
+@SuppressWarnings("unused")
 public class SampleCommand implements ICommand {
 
     private List<String> aliases;
