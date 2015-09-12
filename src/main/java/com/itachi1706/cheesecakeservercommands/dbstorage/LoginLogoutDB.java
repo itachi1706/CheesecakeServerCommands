@@ -282,7 +282,7 @@ public class LoginLogoutDB {
             ResultSet rs = statement.executeQuery(querySQL);
             //p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "--------- Login History For " + target + " ---------");
             int i = 1;
-            ArrayList<String> loginHist = new ArrayList<>();
+            ArrayList<String> loginHist = new ArrayList<String>();
             while (rs.next()){
                 if (rs.getString("TYPE").equalsIgnoreCase("LOGIN")){
                     //A login message

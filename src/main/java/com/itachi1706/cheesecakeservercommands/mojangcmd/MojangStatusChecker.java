@@ -63,8 +63,13 @@ public enum MojangStatusChecker {
 
             return Status.get(status);
 
-        } catch (IOException | ParseException exception) {
+        } catch (IOException exception) {
+            if (!suppressErrors) {
+                exception.printStackTrace();
+            }
 
+            return Status.UNKNOWN;
+        } catch (ParseException exception) {
             if (!suppressErrors) {
                 exception.printStackTrace();
             }
@@ -102,15 +107,14 @@ public enum MojangStatusChecker {
         public static Status get(String status) {
             status = status.toLowerCase();
 
-            switch (status) {
-                case "green":
-                    return Status.ONLINE;
-                case "yellow":
-                    return Status.UNSTABLE;
-                case "red":
-                    return Status.OFFLINE;
-                default:
-                    return Status.UNKNOWN;
+            if (status.equals("green")) {
+                return Status.ONLINE;
+            } else if (status.equals("yellow")) {
+                return Status.UNSTABLE;
+            } else if (status.equals("red")) {
+                return Status.OFFLINE;
+            } else {
+                return Status.UNKNOWN;
             }
         }
     }
