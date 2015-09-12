@@ -68,6 +68,9 @@ public class LoginLogoutDB {
     }
 
     private static void addLog(EntityPlayerMP player, String type){
+        if (player == null) return;
+        if (player.playerNetServerHandler == null) return;
+        if (player.getPlayerIP() == null) return;
         String ip = player.getPlayerIP();
         String insertQuery = "INSERT INTO LOGINS (NAME,UUID,IP,X,Y,Z,WORLD,TYPE) " +
                 "VALUES('" + player.getDisplayName() + "','" + player.getUniqueID().toString() + "','" + ip + "','"
@@ -279,7 +282,7 @@ public class LoginLogoutDB {
             ResultSet rs = statement.executeQuery(querySQL);
             //p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "--------- Login History For " + target + " ---------");
             int i = 1;
-            ArrayList<String> loginHist = new ArrayList<String>();
+            ArrayList<String> loginHist = new ArrayList<>();
             while (rs.next()){
                 if (rs.getString("TYPE").equalsIgnoreCase("LOGIN")){
                     //A login message
