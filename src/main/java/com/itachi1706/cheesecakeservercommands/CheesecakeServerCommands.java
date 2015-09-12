@@ -7,6 +7,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -60,6 +61,7 @@ public class CheesecakeServerCommands {
         //Register Commands
         //event.registerServerCommand(new SampleCommand());
         event.registerServerCommand(new CCLoggerCommand());
+        event.registerServerCommand(new MojangServerCommand());
     }
 
     @Mod.EventHandler
@@ -68,7 +70,7 @@ public class CheesecakeServerCommands {
     }
 
     private void registerLoggers(){
-        lastKnownUsernames = new ArrayList<LastKnownUsernames>();
+        lastKnownUsernames = new ArrayList<>();
         if (LastKnownUsernameJsonHelper.fileExists())
             lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
 
