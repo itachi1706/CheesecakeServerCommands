@@ -42,6 +42,7 @@ public class CCLoggerCommand implements ICommand {
         this.aliases = new ArrayList<String>();
         this.aliases.add("cheesecakelogger");
         this.aliases.add("cclogger");
+        this.aliases.add("ccl");
     }
 
     @Override
@@ -117,6 +118,33 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("viewlogins")){
             //TODO: View Logins
+            if (astring.length < 2 || astring.length > 3){
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /viewlogins <player> <#>"));
+                return;
+            }
+
+            int value;
+            String playerName = astring[1];
+            if (astring.length == 2){
+                // Check login logs for first page
+                LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, 1);
+            } else {
+                // Check login logs for whatever page is passed
+                try {
+                    value = Integer.parseInt(astring[2]);
+                    if (value == 0){
+                        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage. Please specify a number above 0!"));
+                        return;
+                    }
+
+                    LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, value);
+                } catch (NumberFormatException e){
+                    iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage. Please specify a number!"));
+                    return;
+                }
+            }
+            return;
+
         }
 
         if (subCommand.equalsIgnoreCase("delloginhistory")){
@@ -172,7 +200,8 @@ public class CCLoggerCommand implements ICommand {
     public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
         if (typedValue.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen");
-        if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen") || typedValue[0].equalsIgnoreCase("viewplayerstats")))
+        if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen") ||
+                typedValue[0].equalsIgnoreCase("viewplayerstats") || typedValue[0].equalsIgnoreCase("viewlogins")))
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
         return null;
     }

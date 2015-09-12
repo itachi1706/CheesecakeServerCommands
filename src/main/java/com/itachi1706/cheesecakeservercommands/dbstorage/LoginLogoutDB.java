@@ -268,10 +268,12 @@ public class LoginLogoutDB {
         }
         Statement statement;
 
+        String querySQL = "SELECT NAME,UUID,TYPE,X,Y,Z,WORLD,TIME,IP FROM LOGINS WHERE (NAME='" + target + "' OR UUID='" + target + "') ORDER BY TIME DESC;";
+
         try {
             db.setAutoCommit(false);
             statement = db.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT NAME,UUID,TYPE,X,Y,Z,WORLD,TIME,IP FROM LOGINS WHERE NAME='" + target + "' OR UUID='" + target + "' ORDER BY TIME DESC;");
+            ResultSet rs = statement.executeQuery(querySQL);
             //p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "--------- Login History For " + target + " ---------");
             int i = 1;
             ArrayList<String> loginHist = new ArrayList<String>();
