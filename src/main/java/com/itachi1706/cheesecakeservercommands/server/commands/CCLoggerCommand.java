@@ -117,7 +117,6 @@ public class CCLoggerCommand implements ICommand {
         }
 
         if (subCommand.equalsIgnoreCase("viewlogins")){
-            //TODO: View Logins
             if (astring.length < 2 || astring.length > 3){
                 iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /viewlogins <player> <#>"));
                 return;
@@ -148,7 +147,13 @@ public class CCLoggerCommand implements ICommand {
         }
 
         if (subCommand.equalsIgnoreCase("delloginhistory")){
-            //TODO: Delete login history
+            if (astring.length != 2){
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /delloginhistory <player>"));
+                return;
+            }
+
+            LoginLogoutDB.deleteLogs(iCommandSender, astring[1]);
+            return;
         }
 
         if (subCommand.equalsIgnoreCase("viewplayerstats")){
@@ -192,7 +197,7 @@ public class CCLoggerCommand implements ICommand {
             return;
         }
 
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "TODO"));
+        sendHelp(iCommandSender);
 
     }
 
@@ -201,7 +206,8 @@ public class CCLoggerCommand implements ICommand {
         if (typedValue.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen");
         if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen") ||
-                typedValue[0].equalsIgnoreCase("viewplayerstats") || typedValue[0].equalsIgnoreCase("viewlogins")))
+                typedValue[0].equalsIgnoreCase("viewplayerstats") || typedValue[0].equalsIgnoreCase("viewlogins") ||
+                typedValue[0].equalsIgnoreCase("delloginhistory")))
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
         return null;
     }

@@ -70,7 +70,10 @@ public class LoginLogoutDB {
     private static void addLog(EntityPlayerMP player, String type){
         String ip = player.getPlayerIP();
         String insertQuery = "INSERT INTO LOGINS (NAME,UUID,IP,X,Y,Z,WORLD,TYPE) " +
-                "VALUES('" + player.getDisplayName() + "','" + player.getUniqueID().toString() + "','" + ip + "','" + player.posX + "','" + player.posY + "','" + player.posZ + "','" + player.worldObj.getWorldInfo().getWorldName() + "','" + type + "');";
+                "VALUES('" + player.getDisplayName() + "','" + player.getUniqueID().toString() + "','" + ip + "','"
+                + (Math.round(player.posX * 100.0) / 100.0) + "','" + (Math.round(player.posY * 100.0) / 100.0) + "','"
+                + (Math.round(player.posZ * 100.0) / 100.0) + "','" + player.worldObj.getWorldInfo().getWorldName() + "','"
+                + type + "');";
 
         Connection db = getSQLiteDBConnection();
         Statement stmt;
