@@ -67,6 +67,7 @@ public class SampleCommand implements ICommand {
         return false;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public int compareTo(Object o) {
         return 0;

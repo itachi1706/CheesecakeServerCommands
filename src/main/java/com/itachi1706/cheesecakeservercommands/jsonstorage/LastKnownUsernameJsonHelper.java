@@ -87,16 +87,6 @@ public class LastKnownUsernameJsonHelper {
         writeToFile();
     }
 
-    public static String getLastKnownPlayerNameFromUUID(UUID uuid){
-        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.lastKnownUsernames){
-            if (lastKnownUsernames.getUuid().equals(uuid)){
-                return lastKnownUsernames.getLastKnownUsername();
-            }
-        }
-
-        return null;
-    }
-
     public static UUID getLastKnownUUIDFromPlayerName(String playerName){
         for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.lastKnownUsernames){
             if (lastKnownUsernames.getLastKnownUsername().equals(playerName)){

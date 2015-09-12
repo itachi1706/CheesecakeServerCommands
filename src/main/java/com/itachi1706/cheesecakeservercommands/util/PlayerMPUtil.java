@@ -19,8 +19,6 @@ public class PlayerMPUtil {
     }
 
     public static boolean isOperator(EntityPlayer player){
-        EntityPlayerMP playerMP = (EntityPlayerMP) player;
-
         if (MinecraftServer.getServer().isSinglePlayer())
             return true;
 

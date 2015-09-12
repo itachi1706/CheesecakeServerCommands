@@ -16,29 +16,9 @@ public class LastKnownUsernames {
     private long lastSeen;
     private long firstJoined;
 
-    public LastKnownUsernames(){}
-
-    public LastKnownUsernames(UUID uuid, String lastKnownUsername) {
-        this.uuid = uuid;
-        this.lastKnownUsername = lastKnownUsername;
-    }
-
-    public LastKnownUsernames(UUID uuid, String lastKnownUsername, List<String> historyOfKnownUsernames) {
-        this.uuid = uuid;
-        this.lastKnownUsername = lastKnownUsername;
-        this.historyOfKnownUsernames = historyOfKnownUsernames;
-    }
-
     public LastKnownUsernames(UUID uuid, String lastKnownUsername, long firstJoined) {
         this.uuid = uuid;
         this.lastKnownUsername = lastKnownUsername;
-        this.firstJoined = firstJoined;
-    }
-
-    public LastKnownUsernames(UUID uuid, String lastKnownUsername, List<String> historyOfKnownUsernames, long firstJoined) {
-        this.uuid = uuid;
-        this.lastKnownUsername = lastKnownUsername;
-        this.historyOfKnownUsernames = historyOfKnownUsernames;
         this.firstJoined = firstJoined;
     }
 
@@ -60,10 +40,6 @@ public class LastKnownUsernames {
 
     public List<String> getHistoryOfKnownUsernames() {
         return historyOfKnownUsernames;
-    }
-
-    public void setHistoryOfKnownUsernames(List<String> historyOfKnownUsernames) {
-        this.historyOfKnownUsernames = historyOfKnownUsernames;
     }
 
     public void addHistoryOfKnownUsernames(String username){
