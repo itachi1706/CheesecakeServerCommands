@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeservercommands.enums;
+package com.itachi1706.cheesecakeservercommands.mojangcmd;
 
 import net.minecraft.util.EnumChatFormatting;
 
@@ -13,7 +13,7 @@ import java.net.URL;
 
 /**
  * Created by Kenneth on 9/12/2015.
- * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.enums
+ * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.mojangcmd
  */
 public enum MojangStatusChecker {
     ACCOUNTS("Accounts Service", "account.mojang.com"),
