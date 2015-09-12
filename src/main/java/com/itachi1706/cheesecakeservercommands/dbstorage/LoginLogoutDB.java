@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.dbstorage;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
+import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -94,10 +95,12 @@ public class LoginLogoutDB {
 
     public static void addLoginLog(EntityPlayer player){
         addLog((EntityPlayerMP) player, "LOGIN");
+        LogHelper.info("Logged Login for " + player.getUniqueID());
     }
 
     public static void addLogoutLog(EntityPlayer player){
         addLog((EntityPlayerMP) player, "LOGOUT");
+        LogHelper.info("Logged Logout for " + player.getUniqueID());
     }
 
     public static int getLoginCount(String name){
@@ -237,8 +240,7 @@ public class LoginLogoutDB {
         String nick = target;
 
         // Check if EntityPlayer is online
-        @SuppressWarnings("unchecked")
-        List<EntityPlayerMP> playerEntityList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+        List<EntityPlayerMP> playerEntityList = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP pl : playerEntityList){
             if (pl.getDisplayName().equals(target) || pl.getUniqueID().equals(uuid)){
                 status = EnumChatFormatting.GREEN + "Online";

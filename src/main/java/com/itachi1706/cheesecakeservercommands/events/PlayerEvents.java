@@ -25,6 +25,7 @@ public class PlayerEvents {
 
         LogHelper.info("Player " + player.getDisplayName() + " with UUID " + player.getUniqueID().toString() + " logged in");
         LastKnownUsernameJsonHelper.logUsernameToList(player);
+        LastKnownUsernameJsonHelper.logLastSeenToList(player);
         LoginLogoutDB.addLoginLog(player);
     }
 
@@ -36,6 +37,7 @@ public class PlayerEvents {
             return;
 
         LogHelper.info("Player " + player.getDisplayName() + " with UUID " + player.getUniqueID().toString() + " logged out");
+        LastKnownUsernameJsonHelper.logLastSeenToList(player);
         LoginLogoutDB.addLogoutLog(player);
     }
 }

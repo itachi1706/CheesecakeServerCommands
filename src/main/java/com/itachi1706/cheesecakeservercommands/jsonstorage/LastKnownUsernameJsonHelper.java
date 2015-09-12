@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -53,6 +54,21 @@ public class LastKnownUsernameJsonHelper {
         return file.exists();
     }
 
+    public static void logLastSeenToList(EntityPlayer player){
+        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName());
+        for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
+            if (i.getUuid().equals(player.getUniqueID())) {
+                CheesecakeServerCommands.lastKnownUsernames.remove(i);
+                playerLastSeen = i;
+                break;
+            }
+        }
+
+        playerLastSeen.updateLastSeen();
+        CheesecakeServerCommands.lastKnownUsernames.add(playerLastSeen);
+        writeToFile();
+    }
+
     public static void logUsernameToList(EntityPlayer player){
         LastKnownUsernames playerUsername = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName());
         for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
@@ -66,6 +82,36 @@ public class LastKnownUsernameJsonHelper {
         playerUsername.updateDisplayName(player.getDisplayName());
         CheesecakeServerCommands.lastKnownUsernames.add(playerUsername);
         writeToFile();
+    }
+
+    public static String getLastKnownPlayerNameFromUUID(UUID uuid){
+        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.lastKnownUsernames){
+            if (lastKnownUsernames.getUuid().equals(uuid)){
+                return lastKnownUsernames.getLastKnownUsername();
+            }
+        }
+
+        return null;
+    }
+
+    public static UUID getLastKnownUUIDFromPlayerName(String playerName){
+        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.lastKnownUsernames){
+            if (lastKnownUsernames.getLastKnownUsername().equals(playerName)){
+                return lastKnownUsernames.getUuid();
+            }
+        }
+
+        return null;
+    }
+
+    public static LastKnownUsernames getLastKnownUsernameFromList(UUID uuid){
+        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.lastKnownUsernames){
+            if (lastKnownUsernames.getUuid().equals(uuid)){
+                return lastKnownUsernames;
+            }
+        }
+
+        return null;
     }
 
 }
