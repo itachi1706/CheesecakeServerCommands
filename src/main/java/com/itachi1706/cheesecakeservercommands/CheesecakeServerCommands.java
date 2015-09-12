@@ -8,6 +8,7 @@ import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -62,6 +63,7 @@ public class CheesecakeServerCommands {
         //event.registerServerCommand(new SampleCommand());
         event.registerServerCommand(new CCLoggerCommand());
         event.registerServerCommand(new MojangServerCommand());
+        event.registerServerCommand(new ServerPropertiesCommand());
     }
 
     @Mod.EventHandler
