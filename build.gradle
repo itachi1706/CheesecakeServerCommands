@@ -19,6 +19,7 @@ apply plugin: 'forge'
 
 version = "1.7.10-1.0"
 group= "com.itachi1706.cheesecakeservercommands" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
 archivesBaseName = "CheesecakeServerCommands"
 
 minecraft {
@@ -46,7 +47,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compile "com.almworks.sqlite4java:sqlite4java:1.0.392"
+    compile "org.xerial:sqlite-jdbc:3.8.11.1"
 
 }
 

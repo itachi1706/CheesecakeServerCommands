@@ -1,12 +1,14 @@
 package com.itachi1706.cheesecakeservercommands.events;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
+import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 /**
  * Created by Kenneth on 9/12/2015.
@@ -23,6 +25,7 @@ public class PlayerEvents {
 
         LogHelper.info("Player " + player.getDisplayName() + " with UUID " + player.getUniqueID().toString() + " logged in");
         LastKnownUsernameJsonHelper.logUsernameToList(player);
+        LoginLogoutDB.addLoginLog(player);
     }
 
     @SubscribeEvent
@@ -33,5 +36,6 @@ public class PlayerEvents {
             return;
 
         LogHelper.info("Player " + player.getDisplayName() + " with UUID " + player.getUniqueID().toString() + " logged out");
+        LoginLogoutDB.addLogoutLog(player);
     }
 }

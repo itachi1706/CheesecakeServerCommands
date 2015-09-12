@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands;
 
+import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
@@ -71,6 +72,8 @@ public class CheesecakeServerCommands {
         lastKnownUsernames = new ArrayList<LastKnownUsernames>();
         if (LastKnownUsernameJsonHelper.fileExists())
             lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
+
+        LoginLogoutDB.checkTablesExists();
 
     }
 
