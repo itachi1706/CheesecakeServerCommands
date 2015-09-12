@@ -1,12 +1,14 @@
 package com.itachi1706.cheesecakeservercommands;
 
-import com.itachi1706.cheesecakeservercommands.jsonstorage.Logins;
-import com.itachi1706.cheesecakeservercommands.jsonstorage.LoginsJsonHelper;
+import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.SampleCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -25,7 +27,7 @@ import java.util.List;
 @Mod(modid = References.MOD_ID, name=References.MOD_NAME, version=References.VERSION, acceptableRemoteVersions = "*")
 public class CheesecakeServerCommands {
 
-    public static List<Logins> loginLogoutLogger;
+    public static List<LastKnownUsernames> lastKnownUsernames;
     public static File configFileDirectory;
 
     @Mod.Instance(References.MOD_ID)
@@ -37,12 +39,17 @@ public class CheesecakeServerCommands {
     @Mod.EventHandler
     public void FMLPreInitEvent(FMLPreInitializationEvent event){
         File file = new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "cheesecakeserver");
-        LogHelper.info(">>> File name: " + file.getAbsolutePath());
+        LogHelper.info(">>> Folder name: " + file.getAbsolutePath());
         if (!file.exists() && file.mkdir()){
             LogHelper.info("Created Cheesecake Server Internal Directory");
         }
 
         configFileDirectory = file;
+    }
+
+    @Mod.EventHandler
+    public void FMLInitEvent(FMLInitializationEvent event){
+        FMLCommonHandler.instance().bus().register(new PlayerEvents());
     }
 
     @Mod.EventHandler
@@ -57,13 +64,13 @@ public class CheesecakeServerCommands {
 
     @Mod.EventHandler
     public void serverStoppingEvent(FMLServerStoppingEvent event){
-        LoginsJsonHelper.writeToFile();
+        LastKnownUsernameJsonHelper.writeToFile();
     }
 
     private void registerLoggers(){
-        loginLogoutLogger = new ArrayList<Logins>();
-        if (LoginsJsonHelper.fileExists())
-            loginLogoutLogger = LoginsJsonHelper.readFromFile();
+        lastKnownUsernames = new ArrayList<LastKnownUsernames>();
+        if (LastKnownUsernameJsonHelper.fileExists())
+            lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
 
     }
 

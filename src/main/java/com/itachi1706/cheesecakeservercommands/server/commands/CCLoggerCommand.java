@@ -1,13 +1,18 @@
 package com.itachi1706.cheesecakeservercommands.server.commands;
 
+import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -22,6 +27,7 @@ public class CCLoggerCommand implements ICommand {
     /cheesecakelogger viewlogins <player> <#>
     /cheesecakelogger viewplayerstats <player> <#>
     /cheesecakelogger delloginhistory <player>
+    /cheesecakelogger lastknownusername <player/uuid>
     /cheesecakelogger help
      */
 
@@ -54,6 +60,9 @@ public class CCLoggerCommand implements ICommand {
                 + EnumChatFormatting.AQUA + " View Player Stats"));
         iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger delloginhistory <player>"
                 + EnumChatFormatting.AQUA + " Delete Player History"));
+        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger lastknownusername <player/UUID>"
+                + EnumChatFormatting.AQUA + " Get list of last " + EnumChatFormatting.AQUA +
+                "known names of a player"));
     }
 
     @Override
@@ -67,12 +76,46 @@ public class CCLoggerCommand implements ICommand {
 
         String subCommand = astring[0];
 
+        if (subCommand.equalsIgnoreCase("help")){
+            sendHelp(iCommandSender);
+            return;
+        }
+
+        if (subCommand.equalsIgnoreCase("lastknownusername")){
+            if (astring.length != 2){
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage: /cclogger lastknownusername <player/UUID>"));
+                return;
+            }
+
+            String query = astring[1];
+            boolean isUUID = true;
+            UUID uid = null;
+            try {
+                uid = UUID.fromString(query);
+            } catch (IllegalArgumentException e){
+                //Not UUID
+                isUUID = false;
+            }
+
+            if (isUUID){
+                getListOfKnownUsernames(uid, iCommandSender);
+            } else {
+                getListOfKnownUsernames(query, iCommandSender);
+            }
+
+            return;
+        }
+
         iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "TODO"));
 
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] astring) {
+    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+        if (typedValue.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername");
+        if (typedValue.length == 2 && typedValue[0].equalsIgnoreCase("lastknownusername"))
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
         return null;
     }
 
@@ -86,8 +129,43 @@ public class CCLoggerCommand implements ICommand {
         return false;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public int compareTo(Object o) {
         return 0;
+    }
+
+    private void getListOfKnownUsernames(UUID uid, ICommandSender sender){
+        for (LastKnownUsernames u : CheesecakeServerCommands.lastKnownUsernames){
+            if (u.getUuid().equals(uid)){
+                //Found, send list of usernames to sender
+                foundAndTellRequesterAboutKnownUsernames(u, sender);
+                return;
+            }
+        }
+
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Unable to find any player with UUID of " + uid.toString()));
+    }
+
+    private void getListOfKnownUsernames(String player, ICommandSender sender){
+        for (LastKnownUsernames u : CheesecakeServerCommands.lastKnownUsernames){
+            if (u.getLastKnownUsername().equalsIgnoreCase(player)){
+                foundAndTellRequesterAboutKnownUsernames(u, sender);
+                return;
+            }
+        }
+
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Unable to find any player named " + player));
+    }
+
+    private void foundAndTellRequesterAboutKnownUsernames(LastKnownUsernames u, ICommandSender sender){
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + " Usernames for " + EnumChatFormatting.WHITE + u.getUuid()));
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Size: " + EnumChatFormatting.AQUA + u.getHistoryOfKnownUsernames().size()));
+        for (String names : u.getHistoryOfKnownUsernames()){
+            sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + names));
+        }
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
     }
 }
