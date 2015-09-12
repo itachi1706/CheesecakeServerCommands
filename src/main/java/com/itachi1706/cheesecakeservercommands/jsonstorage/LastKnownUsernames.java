@@ -1,7 +1,5 @@
 package com.itachi1706.cheesecakeservercommands.jsonstorage;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +14,7 @@ public class LastKnownUsernames {
     private String lastKnownUsername;
     private List<String> historyOfKnownUsernames = new ArrayList<String>();
     private long lastSeen;
+    private long firstJoined;
 
     public LastKnownUsernames(){}
 
@@ -30,17 +29,17 @@ public class LastKnownUsernames {
         this.historyOfKnownUsernames = historyOfKnownUsernames;
     }
 
-    public LastKnownUsernames(UUID uuid, String lastKnownUsername, long lastSeen) {
+    public LastKnownUsernames(UUID uuid, String lastKnownUsername, long firstJoined) {
         this.uuid = uuid;
         this.lastKnownUsername = lastKnownUsername;
-        this.lastSeen = lastSeen;
+        this.firstJoined = firstJoined;
     }
 
-    public LastKnownUsernames(UUID uuid, String lastKnownUsername, List<String> historyOfKnownUsernames, long lastSeen) {
+    public LastKnownUsernames(UUID uuid, String lastKnownUsername, List<String> historyOfKnownUsernames, long firstJoined) {
         this.uuid = uuid;
         this.lastKnownUsername = lastKnownUsername;
         this.historyOfKnownUsernames = historyOfKnownUsernames;
-        this.lastSeen = lastSeen;
+        this.firstJoined = firstJoined;
     }
 
     public UUID getUuid() {
@@ -92,5 +91,13 @@ public class LastKnownUsernames {
 
     public void updateLastSeen() {
         setLastSeen(System.currentTimeMillis());
+    }
+
+    public long getFirstJoined() {
+        return firstJoined;
+    }
+
+    public void setFirstJoined(long firstJoined) {
+        this.firstJoined = firstJoined;
     }
 }

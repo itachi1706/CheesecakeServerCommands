@@ -6,7 +6,6 @@ import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -112,7 +111,7 @@ public class LoginLogoutDB {
     }
 
     private static int getCount(String name, String type){
-        String queryString = "SELECT COUNT(*) FROM LOGINS WHERE NAME='" + name + "' OR UUID='" + name + "' AND TYPE='" + type + "';";
+        String queryString = "SELECT COUNT(*) FROM LOGINS WHERE (NAME='" + name + "' OR UUID='" + name + "') AND TYPE='" + type + "';";
         Connection db = getSQLiteDBConnection();
         if (db == null){
             LogHelper.error("Unable to add log due to failed db connection");

@@ -1,10 +1,10 @@
 package com.itachi1706.cheesecakeservercommands.server.commands;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
+import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.storage.SaveHandler;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -32,7 +31,7 @@ public class CCLoggerCommand implements ICommand {
     /*
     Commands List
     /cheesecakelogger viewlogins <player> <#>
-    /cheesecakelogger viewplayerstats <player> <#>
+    /cheesecakelogger viewplayerstats <player>
     /cheesecakelogger delloginhistory <player>
     /cheesecakelogger lastknownusername <player/uuid>
     /cheesecakelogger lastseen <player>
@@ -64,7 +63,7 @@ public class CCLoggerCommand implements ICommand {
         iCommandSender.addChatMessage(new ChatComponentText("Commands List:"));
         iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger viewlogins <player> <#>"
                 + EnumChatFormatting.AQUA + " View Player Login Info"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger viewplayerstats <player> <#>"
+        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger viewplayerstats <player>"
                 + EnumChatFormatting.AQUA + " View Player Stats"));
         iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger delloginhistory <player>"
                 + EnumChatFormatting.AQUA + " Delete Player History"));
@@ -125,8 +124,26 @@ public class CCLoggerCommand implements ICommand {
         }
 
         if (subCommand.equalsIgnoreCase("viewplayerstats")){
-            //TODO: View Player Stats
+            if (astring.length != 2){
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /viewplayerstats <player>"));
+                return;
+            }
 
+            String playerName = astring[1];
+            UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
+            if (uuid == null){
+                notOnServerError(playerName, iCommandSender);
+                return;
+            }
+
+            LastKnownUsernames name = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
+            if (name == null){
+                notOnServerError(playerName, iCommandSender);
+                return;
+            }
+
+            LoginLogoutDB.checkLoginStats(iCommandSender, astring[1], uuid, convertTime(name.getFirstJoined()), convertTime(name.getLastSeen()));
+            return;
         }
 
         if (subCommand.equalsIgnoreCase("lastseen")){
@@ -139,10 +156,10 @@ public class CCLoggerCommand implements ICommand {
 
             UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
             if (uuid == null){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + playerName + " has never logged into the server"));
+                notOnServerError(playerName, iCommandSender);
                 return;
             }
-            getLastSeenFromUUID(uuid, iCommandSender);
+            getLastSeenFromUUID(uuid, iCommandSender, playerName);
 
             return;
         }
@@ -155,7 +172,7 @@ public class CCLoggerCommand implements ICommand {
     public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
         if (typedValue.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen");
-        if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen")))
+        if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen") || typedValue[0].equalsIgnoreCase("viewplayerstats")))
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
         return null;
     }
@@ -176,8 +193,16 @@ public class CCLoggerCommand implements ICommand {
         return 0;
     }
 
-    private void getLastSeenFromUUID(UUID uuid, ICommandSender sender){
+    private void notOnServerError(String playerName, ICommandSender sender){
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + playerName + " has never logged into the server"));
+    }
+
+    private void getLastSeenFromUUID(UUID uuid, ICommandSender sender, String playerName){
         LastKnownUsernames name = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
+        if (name == null){
+            notOnServerError(playerName, sender);
+            return;
+        }
 
         List<EntityPlayerMP> onlinePlayers = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP player : onlinePlayers){
@@ -186,7 +211,7 @@ public class CCLoggerCommand implements ICommand {
                 return;
             }
         }
-        assert name != null;
+
         sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + name.getLastKnownUsername() + EnumChatFormatting.WHITE + " is last seen on " + EnumChatFormatting.ITALIC + convertTime(name.getLastSeen())));
     }
 

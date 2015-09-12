@@ -55,7 +55,7 @@ public class LastKnownUsernameJsonHelper {
     }
 
     public static void logLastSeenToList(EntityPlayer player){
-        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName());
+        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName(), System.currentTimeMillis());
         for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
             if (i.getUuid().equals(player.getUniqueID())) {
                 CheesecakeServerCommands.lastKnownUsernames.remove(i);
@@ -64,13 +64,16 @@ public class LastKnownUsernameJsonHelper {
             }
         }
 
+        if (playerLastSeen.getFirstJoined() == 0){
+            playerLastSeen.setFirstJoined(System.currentTimeMillis());
+        }
         playerLastSeen.updateLastSeen();
         CheesecakeServerCommands.lastKnownUsernames.add(playerLastSeen);
         writeToFile();
     }
 
     public static void logUsernameToList(EntityPlayer player){
-        LastKnownUsernames playerUsername = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName());
+        LastKnownUsernames playerUsername = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName(), System.currentTimeMillis());
         for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
             if (i.getUuid().equals(player.getUniqueID())) {
                 CheesecakeServerCommands.lastKnownUsernames.remove(i);
