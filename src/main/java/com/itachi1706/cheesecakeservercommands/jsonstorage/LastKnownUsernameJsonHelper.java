@@ -54,7 +54,7 @@ public class LastKnownUsernameJsonHelper {
         return file.exists();
     }
 
-    public static void logLastSeenToList(EntityPlayer player){
+    public static void logLastSeenToList(EntityPlayer player, boolean state){
         LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName(), System.currentTimeMillis());
         for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
             if (i.getUuid().equals(player.getUniqueID())) {
@@ -67,6 +67,12 @@ public class LastKnownUsernameJsonHelper {
         if (playerLastSeen.getFirstJoined() == 0){
             playerLastSeen.setFirstJoined(System.currentTimeMillis());
         }
+
+        if (state)
+            playerLastSeen.setLoginState(true); //Login
+        else
+            playerLastSeen.setLoginState(false); // Logout
+
         playerLastSeen.updateLastSeen();
         CheesecakeServerCommands.lastKnownUsernames.add(playerLastSeen);
         writeToFile();

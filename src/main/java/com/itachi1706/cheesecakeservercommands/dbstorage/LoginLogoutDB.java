@@ -1,6 +1,8 @@
 package com.itachi1706.cheesecakeservercommands.dbstorage;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.ICommandSender;
@@ -243,15 +245,27 @@ public class LoginLogoutDB {
         }
         String status = EnumChatFormatting.RED + "Offline";
         String nick = target;
+        boolean isOnline = false;
 
         // Check if EntityPlayer is online
         List<EntityPlayerMP> playerEntityList = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP pl : playerEntityList){
             if (pl.getDisplayName().equals(target) || pl.getUniqueID().equals(uuid)){
                 status = EnumChatFormatting.GREEN + "Online";
+                isOnline = true;
                 nick = pl.getDisplayName();
+                break;
             }
         }
+
+        // Validate offline if crash or not
+        if (!isOnline){
+            LastKnownUsernames names = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
+            if (names != null) {
+                if (names.isLoginState()) status = EnumChatFormatting.DARK_RED + "SERVER CRASHED";
+            }
+        }
+
 
         //Present them all out
         p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "-------------------- Login Statistics -------------------"));

@@ -15,6 +15,7 @@ public class LastKnownUsernames {
     private List<String> historyOfKnownUsernames = new ArrayList<String>();
     private long lastSeen;
     private long firstJoined;
+    private boolean loginState;
 
     public LastKnownUsernames(UUID uuid, String lastKnownUsername, long firstJoined) {
         this.uuid = uuid;
@@ -75,5 +76,13 @@ public class LastKnownUsernames {
 
     public void setFirstJoined(long firstJoined) {
         this.firstJoined = firstJoined;
+    }
+
+    public boolean isLoginState() {
+        return loginState;
+    }
+
+    public void setLoginState(boolean loginState) {
+        this.loginState = loginState;
     }
 }
