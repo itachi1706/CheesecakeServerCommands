@@ -15,7 +15,6 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void playerLoginEvent(PlayerEvent.PlayerLoggedInEvent event){
-        LogHelper.info(">>> Player Logged In Event Triggered");
         EntityPlayer player = event.player;
         if (player == null)
             return;
@@ -28,7 +27,6 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void playerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event){
-        LogHelper.info(">>> Player Logged Out Event Triggered");
         EntityPlayer player = event.player;
         if (player == null)
             return;

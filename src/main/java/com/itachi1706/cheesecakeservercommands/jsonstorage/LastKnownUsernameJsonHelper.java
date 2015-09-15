@@ -27,7 +27,6 @@ public class LastKnownUsernameJsonHelper {
             FileWriter writer = new FileWriter(CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + File.separator + "usernames.json");
             writer.write(jsonString);
             writer.close();
-            LogHelper.info("Wrote usernames to file");
         } catch (IOException e) {
             LogHelper.error("Cannot write usernames file");
             e.printStackTrace();
