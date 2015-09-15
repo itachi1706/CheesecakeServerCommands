@@ -36,6 +36,7 @@ public class CCLoggerCommand implements ICommand {
     /cheesecakelogger lastknownusername <player/uuid>
     /cheesecakelogger lastseen <player>
     /cheesecakelogger help
+    /cheesecakelogger stats
      */
 
     public CCLoggerCommand(){
@@ -62,6 +63,8 @@ public class CCLoggerCommand implements ICommand {
 
     private void sendHelp(ICommandSender iCommandSender){
         iCommandSender.addChatMessage(new ChatComponentText("Commands List:"));
+        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger stats"
+                + EnumChatFormatting.AQUA + " Gets General Statistics Logged."));
         iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger viewlogins <player> <#>"
                 + EnumChatFormatting.AQUA + " View Player Login Info"));
         iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger viewplayerstats <player>"
@@ -118,7 +121,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("viewlogins")){
             if (astring.length < 2 || astring.length > 3){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /viewlogins <player> <#>"));
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewlogins <player> <#>"));
                 return;
             }
 
@@ -148,7 +151,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("delloginhistory")){
             if (astring.length != 2){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /delloginhistory <player>"));
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger delloginhistory <player>"));
                 return;
             }
 
@@ -158,7 +161,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("viewplayerstats")){
             if (astring.length != 2){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /viewplayerstats <player>"));
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewplayerstats <player>"));
                 return;
             }
 
@@ -181,7 +184,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("lastseen")){
             if (astring.length != 2){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /lastseen <player>"));
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger lastseen <player>"));
                 return;
             }
 
@@ -197,6 +200,20 @@ public class CCLoggerCommand implements ICommand {
             return;
         }
 
+        if (subCommand.equalsIgnoreCase("stats")){
+            if (astring.length != 1){
+                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger stats"));
+                return;
+            }
+
+            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
+            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "                           General Stats"));
+            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
+            iCommandSender.addChatMessage(new ChatComponentText("Total Players Logged: " + EnumChatFormatting.AQUA + CheesecakeServerCommands.lastKnownUsernames.size()));
+            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
+            return;
+        }
+
         sendHelp(iCommandSender);
 
     }
@@ -204,7 +221,7 @@ public class CCLoggerCommand implements ICommand {
     @Override
     public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen");
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen", "stats");
         if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen") ||
                 typedValue[0].equalsIgnoreCase("viewplayerstats") || typedValue[0].equalsIgnoreCase("viewlogins") ||
                 typedValue[0].equalsIgnoreCase("delloginhistory")))
