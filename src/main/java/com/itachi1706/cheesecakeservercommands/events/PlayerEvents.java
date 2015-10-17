@@ -28,7 +28,6 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void playerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event){
-        LogHelper.info(">>> Player Logged out Event");
         EntityPlayer player = event.player;
         if (player == null)
             return;
