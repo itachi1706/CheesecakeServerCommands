@@ -245,6 +245,8 @@ public class LoginLogoutDB {
         }
         String status = EnumChatFormatting.RED + "Offline";
         String nick = target;
+        String opStatus = EnumChatFormatting.RED + "Not Opped";
+        String gamemode = EnumChatFormatting.GRAY + "Unknown";
         boolean isOnline = false;
 
         // Check if EntityPlayer is online
@@ -254,6 +256,16 @@ public class LoginLogoutDB {
                 status = EnumChatFormatting.GREEN + "Online";
                 isOnline = true;
                 nick = pl.getDisplayName();
+                switch (pl.theItemInWorldManager.getGameType()){
+                    case CREATIVE: gamemode = EnumChatFormatting.GREEN + "CREATIVE"; break;
+                    case SURVIVAL: gamemode = EnumChatFormatting.GREEN + "SURVIVAL"; break;
+                    case ADVENTURE: gamemode = EnumChatFormatting.GREEN + "ADVENTURE"; break;
+                    case NOT_SET: gamemode = EnumChatFormatting.GRAY + "UNSET"; break;
+                }
+
+                if (PlayerMPUtil.isOperator(pl)){
+                    opStatus = EnumChatFormatting.GREEN + "Opped";
+                }
                 break;
             }
         }
@@ -270,11 +282,11 @@ public class LoginLogoutDB {
         //Present them all out
         p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "-------------------- Login Statistics -------------------"));
         p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Status: " + EnumChatFormatting.RESET + status));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Name: " + EnumChatFormatting.RESET + target));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Nickname: " + EnumChatFormatting.RESET + nick));
+        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Name: " + EnumChatFormatting.RESET + nick));
+        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "OP Status: " + EnumChatFormatting.RESET + opStatus));
         p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + uuid));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Total Logins: " + EnumChatFormatting.RESET + logins));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Total Logouts: " + EnumChatFormatting.RESET + logouts));
+        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Current Gamemode: " + EnumChatFormatting.RESET + gamemode));
+        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Login/Logout Counts: " + EnumChatFormatting.RESET + logins + "/" + logouts));
         p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "First Joined: " + EnumChatFormatting.RESET + firstPlayed));
         p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Last Played: " + EnumChatFormatting.RESET + lastPlayed));
         p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "-----------------------------------------------------"));
