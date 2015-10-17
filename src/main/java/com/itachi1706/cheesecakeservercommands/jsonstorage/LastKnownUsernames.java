@@ -16,6 +16,7 @@ public class LastKnownUsernames {
     private long lastSeen;
     private long firstJoined;
     private boolean loginState;
+    private String lastKnownGamemode = "";
 
     public LastKnownUsernames(UUID uuid, String lastKnownUsername, long firstJoined) {
         this.uuid = uuid;
@@ -84,5 +85,17 @@ public class LastKnownUsernames {
 
     public void setLoginState(boolean loginState) {
         this.loginState = loginState;
+    }
+
+    public String getLastKnownGamemode() {
+        return lastKnownGamemode;
+    }
+
+    public void setLastKnownGamemode(String lastKnownGamemode) {
+        this.lastKnownGamemode = lastKnownGamemode;
+    }
+
+    public boolean hasLastKnownGamemode(){
+        return this.lastKnownGamemode != null;
     }
 }

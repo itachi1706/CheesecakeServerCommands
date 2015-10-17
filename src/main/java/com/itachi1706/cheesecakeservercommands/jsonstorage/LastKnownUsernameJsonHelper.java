@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -51,6 +52,22 @@ public class LastKnownUsernameJsonHelper {
     public static boolean fileExists() {
         File file = new File(CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + File.separator + "usernames.json");
         return file.exists();
+    }
+
+    public static void logGamemodeToLit(EntityPlayerMP player){
+        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName(), System.currentTimeMillis());
+        for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
+            if (i.getUuid().equals(player.getUniqueID())) {
+                CheesecakeServerCommands.lastKnownUsernames.remove(i);
+                playerLastSeen = i;
+                break;
+            }
+        }
+
+        playerLastSeen.setLastKnownGamemode(player.theItemInWorldManager.getGameType().getName());
+
+        CheesecakeServerCommands.lastKnownUsernames.add(playerLastSeen);
+        writeToFile();
     }
 
     public static void logLastSeenToList(EntityPlayer player, boolean state){

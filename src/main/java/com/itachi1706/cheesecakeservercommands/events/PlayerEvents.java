@@ -7,6 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 /**
  * Created by Kenneth on 9/12/2015.
@@ -35,6 +36,9 @@ public class PlayerEvents {
         LogHelper.info("Player " + player.getDisplayName() + " with UUID " + player.getUniqueID().toString() + " logged out");
         LastKnownUsernameJsonHelper.logLastSeenToList(player, false);
         LoginLogoutDB.addLogoutLog(player);
+        if (player instanceof EntityPlayerMP){
+            LastKnownUsernameJsonHelper.logGamemodeToLit((EntityPlayerMP)player);
+        }
     }
 
     /**

@@ -275,6 +275,16 @@ public class LoginLogoutDB {
             LastKnownUsernames names = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
             if (names != null) {
                 if (names.isLoginState()) status = EnumChatFormatting.DARK_RED + "SERVER CRASHED";
+                String s = names.hasLastKnownGamemode() ? names.getLastKnownGamemode() : "";
+                if (s.equals("creative")) {
+                    gamemode = EnumChatFormatting.RED + "CREATIVE";
+                } else if (s.equals("survival")) {
+                    gamemode = EnumChatFormatting.RED + "SURVIVAL";
+                } else if (s.equals("adventure")) {
+                    gamemode = EnumChatFormatting.RED + "ADVENTURE";
+                } else {
+                    gamemode = EnumChatFormatting.GRAY + "UNSET (REQUIRES PLAYER LOGIN TO SET)";
+                }
             }
         }
 
