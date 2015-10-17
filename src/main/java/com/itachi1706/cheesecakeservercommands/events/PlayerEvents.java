@@ -5,6 +5,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJson
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -27,6 +28,7 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void playerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event){
+        LogHelper.info(">>> Player Logged out Event");
         EntityPlayer player = event.player;
         if (player == null)
             return;
@@ -34,5 +36,16 @@ public class PlayerEvents {
         LogHelper.info("Player " + player.getDisplayName() + " with UUID " + player.getUniqueID().toString() + " logged out");
         LastKnownUsernameJsonHelper.logLastSeenToList(player, false);
         LoginLogoutDB.addLogoutLog(player);
+    }
+
+    /**
+     * Somehow only gets called if client times out, disconnect or stuff (Ignore)
+     * When want to use, call @SubscribeEvent
+     * @param event The Server Disconnection Event
+     */
+    public void serverDisconnectFromClientEvent(FMLNetworkEvent.ServerDisconnectionFromClientEvent event){
+        LogHelper.info(">>> Server Disconnection From Client Event Called");
+        LogHelper.info(">>> " + event.manager.getExitMessage());
+        //MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText("Client DC"));
     }
 }
