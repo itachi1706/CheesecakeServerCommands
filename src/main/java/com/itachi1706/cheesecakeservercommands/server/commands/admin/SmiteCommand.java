@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MovingObjectPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class SmiteCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "smite [player/x] [y] [z]";
+        return "smite [player/me/x] [y] [z]";
     }
 
     @Override
@@ -46,7 +47,7 @@ public class SmiteCommand implements ICommand {
     public void processCommand(ICommandSender iCommandSender, String[] astring) {
         if (astring.length == 0)
         {
-            // Smite yourself
+            // Smite where you are staring at
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot smite CONSOLE");
                 return;
@@ -57,14 +58,39 @@ public class SmiteCommand implements ICommand {
                     return;
                 }
 
-                player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "FEEL THE WRATH OF ZEUS");
-                ChatHelper.sendAdminMessage(iCommandSender, "Struck own self with lightning");
+                MovingObjectPosition pos = PlayerMPUtil.getPlayerLookingSpot(player);
+                if (pos == null) {
+                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Please make sure you are looking at a ground!");
+                    return;
+                }
+                player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, pos.blockX, pos.blockY, pos.blockZ));
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Struck the ground with lightning");
+                ChatHelper.sendAdminMessage(iCommandSender, "Struck " + pos.blockX + ", " + pos.blockY + ", " + pos.blockZ + " with lightning");
                 return;
             }
         } else if (astring.length == 1) {
-            // Smite another player
+            // Smite another player (or yourself)
             String subname = astring[0];
+
+            if (subname.equalsIgnoreCase("me")) {
+                // Smite yourself
+                if (!PlayerMPUtil.isPlayer(iCommandSender)) {
+                    ChatHelper.sendMessage(iCommandSender, "Cannot smite CONSOLE");
+                    return;
+                } else {
+                    EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
+                    if (player == null) {
+                        ChatHelper.sendMessage(iCommandSender, "Cannot smite" + iCommandSender.getCommandSenderName());
+                        return;
+                    }
+
+                    player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
+                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "FEEL THE WRATH OF ZEUS");
+                    ChatHelper.sendAdminMessage(iCommandSender, "Struck own self with lightning");
+                    return;
+                }
+            }
+
             EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
             if (player == null) {
                 ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
@@ -97,7 +123,7 @@ public class SmiteCommand implements ICommand {
         }
         player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, x, y, z));
         ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Smited " + x + ", " + y + ", " + z);
-        ChatHelper.sendAdminMessage(iCommandSender, "Struck " + player.getCommandSenderName() + " with lightning");
+        ChatHelper.sendAdminMessage(iCommandSender, "Struck " + x + ", " + y + ", " + z + " with lightning");
     }
 
     @Override
