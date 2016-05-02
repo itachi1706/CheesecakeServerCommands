@@ -118,6 +118,8 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " Kills yourself or another player");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/invsee [player]"
                     + EnumChatFormatting.WHITE + " Views player inventory");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/burn [player] [duration]"
+                    + EnumChatFormatting.WHITE + " Burns a player");
         } else {
             ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Invalid Module. View modules with /csc list");
         }

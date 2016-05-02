@@ -42,18 +42,4 @@ public class CommandsEventHandler {
     {
         super();
     }
-
-    /*@SubscribeEvent
-    public void tickStart(TickEvent.PlayerTickEvent event)
-    {
-        if (map.containsKey(event.player))
-        {
-            for (PlayerInvChest inv : map.get(event.player))
-            {
-                inv.update();
-            }
-        }
-        if (event.phase == TickEvent.Phase.END)
-            CommandNoClip.checkClip(event.player);
-    }*/
 }
