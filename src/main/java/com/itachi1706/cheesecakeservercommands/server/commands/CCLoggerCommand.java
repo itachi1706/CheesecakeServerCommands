@@ -224,8 +224,16 @@ public class CCLoggerCommand implements ICommand {
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen", "stats");
         if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen") ||
                 typedValue[0].equalsIgnoreCase("viewplayerstats") || typedValue[0].equalsIgnoreCase("viewlogins") ||
-                typedValue[0].equalsIgnoreCase("delloginhistory")))
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+                typedValue[0].equalsIgnoreCase("delloginhistory"))) {
+            String[] names = new String[CheesecakeServerCommands.lastKnownUsernames.size()];
+            int i = 0;
+            for (LastKnownUsernames name : CheesecakeServerCommands.lastKnownUsernames) {
+                names[i] = name.getLastKnownUsername();
+                i++;
+            }
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, names);
+        }
+
         return null;
     }
 
