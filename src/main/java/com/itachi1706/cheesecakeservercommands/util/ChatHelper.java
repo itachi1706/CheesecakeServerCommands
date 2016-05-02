@@ -54,6 +54,7 @@ public class ChatHelper {
         texts = "[" + sender.getCommandSenderName() + ": " + texts + "]";
         ChatComponentText newtext = new ChatComponentText(EnumChatFormatting.GRAY + "" + EnumChatFormatting.ITALIC + texts);
         List<EntityPlayerMP> players = PlayerMPUtil.getOnlinePlayers();
+        LogHelper.info(texts);
         for (EntityPlayerMP playerMP : players) {
             if (PlayerMPUtil.isOperator(playerMP) && !playerMP.getCommandSenderName().equals(sender.getCommandSenderName())) {
                 playerMP.addChatMessage(newtext);
