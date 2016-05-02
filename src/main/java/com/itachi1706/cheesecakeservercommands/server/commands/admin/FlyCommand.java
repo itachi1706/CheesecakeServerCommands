@@ -18,23 +18,23 @@ import java.util.List;
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
  */
 @SuppressWarnings("unused")
-public class GMSCommand implements ICommand {
+public class FlyCommand implements ICommand {
 
     private List<String> aliases;
 
-    public GMSCommand(){
+    public FlyCommand(){
         this.aliases = new ArrayList<String>();
-        this.aliases.add("gms");
+        this.aliases.add("fly");
     }
 
     @Override
     public String getCommandName() {
-        return "gms";
+        return "fly";
     }
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "gms [player]";
+        return "fly [player]";
     }
 
     @Override
@@ -48,17 +48,20 @@ public class GMSCommand implements ICommand {
         if(astring.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
-                ChatHelper.sendMessage(iCommandSender, "Cannot set CONSOLE as Survival Mode");
+                ChatHelper.sendMessage(iCommandSender, "Cannot set flight status of CONSOLE");
                 return;
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getCommandSenderName() + " as Survival Mode");
+                    ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getCommandSenderName() + "'s flight status");
                 }
                 assert player != null;
-                player.setGameType(WorldSettings.GameType.SURVIVAL);
-                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + EnumChatFormatting.GOLD + "Survival");
-                ChatHelper.sendAdminMessage(iCommandSender, "Set own gamemode to Survival Mode");
+                player.capabilities.allowFlying = !player.capabilities.allowFlying;
+                if (!player.onGround)
+                    player.capabilities.isFlying = player.capabilities.allowFlying;
+                player.sendPlayerAbilities();
+                ChatHelper.sendMessage(iCommandSender, "Flight Mode " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
+                ChatHelper.sendAdminMessage(iCommandSender, "Set own flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
                 return;
             }
         }
@@ -70,9 +73,13 @@ public class GMSCommand implements ICommand {
             return;
         }
 
-        player.setGameType(WorldSettings.GameType.SURVIVAL);
-        ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to " + EnumChatFormatting.GOLD + "Survival");
-        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to Survival Mode");
+        player.capabilities.allowFlying = !player.capabilities.allowFlying;
+        if (!player.onGround)
+            player.capabilities.isFlying = player.capabilities.allowFlying;
+        player.sendPlayerAbilities();
+        ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " flight mode to " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
+        ChatHelper.sendMessage(player, "Flight Mode has been set to " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
+        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJson
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import ibxm.Player;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -91,6 +92,15 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("help")){
             sendHelp(iCommandSender);
+            return;
+        }
+
+        if (subCommand.equalsIgnoreCase("test")){
+            EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
+            player.capabilities.allowFlying = !player.capabilities.allowFlying;
+            if (!player.onGround)
+                player.capabilities.isFlying = player.capabilities.allowFlying;
+            player.sendPlayerAbilities();
             return;
         }
 

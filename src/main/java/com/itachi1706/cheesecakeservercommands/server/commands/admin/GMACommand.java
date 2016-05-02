@@ -72,7 +72,6 @@ public class GMACommand implements ICommand {
 
         player.setGameType(WorldSettings.GameType.ADVENTURE);
         ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to " + EnumChatFormatting.GOLD + "Adventure Mode");
-        ChatHelper.sendMessage(player, "Set gamemode to " + EnumChatFormatting.GOLD + "Adventure Mode");
         ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to Adventure Mode");
     }
 

@@ -72,7 +72,6 @@ public class GMCCommand implements ICommand {
 
         player.setGameType(WorldSettings.GameType.CREATIVE);
         ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to " + EnumChatFormatting.GOLD + "Creative Mode");
-        ChatHelper.sendMessage(player, "Set gamemode to " + EnumChatFormatting.GOLD + "Creative Mode");
         ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to Creative Mode");
     }
 
