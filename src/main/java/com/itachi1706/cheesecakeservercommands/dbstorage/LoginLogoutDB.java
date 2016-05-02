@@ -247,6 +247,7 @@ public class LoginLogoutDB {
         String nick = target;
         String opStatus = EnumChatFormatting.RED + "Not Opped";
         String gamemode = EnumChatFormatting.GRAY + "Unknown";
+        String currentlocation = EnumChatFormatting.RED + "Offline";
         boolean isOnline = false;
 
         // Check if EntityPlayer is online
@@ -266,6 +267,8 @@ public class LoginLogoutDB {
                 if (PlayerMPUtil.isOperator(pl)){
                     opStatus = EnumChatFormatting.GREEN + "Opped";
                 }
+
+                currentlocation = pl.getPlayerCoordinates().posX + ", " + pl.getPlayerCoordinates().posY + ", " + pl.getPlayerCoordinates().posZ;
                 break;
             }
         }
@@ -299,6 +302,7 @@ public class LoginLogoutDB {
         ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Login/Logout Counts: " + EnumChatFormatting.RESET + logins + "/" + logouts);
         ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "First Joined: " + EnumChatFormatting.RESET + firstPlayed);
         ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Last Played: " + EnumChatFormatting.RESET + lastPlayed);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Current Location: " + EnumChatFormatting.RESET + currentlocation);
         ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "-----------------------------------------------------");
     }
 
