@@ -40,4 +40,14 @@ public class PlayerMPUtil {
     public static List<EntityPlayerMP> getOnlinePlayers(){
         return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
     }
+
+    public static EntityPlayerMP getPlayer(String username) {
+        List<EntityPlayerMP> players = getOnlinePlayers();
+        for (EntityPlayerMP playerMP : players) {
+            if (playerMP.getCommandSenderName().equals(username)) {
+                return playerMP;
+            }
+        }
+        return null;
+    }
 }

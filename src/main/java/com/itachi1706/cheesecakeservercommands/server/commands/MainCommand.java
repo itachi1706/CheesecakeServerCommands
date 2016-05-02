@@ -53,7 +53,6 @@ public class MainCommand implements ICommand {
         String subCommand = astring[0];
         if (subCommand.equalsIgnoreCase("list")) {
             listModules(iCommandSender);
-            return;
         } else if (subCommand.equalsIgnoreCase("modulehelp")) {
             if (astring.length < 2)
                 ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Please select a module. View modules with /csc list");
@@ -97,6 +96,18 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " View Mojang Server Status");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/mojang premium"
                     + EnumChatFormatting.WHITE + " Check if name is purchased");
+        } else if (modules.equals("admin")) {
+            if (!isOp) {
+                ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "You do not have permission to view help for this module!");
+                return;
+            }
+            ChatHelper.sendMessage(sender, EnumChatFormatting.AQUA + "Admin Module Commands");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/gmc [player]"
+                    + EnumChatFormatting.WHITE + " Set Gamemode to Creative");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/gms [player]"
+                    + EnumChatFormatting.WHITE + " Set Gamemode to Survival");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/gma [player]"
+                    + EnumChatFormatting.WHITE + " Set Gamemode to Adventure");
         } else {
             ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Invalid Module. View modules with /csc list");
         }
@@ -108,6 +119,7 @@ public class MainCommand implements ICommand {
         if (isOp) {
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "serverproperties");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "cheesecakelogger");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "admin");
         }
         ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "mojang");
     }
@@ -119,7 +131,7 @@ public class MainCommand implements ICommand {
         if (typedValue.length == 2 && typedValue[0].equalsIgnoreCase("modulehelp")) {
             boolean isOp = PlayerMPUtil.isOperatorOrConsole(iCommandSender);
             if (isOp) {
-                return CommandBase.getListOfStringsMatchingLastWord(typedValue, "mojang", "serverproperties", "cheesecakelogger");
+                return CommandBase.getListOfStringsMatchingLastWord(typedValue, "mojang", "serverproperties", "cheesecakelogger", "admin");
             }
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "serverproperties");
         }

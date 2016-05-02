@@ -10,6 +10,9 @@ import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.MainCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.GMACommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.GMCCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.GMSCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -66,6 +69,11 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new MojangServerCommand());
         event.registerServerCommand(new ServerPropertiesCommand());
         event.registerServerCommand(new MainCommand());
+
+        // Admin Commands
+        event.registerServerCommand(new GMCCommand());
+        event.registerServerCommand(new GMSCommand());
+        event.registerServerCommand(new GMACommand());
     }
 
     @Mod.EventHandler
