@@ -112,6 +112,8 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " Set Fly/Walk speed of player");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/heal [player]"
                     + EnumChatFormatting.WHITE + " Heals a player");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/smite [player/x] [y] [z]"
+                    + EnumChatFormatting.WHITE + " Smites a player or location");
         } else {
             ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Invalid Module. View modules with /csc list");
         }

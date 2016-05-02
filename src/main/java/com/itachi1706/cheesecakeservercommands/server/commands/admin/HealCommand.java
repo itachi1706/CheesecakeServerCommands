@@ -80,7 +80,7 @@ public class HealCommand implements ICommand {
         player.getFoodStats().addStats(20, 1.0F);
         ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Healed " + player.getCommandSenderName());
         ChatHelper.sendAdminMessage(iCommandSender, "Restored " + player.getCommandSenderName() + "'s Health");
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "You were healed");
+        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were healed");
     }
 
     @Override
