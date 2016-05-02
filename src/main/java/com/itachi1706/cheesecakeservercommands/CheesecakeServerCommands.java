@@ -76,6 +76,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new SpeedCommand());
         event.registerServerCommand(new HealCommand());
         event.registerServerCommand(new SmiteCommand());
+        event.registerServerCommand(new KillCommand());
     }
 
     @Mod.EventHandler
