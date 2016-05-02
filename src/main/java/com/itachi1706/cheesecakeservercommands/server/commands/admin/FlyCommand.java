@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.WorldUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -59,6 +60,8 @@ public class FlyCommand implements ICommand {
                 player.capabilities.allowFlying = !player.capabilities.allowFlying;
                 if (!player.onGround)
                     player.capabilities.isFlying = player.capabilities.allowFlying;
+                if (!player.capabilities.allowFlying)
+                    WorldUtil.placeInWorld(player);
                 player.sendPlayerAbilities();
                 ChatHelper.sendMessage(iCommandSender, "Flight Mode " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
@@ -76,6 +79,8 @@ public class FlyCommand implements ICommand {
         player.capabilities.allowFlying = !player.capabilities.allowFlying;
         if (!player.onGround)
             player.capabilities.isFlying = player.capabilities.allowFlying;
+        if (!player.capabilities.allowFlying)
+            WorldUtil.placeInWorld(player);
         player.sendPlayerAbilities();
         ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " flight mode to " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
         ChatHelper.sendMessage(player, "Flight Mode has been set to " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
