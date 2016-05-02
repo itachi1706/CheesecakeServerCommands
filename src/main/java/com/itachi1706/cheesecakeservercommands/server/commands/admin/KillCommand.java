@@ -7,6 +7,7 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
@@ -23,17 +24,17 @@ public class KillCommand implements ICommand {
 
     public KillCommand(){
         this.aliases = new ArrayList<String>();
-        this.aliases.add("heal");
+        this.aliases.add("kill");
     }
 
     @Override
     public String getCommandName() {
-        return "heal";
+        return "kill";
     }
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "heal [player]";
+        return "kill [player]";
     }
 
     @Override
@@ -46,21 +47,18 @@ public class KillCommand implements ICommand {
         if (astring.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
-                ChatHelper.sendMessage(iCommandSender, "Cannot heal CONSOLE");
+                ChatHelper.sendMessage(iCommandSender, "Cannot kill CONSOLE");
                 return;
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot heal" + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot kill" + iCommandSender.getCommandSenderName());
                     return;
                 }
 
-                float toHeal = player.getMaxHealth() - player.getHealth();
-                player.heal(toHeal);
-                player.extinguish();
-                player.getFoodStats().addStats(20, 1.0F);
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "You were healed");
-                ChatHelper.sendAdminMessage(iCommandSender, "Restored Own Health");
+                player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "You were slain");
+                ChatHelper.sendAdminMessage(iCommandSender, "Took their own life");
                 return;
             }
         }
@@ -72,13 +70,10 @@ public class KillCommand implements ICommand {
             return;
         }
 
-        float toHeal = player.getMaxHealth() - player.getHealth();
-        player.heal(toHeal);
-        player.extinguish();
-        player.getFoodStats().addStats(20, 1.0F);
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Healed " + player.getCommandSenderName());
-        ChatHelper.sendAdminMessage(iCommandSender, "Restored " + player.getCommandSenderName() + "'s Health");
-        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were healed");
+        player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Killed " + player.getCommandSenderName());
+        ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getCommandSenderName());
+        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were slain");
     }
 
     @Override

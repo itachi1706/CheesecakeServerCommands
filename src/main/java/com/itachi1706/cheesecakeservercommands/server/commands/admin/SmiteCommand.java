@@ -113,13 +113,64 @@ public class SmiteCommand implements ICommand {
             ChatHelper.sendMessage(iCommandSender, "CONSOLE can't smite a location. Sorry :(");
             return;
         }
-        int x = Integer.valueOf(astring[0]);
-        int y = Integer.valueOf(astring[1]);
-        int z = Integer.valueOf(astring[2]);
+        int x = 0, y = 0, z = 0;
+
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
             ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.DARK_RED + "FATAL: Unable to get player object");
             return;
+        }
+
+        try {
+            x = Integer.parseInt(astring[0]);
+        } catch (NumberFormatException e) {
+            if (astring[0].startsWith("~")) {
+                x = (int) player.posX;
+                if (astring[0].length() > 1) {
+                    int addval;
+                    try {
+                        addval = Integer.parseInt(astring[0].substring(1));
+                        x += addval;
+                    } catch (NumberFormatException ignored) {}
+                }
+            } else {
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
+                return;
+            }
+        }
+        try {
+            y = Integer.parseInt(astring[1]);
+        } catch (NumberFormatException e) {
+            if (astring[1].startsWith("~")) {
+                y = (int) player.posY;
+                if (astring[1].length() > 1) {
+                    int addval;
+                    try {
+                        addval = Integer.parseInt(astring[1].substring(1));
+                        y += addval;
+                    } catch (NumberFormatException ignored) {}
+                }
+            } else {
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
+                return;
+            }
+        }
+        try {
+            z = Integer.parseInt(astring[2]);
+        } catch (NumberFormatException e) {
+            if (astring[2].startsWith("~")) {
+                z = (int) player.posZ;
+                if (astring[2].length() > 1) {
+                    int addval = 0;
+                    try {
+                        addval = Integer.parseInt(astring[2].substring(1));
+                        z += addval;
+                    } catch (NumberFormatException ignored) {}
+                }
+            } else {
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
+                return;
+            }
         }
         player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, x, y, z));
         ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Smited " + x + ", " + y + ", " + z);
