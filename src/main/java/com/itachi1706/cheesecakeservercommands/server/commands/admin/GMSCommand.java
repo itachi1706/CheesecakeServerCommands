@@ -54,8 +54,8 @@ public class GMSCommand implements ICommand {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
                     ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getCommandSenderName() + " as Survival Mode");
+                    return;
                 }
-                assert player != null;
                 player.setGameType(WorldSettings.GameType.SURVIVAL);
                 ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + EnumChatFormatting.GOLD + "Survival");
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own gamemode to Survival Mode");

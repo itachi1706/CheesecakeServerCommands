@@ -55,8 +55,8 @@ public class FlyCommand implements ICommand {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
                     ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getCommandSenderName() + "'s flight status");
+                    return;
                 }
-                assert player != null;
                 player.capabilities.allowFlying = !player.capabilities.allowFlying;
                 if (!player.onGround)
                     player.capabilities.isFlying = player.capabilities.allowFlying;
