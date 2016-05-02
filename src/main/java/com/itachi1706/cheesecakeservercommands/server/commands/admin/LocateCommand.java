@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
+import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.CommandBase;
@@ -17,23 +18,25 @@ import java.util.List;
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
  */
 @SuppressWarnings("unused")
-public class BurnCommand implements ICommand {
+public class LocateCommand implements ICommand {
 
     private List<String> aliases;
 
-    public BurnCommand(){
+    public LocateCommand(){
         this.aliases = new ArrayList<String>();
-        this.aliases.add("burn");
+        this.aliases.add("locate");
+        this.aliases.add("loc");
+        this.aliases.add("gps");
     }
 
     @Override
     public String getCommandName() {
-        return "burn";
+        return "locate";
     }
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "burn [player] [duration]";
+        return "locate [player]";
     }
 
     @Override
@@ -46,18 +49,20 @@ public class BurnCommand implements ICommand {
         if (astring.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
-                ChatHelper.sendMessage(iCommandSender, "Cannot burn CONSOLE");
+                ChatHelper.sendMessage(iCommandSender, "Cannot locate CONSOLE");
                 return;
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot burn" + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot locate" + iCommandSender.getCommandSenderName());
                     return;
                 }
 
-                player.setFire(15);
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "You were burned");
-                ChatHelper.sendAdminMessage(iCommandSender, "Set own self on fire");
+                float toHeal = player.getMaxHealth() - player.getHealth();
+                WorldPoint point = new WorldPoint(player);
+                ChatHelper.sendMessage(iCommandSender, String.format(EnumChatFormatting.GOLD + "You are at %d, %d, %d in dimension %d with a gamemode of %s",
+                        point.getX(), point.getY(), point.getZ(), point.getDimension(), player.theItemInWorldManager.getGameType().getName()));
+                ChatHelper.sendAdminMessage(iCommandSender, "Located Own location");
                 return;
             }
         }
@@ -69,25 +74,10 @@ public class BurnCommand implements ICommand {
             return;
         }
 
-        if (astring.length == 1) {
-            player.setFire(15);
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Burned " + player.getCommandSenderName());
-            ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " on fire");
-            ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were burned");
-            return;
-        }
-
-        // Burn for specified duration
-        int duration;
-        try {
-            duration = Integer.parseInt(astring[1]);
-        } catch (NumberFormatException e) {
-            duration = 15;
-        }
-        player.setFire(duration);
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Burned " + player.getCommandSenderName() + " for " + duration + " seconds");
-        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " on fire for " + duration + " seconds");
-        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were burned");
+        WorldPoint point = new WorldPoint(player);
+        ChatHelper.sendMessage(iCommandSender, String.format(EnumChatFormatting.GOLD + "%s is at %d, %d, %d in dimension %d with a gamemode of %s",
+                player.getCommandSenderName(), point.getX(), point.getY(), point.getZ(), point.getDimension(), player.theItemInWorldManager.getGameType().getName()));
+        ChatHelper.sendAdminMessage(iCommandSender, "Located " + player.getCommandSenderName() + "'s location");
     }
 
     @Override

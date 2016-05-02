@@ -120,6 +120,8 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " Views player inventory");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/burn [player] [duration]"
                     + EnumChatFormatting.WHITE + " Burns a player");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/locate [player]"
+                    + EnumChatFormatting.WHITE + " Locates a player's location");
         } else {
             ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Invalid Module. View modules with /csc list");
         }
