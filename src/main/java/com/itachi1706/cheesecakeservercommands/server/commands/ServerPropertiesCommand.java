@@ -1,10 +1,10 @@
 package com.itachi1706.cheesecakeservercommands.server.commands;
 
+import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
@@ -78,26 +78,26 @@ public class ServerPropertiesCommand implements ICommand {
 
     private void getServerStats(ICommandSender sender){
         MinecraftServer tmp = MinecraftServer.getServer();
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "=================================================="));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.BLUE + "                    Server Status"));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "=================================================="));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server: " + EnumChatFormatting.AQUA + tmp.getServerModName()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Version: " + EnumChatFormatting.AQUA + tmp.getMinecraftVersion()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Online Mode: " + EnumChatFormatting.AQUA + tmp.isServerInOnlineMode()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Owner: " + EnumChatFormatting.AQUA + tmp.getServerOwner()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server MOTD: " + EnumChatFormatting.AQUA + tmp.getMotd()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server IP: " + EnumChatFormatting.AQUA + tmp.getServerHostname() + ":" + tmp.getServerPort()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Max Allowed Players: " + EnumChatFormatting.AQUA + tmp.getMaxPlayers()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Spawn Protection Size: " + EnumChatFormatting.AQUA + tmp.getSpawnProtectionSize()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server View Distance: " + EnumChatFormatting.AQUA + tmp.getConfigurationManager().getViewDistance()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server World: " + EnumChatFormatting.AQUA + tmp.getEntityWorld().getWorldInfo().getWorldName()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Allow Nether: " + EnumChatFormatting.AQUA + tmp.getAllowNether()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Allow Flight: " + EnumChatFormatting.AQUA + tmp.isFlightAllowed()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Default Gamemode: " + EnumChatFormatting.AQUA + tmp.getGameType().getName()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Generate Structure: " + EnumChatFormatting.AQUA + tmp.canStructuresSpawn()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Server Whitelist: " + EnumChatFormatting.AQUA + tmp.getConfigurationManager().isWhiteListEnabled()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Hardcore Mode: " + EnumChatFormatting.AQUA + tmp.isHardcore()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "=================================================="));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, EnumChatFormatting.BLUE + "                    Server Status");
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server: " + EnumChatFormatting.AQUA + tmp.getServerModName());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Version: " + EnumChatFormatting.AQUA + tmp.getMinecraftVersion());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Online Mode: " + EnumChatFormatting.AQUA + tmp.isServerInOnlineMode());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Owner: " + EnumChatFormatting.AQUA + tmp.getServerOwner());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server MOTD: " + EnumChatFormatting.AQUA + tmp.getMotd());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server IP: " + EnumChatFormatting.AQUA + tmp.getServerHostname() + ":" + tmp.getServerPort());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Max Allowed Players: " + EnumChatFormatting.AQUA + tmp.getMaxPlayers());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Spawn Protection Size: " + EnumChatFormatting.AQUA + tmp.getSpawnProtectionSize());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server View Distance: " + EnumChatFormatting.AQUA + tmp.getConfigurationManager().getViewDistance());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server World: " + EnumChatFormatting.AQUA + tmp.getEntityWorld().getWorldInfo().getWorldName());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Allow Nether: " + EnumChatFormatting.AQUA + tmp.getAllowNether());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Allow Flight: " + EnumChatFormatting.AQUA + tmp.isFlightAllowed());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Default Gamemode: " + EnumChatFormatting.AQUA + tmp.getGameType().getName());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Generate Structure: " + EnumChatFormatting.AQUA + tmp.canStructuresSpawn());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Server Whitelist: " + EnumChatFormatting.AQUA + tmp.getConfigurationManager().isWhiteListEnabled());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "Hardcore Mode: " + EnumChatFormatting.AQUA + tmp.isHardcore());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
     }
 
 }

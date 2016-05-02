@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.server.commands;
 
+import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -44,11 +45,11 @@ public class SampleCommand implements ICommand {
 
         if(astring.length == 0)
         {
-            iCommandSender.addChatMessage(new ChatComponentText("Invalid arguments"));
+            ChatHelper.sendMessage(iCommandSender, "Invalid arguements");
             return;
         }
 
-        iCommandSender.addChatMessage(new ChatComponentText("Sample: " + EnumChatFormatting.AQUA + "[" + astring[0] + "]"));
+        ChatHelper.sendMessage(iCommandSender, "Sample: " + EnumChatFormatting.AQUA + "[" + astring[0] + "]");
 
     }
 

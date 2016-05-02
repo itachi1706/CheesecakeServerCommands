@@ -82,7 +82,7 @@ public enum MojangStatusChecker {
         ONLINE("Online", EnumChatFormatting.GREEN.toString(), "No problems detected! :)"),
         UNSTABLE("Unstable", EnumChatFormatting.YELLOW.toString(), "Intermittent Connection :("),
         OFFLINE("Offline", EnumChatFormatting.DARK_RED.toString(), "Currently Offline! D:"),
-        UNKNOWN("Unknown", EnumChatFormatting.WHITE.toString(), "Unable to connect to Mojang!");
+        UNKNOWN("Unknown", EnumChatFormatting.WHITE.toString(), "Unable to connect to Mojang Server!");
 
         private String status, color, description;
 

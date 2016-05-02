@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 
 import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangPremiumPlayer;
 import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangStatusChecker;
+import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -47,11 +48,11 @@ public class MojangServerCommand implements ICommand {
     }
 
     private void sendHelp(ICommandSender iCommandSender){
-        iCommandSender.addChatMessage(new ChatComponentText("Commands List:"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/mojang status"
-                + EnumChatFormatting.AQUA + " View Mojang Server Status"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/mojang premium"
-                + EnumChatFormatting.AQUA + " Check if name is purchased"));
+        ChatHelper.sendMessage(iCommandSender, "Commands List:");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/mojang status"
+                + EnumChatFormatting.AQUA + " View Mojang Server Status");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/mojang premium"
+                + EnumChatFormatting.AQUA + " Check if name is purchased");
     }
 
     @Override
@@ -115,26 +116,26 @@ public class MojangServerCommand implements ICommand {
     }
 
     private void printMojangStatus(ICommandSender sender){
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "=================================================="));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.BLUE + "                Mojang Server Status"));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "=================================================="));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, EnumChatFormatting.BLUE + "              Mojang Server Checker Status");
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
         for (MojangStatusChecker statusChecker : MojangStatusChecker.values()) {
             String service = statusChecker.getName();
             MojangStatusChecker.Status status = statusChecker.getStatus(true);
 
-            sender.addChatMessage(new ChatComponentText(service + ": " + status.getColor() + status.getStatus() + " - " + status.getDescription()));
+            ChatHelper.sendMessage(sender, service + ": " + status.getColor() + status.getStatus() + " - " + status.getDescription());
         }
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "=================================================="));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
     }
 
     public void getPremium(ICommandSender sender, String name){
         int returnCode = MojangPremiumPlayer.isPremium(name);
         if (returnCode == 1){
-            sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + name + EnumChatFormatting.DARK_PURPLE + " is a " + EnumChatFormatting.GREEN + "premium" + EnumChatFormatting.DARK_PURPLE + " status player!"));
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + name + EnumChatFormatting.DARK_PURPLE + " is a " + EnumChatFormatting.GREEN + "premium" + EnumChatFormatting.DARK_PURPLE + " status player!");
         } else if (returnCode == 0){
-            sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + name + EnumChatFormatting.DARK_PURPLE + " is a " + EnumChatFormatting.RED + "non-premium" + EnumChatFormatting.DARK_PURPLE + " status player!"));
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + name + EnumChatFormatting.DARK_PURPLE + " is a " + EnumChatFormatting.RED + "non-premium" + EnumChatFormatting.DARK_PURPLE + " status player!");
         } else if (returnCode == 2){
-            sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "An error had occured. Check the console for details!"));
+            ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "An error had occured. Check the console for details!");
         }
     }
 

@@ -3,12 +3,12 @@ package com.itachi1706.cheesecakeservercommands.dbstorage;
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.io.File;
@@ -173,9 +173,9 @@ public class LoginLogoutDB {
             db.commit();
             statement.close();
             db.close();
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + target + " logs for login/logout deleted!"));
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GREEN + target + " logs for login/logout deleted!");
         } catch (Exception e) {
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")"));
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")");
             LogHelper.error("Error occurred deleting logs (" + e.toString() + ")");
             e.printStackTrace();
         }
@@ -205,42 +205,42 @@ public class LoginLogoutDB {
         int maxPossibleValue = stringList.size();	//Max possible based on stringList
         int maxPossiblePage = (stringList.size() / 10) + 1;
         if (maxPossiblePage < arg){
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Max amount of pages is " + maxPossiblePage + ". Please specify a value within that range!"));
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Max amount of pages is " + maxPossiblePage + ". Please specify a value within that range!");
             return;
         }
         //1 (0-9), 2 (10,19)...
         int minValue = (arg - 1) * 10;
         int maxValue = (arg * 10) - 1;
         if (maxValue > maxPossibleValue) {	//Exceeds
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "------ Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ------"));
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "------ Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ------");
             for (int i = minValue; i < stringList.size(); i++){
-                iCommandSender.addChatMessage(new ChatComponentText(stringList.get(i)));
+                ChatHelper.sendMessage(iCommandSender, stringList.get(i));
             }
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "-----------------------------------------------------"));
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "-----------------------------------------------------");
             return;
         }
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "------ Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ------"));
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "------ Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ------");
         for (int i = minValue; i <= maxValue; i++){
-            iCommandSender.addChatMessage(new ChatComponentText(stringList.get(i)));
+            ChatHelper.sendMessage(iCommandSender, stringList.get(i));
         }
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "-----------------------------------------------------"));
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "-----------------------------------------------------");
     }
 
     public static void checkLoginStats(ICommandSender p, String target, UUID uuid, String firstPlayed, String lastPlayed){
         int logins = getLoginCount(target);
         if (logins == -2){
-            p.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "An Error Occured trying to convert login count!"));
+            ChatHelper.sendMessage(p, EnumChatFormatting.RED + "An Error Occured trying to convert login count!");
             return;
         } else if (logins == -1){
-            p.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "An Error Occured trying to get login stats!"));
+            ChatHelper.sendMessage(p, EnumChatFormatting.RED + "An Error Occured trying to get login stats!");
             return;
         }
         int logouts = getLogoutCount(target);
         if (logouts == -2){
-            p.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "An Error Occured trying to convert logout count!"));
+            ChatHelper.sendMessage(p, EnumChatFormatting.RED + "An Error Occured trying to convert logout count!");
             return;
         } else if (logouts == -1){
-            p.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "An Error Occured trying to get logout stats!"));
+            ChatHelper.sendMessage(p, EnumChatFormatting.RED + "An Error Occured trying to get logout stats!");
             return;
         }
         String status = EnumChatFormatting.RED + "Offline";
@@ -290,16 +290,16 @@ public class LoginLogoutDB {
 
 
         //Present them all out
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "-------------------- Login Statistics -------------------"));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Status: " + EnumChatFormatting.RESET + status));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Name: " + EnumChatFormatting.RESET + nick));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "OP Status: " + EnumChatFormatting.RESET + opStatus));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + uuid));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Current Gamemode: " + EnumChatFormatting.RESET + gamemode));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Login/Logout Counts: " + EnumChatFormatting.RESET + logins + "/" + logouts));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "First Joined: " + EnumChatFormatting.RESET + firstPlayed));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Last Played: " + EnumChatFormatting.RESET + lastPlayed));
-        p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "-----------------------------------------------------"));
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "-------------------- Login Statistics -------------------");
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Status: " + EnumChatFormatting.RESET + status);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Name: " + EnumChatFormatting.RESET + nick);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "OP Status: " + EnumChatFormatting.RESET + opStatus);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + uuid);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Current Gamemode: " + EnumChatFormatting.RESET + gamemode);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Login/Logout Counts: " + EnumChatFormatting.RESET + logins + "/" + logouts);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "First Joined: " + EnumChatFormatting.RESET + firstPlayed);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "Last Played: " + EnumChatFormatting.RESET + lastPlayed);
+        ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "-----------------------------------------------------");
     }
 
     private static ArrayList<String> getFullEntityPlayerLogs(String target){
@@ -316,7 +316,7 @@ public class LoginLogoutDB {
             db.setAutoCommit(false);
             statement = db.createStatement();
             ResultSet rs = statement.executeQuery(querySQL);
-            //p.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "--------- Login History For " + target + " ---------");
+            //ChatHelper.sendMessage(p, EnumChatFormatting.GOLD + "--------- Login History For " + target + " ---------");
             int i = 1;
             ArrayList<String> loginHist = new ArrayList<String>();
             while (rs.next()){
@@ -344,7 +344,7 @@ public class LoginLogoutDB {
         ArrayList<String> loginHist = getFullEntityPlayerLogs(target);
         if (loginHist == null){
             //Exception
-            p.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "An Error Occured trying to get logs!"));
+            ChatHelper.sendMessage(p, EnumChatFormatting.RED + "An Error Occured trying to get logs!");
         } else {
             parseMessages(loginHist, p, no, target);
         }

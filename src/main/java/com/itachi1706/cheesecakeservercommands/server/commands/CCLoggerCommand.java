@@ -4,13 +4,13 @@ import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.text.Format;
@@ -62,20 +62,20 @@ public class CCLoggerCommand implements ICommand {
     }
 
     private void sendHelp(ICommandSender iCommandSender){
-        iCommandSender.addChatMessage(new ChatComponentText("Commands List:"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger stats"
-                + EnumChatFormatting.AQUA + " Gets General Statistics Logged."));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger viewlogins <player> <#>"
-                + EnumChatFormatting.AQUA + " View Player Login Info"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger viewplayerstats <player>"
-                + EnumChatFormatting.AQUA + " View Player Stats"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger delloginhistory <player>"
-                + EnumChatFormatting.AQUA + " Delete Player History"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger lastseen <player>"
-                + EnumChatFormatting.AQUA + " Gets Last Seen of Player"));
-        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "/cclogger lastknownusername <player/UUID>"
+        ChatHelper.sendMessage(iCommandSender, "Commands List:");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/cclogger stats"
+                + EnumChatFormatting.AQUA + " Gets General Statistics Logged.");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/cclogger viewlogins <player> <#>"
+                + EnumChatFormatting.AQUA + " View Player Login Info");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/cclogger viewplayerstats <player>"
+                + EnumChatFormatting.AQUA + " View Player Stats");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/cclogger delloginhistory <player>"
+                + EnumChatFormatting.AQUA + " Delete Player History");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/cclogger lastseen <player>"
+                + EnumChatFormatting.AQUA + " Gets Last Seen of Player");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/cclogger lastknownusername <player/UUID>"
                 + EnumChatFormatting.AQUA + " Get list of last " + EnumChatFormatting.AQUA +
-                "known names of a player"));
+                "known names of a player");
     }
 
     @Override
@@ -96,7 +96,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("lastknownusername")){
             if (astring.length != 2){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage: /cclogger lastknownusername <player/UUID>"));
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage: /cclogger lastknownusername <player/UUID>");
                 return;
             }
 
@@ -121,7 +121,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("viewlogins")){
             if (astring.length < 2 || astring.length > 3){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewlogins <player> <#>"));
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewlogins <player> <#>");
                 return;
             }
 
@@ -135,13 +135,13 @@ public class CCLoggerCommand implements ICommand {
                 try {
                     value = Integer.parseInt(astring[2]);
                     if (value == 0){
-                        iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage. Please specify a number above 0!"));
+                        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage. Please specify a number above 0!");
                         return;
                     }
 
                     LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, value);
                 } catch (NumberFormatException e){
-                    iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage. Please specify a number!"));
+                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage. Please specify a number!");
                     return;
                 }
             }
@@ -151,7 +151,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("delloginhistory")){
             if (astring.length != 2){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger delloginhistory <player>"));
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger delloginhistory <player>");
                 return;
             }
 
@@ -161,7 +161,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("viewplayerstats")){
             if (astring.length != 2){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewplayerstats <player>"));
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewplayerstats <player>");
                 return;
             }
 
@@ -184,7 +184,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("lastseen")){
             if (astring.length != 2){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger lastseen <player>"));
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger lastseen <player>");
                 return;
             }
 
@@ -202,15 +202,15 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("stats")){
             if (astring.length != 1){
-                iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger stats"));
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage! Usage: /cclogger stats");
                 return;
             }
 
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "                           General Stats"));
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
-            iCommandSender.addChatMessage(new ChatComponentText("Total Players Logged: " + EnumChatFormatting.AQUA + CheesecakeServerCommands.lastKnownUsernames.size()));
-            iCommandSender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "=====================================================");
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "                           General Stats");
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "=====================================================");
+            ChatHelper.sendMessage(iCommandSender, "Total Players Logged: " + EnumChatFormatting.AQUA + CheesecakeServerCommands.lastKnownUsernames.size());
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "=====================================================");
             return;
         }
 
@@ -246,7 +246,7 @@ public class CCLoggerCommand implements ICommand {
     }
 
     private void notOnServerError(String playerName, ICommandSender sender){
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + playerName + " has never logged into the server"));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.RED + playerName + " has never logged into the server");
     }
 
     private void getLastSeenFromUUID(UUID uuid, ICommandSender sender, String playerName){
@@ -259,12 +259,12 @@ public class CCLoggerCommand implements ICommand {
         List<EntityPlayerMP> onlinePlayers = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP player : onlinePlayers){
             if (player.getUniqueID().equals(uuid)){
-                sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + player.getDisplayName() + EnumChatFormatting.WHITE + " is currently " + EnumChatFormatting.GREEN + "Online"));
+                ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + player.getDisplayName() + EnumChatFormatting.WHITE + " is currently " + EnumChatFormatting.GREEN + "Online");
                 return;
             }
         }
 
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + name.getLastKnownUsername() + EnumChatFormatting.WHITE + " is last seen on " + EnumChatFormatting.ITALIC + convertTime(name.getLastSeen())));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + name.getLastKnownUsername() + EnumChatFormatting.WHITE + " is last seen on " + EnumChatFormatting.ITALIC + convertTime(name.getLastSeen()));
     }
 
     private void getListOfKnownUsernames(UUID uid, ICommandSender sender){
@@ -276,7 +276,7 @@ public class CCLoggerCommand implements ICommand {
             }
         }
 
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Unable to find any player with UUID of " + uid.toString()));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Unable to find any player with UUID of " + uid.toString());
     }
 
     private void getListOfKnownUsernames(String player, ICommandSender sender){
@@ -287,18 +287,18 @@ public class CCLoggerCommand implements ICommand {
             }
         }
 
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Unable to find any player named " + player));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Unable to find any player named " + player);
     }
 
     private void foundAndTellRequesterAboutKnownUsernames(LastKnownUsernames u, ICommandSender sender){
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + " Usernames for " + EnumChatFormatting.WHITE + u.getUuid()));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Size: " + EnumChatFormatting.AQUA + u.getHistoryOfKnownUsernames().size()));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "=====================================================");
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + " Usernames for " + EnumChatFormatting.WHITE + u.getUuid());
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "=====================================================");
+        ChatHelper.sendMessage(sender, EnumChatFormatting.WHITE + "Size: " + EnumChatFormatting.AQUA + u.getHistoryOfKnownUsernames().size());
         for (String names : u.getHistoryOfKnownUsernames()){
-            sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + names));
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + names);
         }
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "====================================================="));
+        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "=====================================================");
     }
 
     private String convertTime(long time){
