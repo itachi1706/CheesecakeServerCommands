@@ -7,6 +7,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.MainCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
@@ -64,6 +65,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new CCLoggerCommand());
         event.registerServerCommand(new MojangServerCommand());
         event.registerServerCommand(new ServerPropertiesCommand());
+        event.registerServerCommand(new MainCommand());
     }
 
     @Mod.EventHandler
