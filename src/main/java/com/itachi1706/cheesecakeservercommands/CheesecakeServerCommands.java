@@ -79,6 +79,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new KillCommand());
         event.registerServerCommand(new InvSeeCommand());
         event.registerServerCommand(new BurnCommand());
+        event.registerServerCommand(new SudoCommand());
     }
 
     @Mod.EventHandler
