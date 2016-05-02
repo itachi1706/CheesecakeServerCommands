@@ -32,7 +32,7 @@ public class SpeedCommand implements ICommand {
 
     public SpeedCommand(){
         this.aliases = new ArrayList<String>();
-        this.aliases.add("fly");
+        this.aliases.add("speed");
     }
 
     @Override

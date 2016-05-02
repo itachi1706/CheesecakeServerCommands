@@ -110,6 +110,8 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " Set Gamemode to Adventure");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/speed <fly/walk/all> <speed/reset> [player]"
                     + EnumChatFormatting.WHITE + " Set Fly/Walk speed of player");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/heal [player]"
+                    + EnumChatFormatting.WHITE + " Heals a player");
         } else {
             ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Invalid Module. View modules with /csc list");
         }

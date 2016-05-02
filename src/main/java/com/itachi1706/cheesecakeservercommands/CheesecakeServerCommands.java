@@ -74,6 +74,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new GMACommand());
         event.registerServerCommand(new FlyCommand());
         event.registerServerCommand(new SpeedCommand());
+        event.registerServerCommand(new HealCommand());
     }
 
     @Mod.EventHandler
