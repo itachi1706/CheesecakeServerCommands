@@ -9,6 +9,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S2APacketParticles;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
@@ -65,6 +66,7 @@ public class FlingCommand implements ICommand {
                 //player.worldObj.spawnParticle("hugeexplosion", player.posX + 0.5D, player.posY + 1.0D, player.posZ + 0.5D, 1.0D, 0.0D, 0.0D);
                 player.motionY = 10;
                 player.velocityChanged = true;
+                player.addPotionEffect(new PotionEffect(Potion.resistance.id, 300, 100, true));
                 WorldServer worldServer = (WorldServer) player.worldObj;
                 worldServer.func_147487_a("hugeexplosion", player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0);
                 Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0);
@@ -84,6 +86,7 @@ public class FlingCommand implements ICommand {
 
         player.motionY = 10;
         player.velocityChanged = true;
+        player.addPotionEffect(new PotionEffect(Potion.resistance.id, 300, 100, true));
         WorldServer worldServer = (WorldServer) player.worldObj;
         worldServer.func_147487_a("hugeexplosion", player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0);
         Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0);
