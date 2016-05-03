@@ -85,7 +85,7 @@ public class SmiteCommand implements ICommand {
                     }
 
                     player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
-                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "FEEL THE WRATH OF ZEUS");
+                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Struck yourself with lightning");
                     ChatHelper.sendAdminMessage(iCommandSender, "Struck own self with lightning");
                     return;
                 }
@@ -100,7 +100,7 @@ public class SmiteCommand implements ICommand {
             player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
             ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Smited " + player.getCommandSenderName());
             ChatHelper.sendAdminMessage(iCommandSender, "Struck " + player.getCommandSenderName() + " with lightning");
-            ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "FEEL THE WRATH OF ZEUS");
+            ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were struck by lightning");
             return;
         } else if (astring.length == 2) {
             // Invalid coords
