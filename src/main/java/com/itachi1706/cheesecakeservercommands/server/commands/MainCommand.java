@@ -122,6 +122,8 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " Kills yourself or another player");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/wow [player]"
                     + EnumChatFormatting.WHITE + " Trolls yourself or another player");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/fling [player]"
+                    + EnumChatFormatting.WHITE + " Flings yourself or another player into the air");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/invsee [player]"
                     + EnumChatFormatting.WHITE + " Views player inventory");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/burn [player] [duration]"

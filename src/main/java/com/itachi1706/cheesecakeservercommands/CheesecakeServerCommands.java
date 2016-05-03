@@ -85,6 +85,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new GamemodeCommand());
         event.registerServerCommand(new ZeusCommand());
         event.registerServerCommand(new WowCommand());
+        event.registerServerCommand(new FlingCommand());
     }
 
     @Mod.EventHandler
