@@ -12,6 +12,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerComma
 import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
+import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -55,6 +56,7 @@ public class CheesecakeServerCommands {
     @Mod.EventHandler
     public void FMLInitEvent(FMLInitializationEvent event){
         FMLCommonHandler.instance().bus().register(new PlayerEvents());
+        FMLCommonHandler.instance().bus().register(new TeleportHelper());
     }
 
     @Mod.EventHandler
@@ -86,6 +88,8 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new ZeusCommand());
         event.registerServerCommand(new WowCommand());
         event.registerServerCommand(new FlingCommand());
+        event.registerServerCommand(new TpToCommand());
+        event.registerServerCommand(new TpHereCommand());
     }
 
     @Mod.EventHandler
