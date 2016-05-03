@@ -81,6 +81,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new BurnCommand());
         event.registerServerCommand(new LocateCommand());
         event.registerServerCommand(new SudoCommand());
+        event.registerServerCommand(new GamemodeCommand());
     }
 
     @Mod.EventHandler
