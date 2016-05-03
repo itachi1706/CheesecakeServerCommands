@@ -90,6 +90,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new FlingCommand());
         event.registerServerCommand(new TpToCommand());
         event.registerServerCommand(new TpHereCommand());
+        event.registerServerCommand(new KickCommand());
     }
 
     @Mod.EventHandler
