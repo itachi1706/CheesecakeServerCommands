@@ -120,6 +120,8 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " Smites a player or location");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/kill [player]"
                     + EnumChatFormatting.WHITE + " Kills yourself or another player");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/kick <player> [reason]"
+                    + EnumChatFormatting.WHITE + " Kicks a player from the server with an optional color coded reason");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/wow [player]"
                     + EnumChatFormatting.WHITE + " Trolls yourself or another player");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/tpto <player>"
