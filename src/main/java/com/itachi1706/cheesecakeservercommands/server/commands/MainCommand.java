@@ -114,6 +114,8 @@ public class MainCommand implements ICommand {
                     + EnumChatFormatting.WHITE + " Set Fly/Walk speed of player");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/heal [player]"
                     + EnumChatFormatting.WHITE + " Heals a player");
+            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/zeus [player]"
+                    + EnumChatFormatting.WHITE + " Let a player suffer the Wrath of Zeus");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/smite [player/me/x] [y] [z]"
                     + EnumChatFormatting.WHITE + " Smites a player or location");
             ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/kill [player]"

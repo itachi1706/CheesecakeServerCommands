@@ -49,6 +49,7 @@ public class CheesecakeServerCommands {
         }
 
         configFileDirectory = file;
+
     }
 
     @Mod.EventHandler
@@ -82,6 +83,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new LocateCommand());
         event.registerServerCommand(new SudoCommand());
         event.registerServerCommand(new GamemodeCommand());
+        event.registerServerCommand(new ZeusCommand());
     }
 
     @Mod.EventHandler
