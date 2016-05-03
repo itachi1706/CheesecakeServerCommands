@@ -84,6 +84,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new SudoCommand());
         event.registerServerCommand(new GamemodeCommand());
         event.registerServerCommand(new ZeusCommand());
+        event.registerServerCommand(new WowCommand());
     }
 
     @Mod.EventHandler
