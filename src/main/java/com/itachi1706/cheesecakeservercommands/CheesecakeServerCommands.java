@@ -12,6 +12,8 @@ import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerComma
 import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.*;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ModlistCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ServerSettingsCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -108,6 +110,10 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new EnderChestCommand());
         event.registerServerCommand(new RenameCommand());
         event.registerServerCommand(new RepairCommand());
+
+        // Essentials Server
+        event.registerServerCommand(new ModlistCommand());
+        event.registerServerCommand(new ServerSettingsCommand());
     }
 
     @Mod.EventHandler
