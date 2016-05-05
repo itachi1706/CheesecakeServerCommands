@@ -86,6 +86,7 @@ public class CheesecakeServerCommands {
 
         event.registerServerCommand(new EnchantForceCommand());
         event.registerServerCommand(new InvSeeEnderChestCommand());
+        event.registerServerCommand(new ClearInventoryCommand());
 
         // Adapted from Essentials
 
