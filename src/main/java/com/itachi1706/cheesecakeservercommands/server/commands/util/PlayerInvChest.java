@@ -1,5 +1,6 @@
-package com.itachi1706.cheesecakeservercommands.util;
+package com.itachi1706.cheesecakeservercommands.server.commands.util;
 
+import com.itachi1706.cheesecakeservercommands.server.commands.util.CommandsEventHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryBasic;
 

@@ -1,8 +1,6 @@
-package com.itachi1706.cheesecakeservercommands.util;
+package com.itachi1706.cheesecakeservercommands.server.commands.util;
 
 import com.google.common.collect.HashMultimap;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 

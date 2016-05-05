@@ -1,7 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
-import com.itachi1706.cheesecakeservercommands.util.PlayerInvChest;
+import com.itachi1706.cheesecakeservercommands.server.commands.util.PlayerInvChest;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
@@ -10,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.network.play.server.S2DPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
