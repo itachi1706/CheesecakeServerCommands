@@ -81,7 +81,8 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new FlingCommand());
         event.registerServerCommand(new KickCommand());
 
-        event.registerServerCommand(new EnchantForceCommand()); // Not Essentials
+        event.registerServerCommand(new EnchantForceCommand());
+        event.registerServerCommand(new InvSeeEnderChestCommand());
 
         // Adapted from Essentials
 
@@ -104,6 +105,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new DechantCommand());
         event.registerServerCommand(new EnchantCommand());
         event.registerServerCommand(new DuplicateCommand());
+        event.registerServerCommand(new EnderChestCommand());
     }
 
     @Mod.EventHandler
