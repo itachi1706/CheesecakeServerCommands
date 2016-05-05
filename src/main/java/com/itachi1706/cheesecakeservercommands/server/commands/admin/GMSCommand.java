@@ -57,7 +57,7 @@ public class GMSCommand implements ICommand {
                     return;
                 }
                 player.setGameType(WorldSettings.GameType.SURVIVAL);
-                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + EnumChatFormatting.GOLD + "Survival");
+                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + EnumChatFormatting.GOLD + "Survival Mode");
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own gamemode to Survival Mode");
                 return;
             }
@@ -71,7 +71,7 @@ public class GMSCommand implements ICommand {
         }
 
         player.setGameType(WorldSettings.GameType.SURVIVAL);
-        ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to " + EnumChatFormatting.GOLD + "Survival");
+        ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to " + EnumChatFormatting.GOLD + "Survival Mode");
         ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to Survival Mode");
     }
 
