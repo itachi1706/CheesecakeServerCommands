@@ -103,7 +103,7 @@ public class GetCommandBookCommand implements ICommand {
                     commands.add("/" + alias);
             }
 
-            String commandusage = new ChatComponentTranslation(cmd.getCommandUsage(player), new Object[0]).getUnformattedTextForChat();
+            String commandusage = new ChatComponentTranslation(cmd.getCommandUsage(player)).getUnformattedTextForChat();
             String text = EnumChatFormatting.GOLD + StringUtils.join(commands, ' ') + '\n'  + EnumChatFormatting.BLACK + commandusage;
             pages.add(text);
         }
