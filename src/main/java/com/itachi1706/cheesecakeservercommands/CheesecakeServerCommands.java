@@ -106,6 +106,8 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new EnchantCommand());
         event.registerServerCommand(new DuplicateCommand());
         event.registerServerCommand(new EnderChestCommand());
+        event.registerServerCommand(new RenameCommand());
+        event.registerServerCommand(new RepairCommand());
     }
 
     @Mod.EventHandler
