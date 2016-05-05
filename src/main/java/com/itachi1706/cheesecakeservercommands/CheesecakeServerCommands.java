@@ -12,6 +12,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerComma
 import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.*;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.GetCommandBookCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ModlistCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ServerSettingsCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
@@ -114,6 +115,7 @@ public class CheesecakeServerCommands {
         // Essentials Server
         event.registerServerCommand(new ModlistCommand());
         event.registerServerCommand(new ServerSettingsCommand());
+        event.registerServerCommand(new GetCommandBookCommand());
     }
 
     @Mod.EventHandler
