@@ -35,7 +35,7 @@ public class DuplicateCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "duplicate [amount]";
+        return "duplicate [amount] [spillover] (Spillover if inventory gets full while duplicating)";
     }
 
     @Override
@@ -77,7 +77,15 @@ public class DuplicateCommand implements ICommand {
             newItem.stackSize = stackSize;
         }
 
-        PlayerMPUtil.give(player, newItem);
+        boolean overflow = false;
+        if (astring.length > 1) {
+            overflow = Boolean.parseBoolean(astring[1]);
+        }
+
+        if (overflow)
+            PlayerMPUtil.give(player, newItem);
+        else
+            PlayerMPUtil.giveNormal(player, newItem);
 
         String message = EnumChatFormatting.GOLD + "Duplicated " + stack.getDisplayName();
         String adminmessage = "Duplicated " + stack.getDisplayName();

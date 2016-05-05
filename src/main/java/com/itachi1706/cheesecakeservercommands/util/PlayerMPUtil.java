@@ -88,11 +88,36 @@ public class PlayerMPUtil {
 
     /**
      * Give player the item stack or drop it if his inventory is full
+     * If the player inventory fills up while it gets full, spill over to the ground
      *
      * @param player
      * @param item
      */
     public static void give(EntityPlayer player, ItemStack item)
+    {
+        int itemstack = item.stackSize;
+        while (itemstack > 64) {
+            ItemStack senditem = item.copy();
+            senditem.stackSize = 64;
+            EntityItem entityitem = player.dropPlayerItemWithRandomChoice(senditem, false);
+            entityitem.delayBeforeCanPickup = 0;
+            entityitem.func_145797_a(player.getCommandSenderName());
+            itemstack -= 64;
+        }
+        item.stackSize = itemstack;
+        EntityItem entityitem = player.dropPlayerItemWithRandomChoice(item, false);
+        entityitem.delayBeforeCanPickup = 0;
+        entityitem.func_145797_a(player.getCommandSenderName());
+    }
+
+    /**
+     * Give player the item stack or drop it if his inventory is full
+     * This command execute without ground spillage if player is given into his/her inventory
+     *
+     * @param player
+     * @param item
+     */
+    public static void giveNormal(EntityPlayer player, ItemStack item)
     {
         EntityItem entityitem = player.dropPlayerItemWithRandomChoice(item, false);
         entityitem.delayBeforeCanPickup = 0;
