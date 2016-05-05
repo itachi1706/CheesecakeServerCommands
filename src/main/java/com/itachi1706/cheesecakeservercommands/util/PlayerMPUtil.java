@@ -2,8 +2,10 @@ package com.itachi1706.cheesecakeservercommands.util;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -82,5 +84,18 @@ public class PlayerMPUtil {
         Vec3 pos1 = playerPos.addVector(0, player.getEyeHeight(), 0);
         Vec3 pos2 = pos1.addVector(lookAt.xCoord * maxDistance, lookAt.yCoord * maxDistance, lookAt.zCoord * maxDistance);
         return player.worldObj.rayTraceBlocks(pos1, pos2);
+    }
+
+    /**
+     * Give player the item stack or drop it if his inventory is full
+     *
+     * @param player
+     * @param item
+     */
+    public static void give(EntityPlayer player, ItemStack item)
+    {
+        EntityItem entityitem = player.dropPlayerItemWithRandomChoice(item, false);
+        entityitem.delayBeforeCanPickup = 0;
+        entityitem.func_145797_a(player.getCommandSenderName());
     }
 }

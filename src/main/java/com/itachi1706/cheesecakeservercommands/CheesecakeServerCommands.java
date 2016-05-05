@@ -11,10 +11,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.MainCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.CraftCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.DechantCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.EnchantCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.EnchantForceCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.*;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -84,6 +81,8 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new FlingCommand());
         event.registerServerCommand(new KickCommand());
 
+        event.registerServerCommand(new EnchantForceCommand()); // Not Essentials
+
         // Adapted from Essentials
 
         // Essentials Server Commands
@@ -104,7 +103,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new CraftCommand());
         event.registerServerCommand(new DechantCommand());
         event.registerServerCommand(new EnchantCommand());
-        event.registerServerCommand(new EnchantForceCommand()); // Not Essentials
+        event.registerServerCommand(new DuplicateCommand());
     }
 
     @Mod.EventHandler
