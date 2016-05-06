@@ -76,12 +76,7 @@ public class SpeedCommand implements ICommand {
             // Reset
             resetSpeed = true;
         } else {
-            try {
-                multiplier = Integer.parseInt(speedStr);
-            } catch (NumberFormatException ex) {
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid speed. Available speed from 1 - 10");
-                return;
-            }
+            multiplier = CommandBase.parseIntBounded(iCommandSender, speedStr, 1, 10);
             if (multiplier > 10) {
                 multiplier = 10;
             }

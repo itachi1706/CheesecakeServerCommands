@@ -142,18 +142,8 @@ public class CCLoggerCommand implements ICommand {
                 LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, 1);
             } else {
                 // Check login logs for whatever page is passed
-                try {
-                    value = Integer.parseInt(astring[2]);
-                    if (value == 0){
-                        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage. Please specify a number above 0!");
-                        return;
-                    }
-
-                    LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, value);
-                } catch (NumberFormatException e){
-                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage. Please specify a number!");
-                    return;
-                }
+                value = CommandBase.parseIntWithMin(iCommandSender, astring[2], 1);
+                LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, value);
             }
             return;
 

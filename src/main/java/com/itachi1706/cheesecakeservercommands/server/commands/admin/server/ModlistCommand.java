@@ -4,6 +4,7 @@ import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -52,14 +53,15 @@ public class ModlistCommand implements ICommand {
 
         int page = 0;
         if (astring.length > 0) {
-            try {
-                page = Integer.parseInt(astring[0]);
-            } catch (NumberFormatException e) {
-                page = 1;
-            }
+            page = CommandBase.parseInt(iCommandSender, astring[0]);
             page -= 1;
         }
         int min = Math.min(page * perPage, size);
+
+        if (page >= pages) {
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Page. There are only " + pages + " pages");
+            return;
+        }
 
         ChatHelper.sendMessage(iCommandSender, String.format(EnumChatFormatting.GOLD + "--- Showing modlist page %1$d of %2$d ---", page + 1, pages));
         for (int i = page * perPage; i < min + perPage; i++)

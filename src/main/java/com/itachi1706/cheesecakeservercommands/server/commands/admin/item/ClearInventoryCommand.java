@@ -90,11 +90,7 @@ public class ClearInventoryCommand implements ICommand {
 
         if (astring.length == 3) {
             // Clears damage value
-            try {
-                itemDamageValue = Integer.parseInt(astring[2]);
-            } catch (NumberFormatException e) {
-                itemDamageValue = -1;
-            }
+            itemDamageValue = CommandBase.parseInt(iCommandSender, astring[2]);
         }
 
         int clearedcount = player.inventory.clearInventory(itemToClear, itemDamageValue);

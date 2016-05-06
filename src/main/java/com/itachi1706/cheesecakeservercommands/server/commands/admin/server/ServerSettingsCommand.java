@@ -92,7 +92,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Allow flight: %s", Boolean.toString(server.isFlightAllowed())));
             else {
-                boolean allowFlight = Boolean.parseBoolean(value);
+                boolean allowFlight = CommandBase.parseBoolean(iCommandSender, value);
                 server.setAllowFlight(allowFlight);
                 setProperty("allow-flight", allowFlight);
                 ChatHelper.sendMessage(iCommandSender, String.format("Allow flight set to %s", Boolean.toString(allowFlight)));
@@ -102,7 +102,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Allow PvP: %s", Boolean.toString(server.isPVPEnabled())));
             else {
-                boolean allowPvP = Boolean.parseBoolean(value);
+                boolean allowPvP = CommandBase.parseBoolean(iCommandSender, value);
                 server.setAllowPvp(allowPvP);
                 setProperty("pvp", allowPvP);
                 ChatHelper.sendMessage(iCommandSender, String.format("PvP set to %s", Boolean.toString(allowPvP)));
@@ -112,12 +112,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Build Limit: %d", server.getBuildLimit()));
             else {
-                int buildlimit = 256;
-                try {
-                    buildlimit = Integer.parseInt(value);
-                } catch (NumberFormatException e) {
-                    buildlimit = 256;
-                }
+                int buildlimit = CommandBase.parseIntBounded(iCommandSender, value, 1, 256);
                 server.setBuildLimit(buildlimit);
                 setProperty("max-build-height", buildlimit);
                 ChatHelper.sendMessage(iCommandSender, String.format("Build Limit set to %d", buildlimit));
@@ -127,12 +122,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Spawn protection size: %d", server.getSpawnProtectionSize()));
             else {
-                int spawnprotection = 16;
-                try {
-                    spawnprotection = Integer.parseInt(value);
-                } catch (NumberFormatException e) {
-                    spawnprotection = 16;
-                }
+                int spawnprotection = CommandBase.parseIntWithMin(iCommandSender, value, 0);
                 setProperty("spawn-protection", spawnprotection);
                 ChatHelper.sendMessage(iCommandSender, String.format("Set spawn-protection to %d", spawnprotection));
             }

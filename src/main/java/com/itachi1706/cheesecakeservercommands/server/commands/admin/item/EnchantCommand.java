@@ -96,12 +96,7 @@ public class EnchantCommand implements ICommand {
 
         int enchantlevel = enchantment.getMaxLevel();
          if (astring.length == 2) {
-             String enchantlevelStr = astring[1];
-             try {
-                 enchantlevel = Integer.parseInt(enchantlevelStr);
-             } catch (NumberFormatException e) {
-                 enchantlevel = enchantment.getMaxLevel();
-             }
+             enchantlevel = CommandBase.parseInt(iCommandSender, astring[1]);
          }
 
         enchantments.put(enchantment.effectId, enchantlevel);

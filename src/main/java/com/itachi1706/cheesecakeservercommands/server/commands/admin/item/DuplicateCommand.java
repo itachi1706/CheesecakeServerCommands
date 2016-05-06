@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -63,12 +64,7 @@ public class DuplicateCommand implements ICommand {
 
         int stackSize = 0;
         if (astring.length > 0) {
-            String sizeStr = astring[0];
-            try {
-                stackSize = Integer.parseInt(sizeStr);
-            } catch (NumberFormatException e) {
-                stackSize = 0;
-            }
+            stackSize = CommandBase.parseInt(iCommandSender, astring[0]);
         }
 
         ItemStack newItem = stack.copy();
@@ -78,7 +74,7 @@ public class DuplicateCommand implements ICommand {
 
         boolean overflow = false;
         if (astring.length > 1) {
-            overflow = Boolean.parseBoolean(astring[1]);
+            overflow = CommandBase.parseBoolean(iCommandSender, astring[1]);
         }
 
         if (overflow)
