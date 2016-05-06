@@ -18,23 +18,23 @@ import java.util.List;
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
  */
 @SuppressWarnings("unused")
-public class DuplicateCommand implements ICommand {
+public class MoreItemsCommand implements ICommand {
 
     private List<String> aliases;
 
-    public DuplicateCommand(){
+    public MoreItemsCommand(){
         this.aliases = new ArrayList<String>();
-        this.aliases.add("duplicate");
+        this.aliases.add("more");
     }
 
     @Override
     public String getCommandName() {
-        return "duplicate";
+        return "more";
     }
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "duplicate [amount] [spillover] (Spillover if inventory gets full while duplicating)";
+        return "more";
     }
 
     @Override
@@ -45,13 +45,13 @@ public class DuplicateCommand implements ICommand {
     @Override
     public void processCommand(ICommandSender iCommandSender, String[] astring) {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
-            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate for CONSOLE");
+            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate max stack items for CONSOLE");
             return;
         }
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate for " + iCommandSender.getCommandSenderName());
+            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate max stack items for " + iCommandSender.getCommandSenderName());
             return;
         }
 
@@ -61,37 +61,21 @@ public class DuplicateCommand implements ICommand {
             return;
         }
 
-        int stackSize = 0;
-        if (astring.length > 0) {
-            String sizeStr = astring[0];
-            try {
-                stackSize = Integer.parseInt(sizeStr);
-            } catch (NumberFormatException e) {
-                stackSize = 0;
-            }
+        int stackSize = stack.getMaxStackSize() - stack.stackSize;
+
+        if (stackSize == 0) {
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "You already have the max stack size of the item");
+            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Use /duplicate to create a new stack");
+            return;
         }
 
         ItemStack newItem = stack.copy();
-        if (stackSize > 0) {
-            newItem.stackSize = stackSize;
-        }
+        newItem.stackSize = stackSize;
 
-        boolean overflow = false;
-        if (astring.length > 1) {
-            overflow = Boolean.parseBoolean(astring[1]);
-        }
+        PlayerMPUtil.giveNormal(player, newItem);
 
-        if (overflow)
-            PlayerMPUtil.give(player, newItem);
-        else
-            PlayerMPUtil.giveNormal(player, newItem);
-
-        String message = EnumChatFormatting.GOLD + "Duplicated " + stack.getDisplayName();
-        String adminmessage = "Duplicated " + stack.getDisplayName();
-        if (stackSize > 0) {
-            message += " with " + EnumChatFormatting.AQUA + stackSize + EnumChatFormatting.GOLD + " items in the stack";
-            adminmessage += " with " + stackSize + " items in the stack";
-        }
+        String message = EnumChatFormatting.GOLD + "Gave you more of " + stack.getDisplayName();
+        String adminmessage = "Given more of " + stack.getDisplayName() + " to self";
         ChatHelper.sendMessage(iCommandSender, message);
         ChatHelper.sendAdminMessage(iCommandSender, adminmessage);
     }

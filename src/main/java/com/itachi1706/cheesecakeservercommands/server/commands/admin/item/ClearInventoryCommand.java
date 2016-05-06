@@ -64,11 +64,11 @@ public class ClearInventoryCommand implements ICommand {
                     return;
                 }
 
-                player.inventory.clearInventory(null, -1);
+                int clearedcount = player.inventory.clearInventory(null, -1);
                 player.inventoryContainer.detectAndSendChanges();
 
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Inventory Cleared");
-                ChatHelper.sendAdminMessage(iCommandSender, "Cleared own inventory");
+                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
+                ChatHelper.sendAdminMessage(iCommandSender, "Cleared own inventory of " + clearedcount + " items");
                 return;
             }
         }
@@ -97,12 +97,12 @@ public class ClearInventoryCommand implements ICommand {
             }
         }
 
-        player.inventory.clearInventory(itemToClear, itemDamageValue);
+        int clearedcount = player.inventory.clearInventory(itemToClear, itemDamageValue);
         player.inventoryContainer.detectAndSendChanges();
 
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Cleared Inventory of " + player.getCommandSenderName());
-        ChatHelper.sendAdminMessage(iCommandSender, "Cleared Inventory of " + player.getCommandSenderName());
-        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "Inventory Cleared");
+        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Cleared Inventory of " + player.getCommandSenderName() + " of " + clearedcount + " items");
+        ChatHelper.sendAdminMessage(iCommandSender, "Cleared Inventory of " + player.getCommandSenderName() + " of " + clearedcount + " items");
+        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
     }
 
     @Override
