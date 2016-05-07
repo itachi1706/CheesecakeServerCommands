@@ -62,7 +62,6 @@ public class BiomeInfoCommand implements ICommand {
             int z = (int) Math.floor(player.posZ);
             BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(x, z);
             ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Current Biome: " + EnumChatFormatting.AQUA + biome.biomeName);
-            //ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + " " + EnumChatFormatting.AQUA + biome.getClass().getName());
             return;
         }
 
@@ -91,7 +90,10 @@ public class BiomeInfoCommand implements ICommand {
 
     @Override
     public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
-        return CommandBase.getListOfStringsMatchingLastWord(typedValue, "list");
+        if (typedValue.length == 1) {
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "list");
+        }
+        return null;
     }
 
     @Override
