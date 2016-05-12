@@ -2,8 +2,7 @@ package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
-import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
-import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.*;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
@@ -27,8 +26,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -38,6 +36,7 @@ import java.util.List;
 public class CheesecakeServerCommands {
 
     public static List<LastKnownUsernames> lastKnownUsernames;
+    public static HashMap<UUID, PlayerPermissions> playerPermissions;
     public static File configFileDirectory;
 
     @Mod.Instance(References.MOD_ID)
@@ -128,12 +127,33 @@ public class CheesecakeServerCommands {
     @Mod.EventHandler
     public void serverStoppingEvent(FMLServerStoppingEvent event){
         LastKnownUsernameJsonHelper.writeToFile();
+        PermissionsHelper.writeToFile();
     }
 
     private void registerLoggers(){
-        lastKnownUsernames = new ArrayList<LastKnownUsernames>();
         if (LastKnownUsernameJsonHelper.fileExists())
             lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
+
+        if (lastKnownUsernames == null) {
+            lastKnownUsernames = new ArrayList<LastKnownUsernames>();
+        }
+
+        if (PermissionsHelper.fileExists())
+            playerPermissions = PermissionsHelper.readFromFile();
+
+        if (playerPermissions == null) {
+            playerPermissions = new HashMap<UUID, PlayerPermissions>();
+        }
+
+        if (playerPermissions.size() > 0) {
+            // TODO: Set Default Permissions
+            for (Map.Entry<UUID, PlayerPermissions> entry : playerPermissions.entrySet()) {
+                UUID key = entry.getKey();
+                PlayerPermissions value = entry.getValue();
+                // TODO: Iterate and set default permissions
+                //LogHelper.info("Found " + key + " player with " + value.getPermissionList().size() + " permissions loaded");
+            }
+        }
 
         LoginLogoutDB.checkTablesExists();
 
