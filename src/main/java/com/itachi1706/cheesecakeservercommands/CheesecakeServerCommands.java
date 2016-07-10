@@ -18,13 +18,13 @@ import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.Serv
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 import java.io.File;
 import java.util.ArrayList;

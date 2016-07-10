@@ -3,13 +3,15 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangPremiumPlayer;
 import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangStatusChecker;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class MojangServerCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "View Command Help: " + EnumChatFormatting.GOLD + "/mojang help";
+        return "View Command Help: " + ChatFormatting.GOLD + "/mojang help";
     }
 
     @Override
@@ -49,25 +51,25 @@ public class MojangServerCommand implements ICommand {
 
     private void sendHelp(ICommandSender iCommandSender){
         ChatHelper.sendMessage(iCommandSender, "Commands List:");
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/mojang status"
-                + EnumChatFormatting.AQUA + " View Mojang Server Status");
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "/mojang premium"
-                + EnumChatFormatting.AQUA + " Check if name is purchased");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/mojang status"
+                + ChatFormatting.AQUA + " View Mojang Server Status");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/mojang premium"
+                + ChatFormatting.AQUA + " Check if name is purchased");
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
-        if(astring.length == 0)
+        if(args.length == 0)
         {
             sendHelp(iCommandSender);
             return;
         }
 
-        String subCommand = astring[0];
+        String subCommand = args[0];
 
         if (subCommand.equalsIgnoreCase("status")){
-            if (astring.length != 1){
+            if (args.length != 1){
                 sendHelp(iCommandSender);
                 return;
             }
@@ -77,12 +79,12 @@ public class MojangServerCommand implements ICommand {
         }
 
         if (subCommand.equalsIgnoreCase("premium")){
-            if (astring.length != 2){
+            if (args.length != 2){
                 sendHelp(iCommandSender);
                 return;
             }
 
-            getPremium(iCommandSender, astring[1]);
+            getPremium(iCommandSender, args[1]);
             return;
         }
 
@@ -91,16 +93,16 @@ public class MojangServerCommand implements ICommand {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "status", "premium");
         if (typedValue.length == 2 && typedValue[0].equalsIgnoreCase("premium"))
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return true;
     }
 
@@ -111,31 +113,31 @@ public class MojangServerCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 
     private void printMojangStatus(ICommandSender sender){
-        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
-        ChatHelper.sendMessage(sender, EnumChatFormatting.BLUE + "              Mojang Server Checker Status");
-        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, ChatFormatting.BLUE + "              Mojang Server Checker Status");
+        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
         for (MojangStatusChecker statusChecker : MojangStatusChecker.values()) {
             String service = statusChecker.getName();
             MojangStatusChecker.Status status = statusChecker.getStatus(true);
 
             ChatHelper.sendMessage(sender, service + ": " + status.getColor() + status.getStatus() + " - " + status.getDescription());
         }
-        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
     }
 
     public void getPremium(ICommandSender sender, String name){
         int returnCode = MojangPremiumPlayer.isPremium(name);
         if (returnCode == 1){
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + name + EnumChatFormatting.DARK_PURPLE + " is a " + EnumChatFormatting.GREEN + "premium" + EnumChatFormatting.DARK_PURPLE + " status player!");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + name + ChatFormatting.DARK_PURPLE + " is a " + ChatFormatting.GREEN + "premium" + ChatFormatting.DARK_PURPLE + " status player!");
         } else if (returnCode == 0){
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + name + EnumChatFormatting.DARK_PURPLE + " is a " + EnumChatFormatting.RED + "non-premium" + EnumChatFormatting.DARK_PURPLE + " status player!");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + name + ChatFormatting.DARK_PURPLE + " is a " + ChatFormatting.RED + "non-premium" + ChatFormatting.DARK_PURPLE + " status player!");
         } else if (returnCode == 2){
-            ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "An error had occured. Check the console for details!");
+            ChatHelper.sendMessage(sender, ChatFormatting.RED + "An error had occured. Check the console for details!");
         }
     }
 

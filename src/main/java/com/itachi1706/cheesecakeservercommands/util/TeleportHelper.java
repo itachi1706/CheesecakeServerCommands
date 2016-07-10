@@ -1,28 +1,25 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
-
 import com.itachi1706.cheesecakeservercommands.commons.selections.WarpPoint;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Kenneth on 3/5/2016.
@@ -85,7 +82,7 @@ public class TeleportHelper {
         {
             if (playerPos.distance(new WarpPoint(player)) > 0.2)
             {
-                ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Teleport cancelled");
+                ChatHelper.sendMessage(player, ChatFormatting.RED + "Teleport cancelled");
                 return true;
             }
             if (System.currentTimeMillis() - start < timeout)
@@ -93,7 +90,7 @@ public class TeleportHelper {
                 return false;
             }
             checkedTeleport(player, point);
-            ChatHelper.sendMessage(player, EnumChatFormatting.GREEN + "Teleported");
+            ChatHelper.sendMessage(player, ChatFormatting.GREEN + "Teleported");
             return true;
         }
 
@@ -114,7 +111,7 @@ public class TeleportHelper {
             DimensionManager.initDimension(point.getDimension());
             if (point.getWorld() == null)
             {
-                ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Unable to teleport! Target dimension does not exist");
+                ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target dimension does not exist");
                 return;
             }
         }
@@ -122,13 +119,13 @@ public class TeleportHelper {
 
         if (!canTeleportTo(point))
         {
-            ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Unable to teleport! Target location obstructed.");
+            ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target location obstructed.");
             return;
         }
 
         // Setup timed teleport
         tpInfos.put(player.getPersistentID(), new TeleportInfo(player, point, 0));
-        //ChatHelper.sendMessage(player, EnumChatFormatting.YELLOW + "Teleporting...");
+        //ChatHelper.sendMessage(player, ChatFormatting.YELLOW + "Teleporting...");
     }
 
     public static boolean canTeleportTo(WarpPoint point)
@@ -146,7 +143,7 @@ public class TeleportHelper {
     {
         if (!canTeleportTo(point))
         {
-            ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Unable to teleport! Target location obstructed.");
+            ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target location obstructed.");
             return;
         }
 
@@ -161,7 +158,7 @@ public class TeleportHelper {
             return;
         }
         // TODO: Handle teleportation of mounted entity
-        player.mountEntity(null);
+        player.mountEntityAndWakeUp();
 
         if (player.dimension != point.getDimension())
         {
@@ -179,7 +176,7 @@ public class TeleportHelper {
             return;
         }
         if (entity.dimension != point.getDimension())
-            entity.travelToDimension(point.getDimension());
+            entity.changeDimension(point.getDimension());
         entity.setLocationAndAngles(point.getX(), point.getY(), point.getZ(), point.getYaw(), point.getPitch());
     }
 
@@ -202,7 +199,7 @@ public class TeleportHelper {
     public static void transferPlayerToDimension(EntityPlayerMP player, int dimension, Teleporter teleporter)
     {
         int oldDim = player.dimension;
-        MinecraftServer mcServer = MinecraftServer.getServer();
+        MinecraftServer mcServer = PlayerMPUtil.getServerInstance();
 
         WorldServer oldWorld = mcServer.worldServerForDimension(player.dimension);
         player.dimension = dimension;

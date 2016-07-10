@@ -1,9 +1,10 @@
 package com.itachi1706.cheesecakeservercommands.damagesource;
 
-import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * Created by Kenneth on 3/5/2016.
@@ -15,13 +16,13 @@ public class ZeusDamage extends DamageSource {
     }
 
     @Override
-    public IChatComponent func_151519_b(EntityLivingBase p_151519_1_)
+    public ITextComponent func_151519_b(EntityLivingBase p_151519_1_)
     {
         String text = "%s suffered the Wrath of Zeus!";
-        String username = p_151519_1_.getCommandSenderName();
+        String username = p_151519_1_.getName();
         LogHelper.info(username);
         String finaltext = String.format(text, username);
-        return new ChatComponentText(finaltext);
+        return new TextComponentString(finaltext);
     }
 
 }

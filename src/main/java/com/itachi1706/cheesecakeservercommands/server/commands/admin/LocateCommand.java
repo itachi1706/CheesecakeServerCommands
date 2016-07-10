@@ -3,13 +3,16 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +48,8 @@ public class LocateCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0)
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot locate CONSOLE");
@@ -54,41 +57,41 @@ public class LocateCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot locate" + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot locate" + iCommandSender.getName());
                     return;
                 }
 
                 float toHeal = player.getMaxHealth() - player.getHealth();
                 WorldPoint point = new WorldPoint(player);
-                ChatHelper.sendMessage(iCommandSender, String.format(EnumChatFormatting.GOLD + "You are at %d, %d, %d in dimension %d with a gamemode of %s",
+                ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "You are at %d, %d, %d in dimension %d with a gamemode of %s",
                         point.getX(), point.getY(), point.getZ(), point.getDimension(), player.theItemInWorldManager.getGameType().getName()));
                 ChatHelper.sendAdminMessage(iCommandSender, "Located Own location");
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
         WorldPoint point = new WorldPoint(player);
-        ChatHelper.sendMessage(iCommandSender, String.format(EnumChatFormatting.GOLD + "%s is at %d, %d, %d in dimension %d with a gamemode of %s",
-                player.getCommandSenderName(), point.getX(), point.getY(), point.getZ(), point.getDimension(), player.theItemInWorldManager.getGameType().getName()));
-        ChatHelper.sendAdminMessage(iCommandSender, "Located " + player.getCommandSenderName() + "'s location");
+        ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "%s is at %d, %d, %d in dimension %d with a gamemode of %s",
+                player.getName(), point.getX(), point.getY(), point.getZ(), point.getDimension(), player.theItemInWorldManager.getGameType().getName()));
+        ChatHelper.sendAdminMessage(iCommandSender, "Located " + player.getName() + "'s location");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -99,7 +102,7 @@ public class LocateCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

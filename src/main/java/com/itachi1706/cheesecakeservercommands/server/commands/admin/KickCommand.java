@@ -2,14 +2,16 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.itachi1706.cheesecakeservercommands.util.WorldUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,46 +45,46 @@ public class KickCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
-        if(astring.length == 0)
+        if(args.length == 0)
         {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Usage: /kick <player> [reason]");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /kick <player> [reason]");
             return;
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
         String reason = "Kicked by an operator.";
-        if (astring.length > 1) {
+        if (args.length > 1) {
             reason = "";
-            for (int i = 1; i < astring.length - 1; i++) {
-                reason += astring[i] + " ";
+            for (int i = 1; i < args.length - 1; i++) {
+                reason += args[i] + " ";
             }
-            reason += astring[astring.length - 1];
+            reason += args[args.length - 1];
         }
 
         reason = ChatHelper.formatString(reason);
 
         player.playerNetServerHandler.kickPlayerFromServer(reason);
-        ChatHelper.sendMessage(iCommandSender, "Kicked " + player.getCommandSenderName() + " with reason " + reason);
-        ChatHelper.sendAdminMessage(iCommandSender, "Kicked " + player.getCommandSenderName() + " with reason " + reason);
+        ChatHelper.sendMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
+        ChatHelper.sendAdminMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -93,7 +95,7 @@ public class KickCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

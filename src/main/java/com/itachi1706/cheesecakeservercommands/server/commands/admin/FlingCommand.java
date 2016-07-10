@@ -2,23 +2,22 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import net.minecraft.client.particle.EntitySmokeFX;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S12PacketEntityVelocity;
-import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.WorldServer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -50,8 +49,8 @@ public class FlingCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0)
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot fling CONSOLE");
@@ -59,7 +58,7 @@ public class FlingCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot fling" + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot fling" + iCommandSender.getName());
                     return;
                 }
 
@@ -71,16 +70,16 @@ public class FlingCommand implements ICommand {
                 worldServer.func_147487_a("hugeexplosion", player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0);
                 Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0);
                 explosion.doExplosionB(true);
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.DARK_PURPLE + "You were flung into the air");
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.DARK_PURPLE + "You were flung into the air");
                 ChatHelper.sendAdminMessage(iCommandSender, "Flung own self into the air!");
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
@@ -91,20 +90,20 @@ public class FlingCommand implements ICommand {
         worldServer.func_147487_a("hugeexplosion", player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0);
         Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0);
         explosion.doExplosionB(true);
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Flung " + player.getCommandSenderName() + " into the air!");
-        ChatHelper.sendAdminMessage(iCommandSender, "Flung " + player.getCommandSenderName() + " into the air");
-        ChatHelper.sendMessage(player, EnumChatFormatting.DARK_PURPLE + "You were flung into the air");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Flung " + player.getName() + " into the air!");
+        ChatHelper.sendAdminMessage(iCommandSender, "Flung " + player.getName() + " into the air");
+        ChatHelper.sendMessage(player, ChatFormatting.DARK_PURPLE + "You were flung into the air");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -115,7 +114,7 @@ public class FlingCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

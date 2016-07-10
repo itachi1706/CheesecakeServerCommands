@@ -2,11 +2,14 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,25 +44,25 @@ public class SampleCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
-        if(astring.length == 0)
+        if(args.length == 0)
         {
             ChatHelper.sendMessage(iCommandSender, "Invalid arguements");
             return;
         }
 
-        ChatHelper.sendMessage(iCommandSender, "Sample: " + EnumChatFormatting.AQUA + "[" + astring[0] + "]");
+        ChatHelper.sendMessage(iCommandSender, "Sample: " + ChatFormatting.AQUA + "[" + args[0] + "]");
 
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] p_71516_2_) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -70,7 +73,7 @@ public class SampleCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

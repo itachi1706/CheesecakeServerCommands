@@ -2,21 +2,23 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.GameType;
 import net.minecraft.world.WorldSettings;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,25 +70,25 @@ public class ServerSettingsCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "You can only use this command on dedicated servers");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You can only use this command on dedicated servers");
             return;
         }
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-        if (astring.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Usage: /serversettings <option> [value]");
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Options: " + EnumChatFormatting.RESET + StringUtils.join(options, ", "));
+        if (args.length == 0) {
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /serversettings <option> [value]");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Options: " + ChatFormatting.RESET + StringUtils.join(options, ", "));
             return;
         }
 
-        String subCmd = astring[0].toLowerCase();
+        String subCmd = args[0].toLowerCase();
         boolean setValue = false;
         String value = "";
-        if (astring.length == 2) {
+        if (args.length == 2) {
             setValue = true;
-            value = astring[1];
+            value = args[1];
         }
         if (subCmd.equalsIgnoreCase("allowflight")) {
             if (!setValue)
@@ -131,7 +133,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Default Gamemode: %s", server.getGameType().getName()));
             else {
-                WorldSettings.GameType gamemode = WorldSettings.GameType.getByID(getGamemode(value));
+                GameType gamemode = GameType.getByID(getGamemode(value));
                 server.setGameType(gamemode);
                 setProperty("gamemode", gamemode.ordinal());
                 ChatHelper.sendMessage(iCommandSender, String.format("Default Gamemode set to %s", gamemode.getName()));
@@ -139,21 +141,21 @@ public class ServerSettingsCommand implements ICommand {
 
         } else if (subCmd.equalsIgnoreCase("difficulty")) {
             if (!setValue)
-                ChatHelper.sendMessage(iCommandSender, String.format("Difficulty: %s", server.func_147135_j()));
+                ChatHelper.sendMessage(iCommandSender, String.format("Difficulty: %s", server.getDifficulty()));
             else {
                 EnumDifficulty difficulty = EnumDifficulty.getDifficultyEnum(getDifficulty(value));
-                server.func_147139_a(difficulty);
+                server.setDifficultyForAllWorlds(difficulty);
                 setProperty("difficulty", difficulty.ordinal());
                 ChatHelper.sendMessage(iCommandSender, String.format("Difficulty set to %s", difficulty.name()));
             }
 
         } else {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Usage. Usage: /serversettings <option> [value]");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage. Usage: /serversettings <option> [value]");
         }
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1) {
             String[] optionArray = new String[options.size()];
             optionArray = options.toArray(optionArray);
@@ -178,21 +180,20 @@ public class ServerSettingsCommand implements ICommand {
 
     private int getGamemode(String gamemode) {
         if (gamemode.equalsIgnoreCase("survival") || gamemode.equalsIgnoreCase("s") || gamemode.equals("0")) {
-            return WorldSettings.GameType.SURVIVAL.getID();
+            return GameType.SURVIVAL.getID();
         } else if (gamemode.equalsIgnoreCase("adventure") || gamemode.equalsIgnoreCase("a") || gamemode.equals("2")) {
-            return WorldSettings.GameType.ADVENTURE.getID();
+            return GameType.ADVENTURE.getID();
         } else if (gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("c") || gamemode.equals("1")) {
-            return WorldSettings.GameType.CREATIVE.getID();
+            return GameType.CREATIVE.getID();
         } else if (gamemode.equalsIgnoreCase("spectator") || gamemode.equalsIgnoreCase("sp") || gamemode.equals("3")) {
-            // TODO: 1.9 game mode spectator
-            return 0;
+            return GameType.SPECTATOR.getID();
         }else {
             return 0;
         }
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -203,7 +204,7 @@ public class ServerSettingsCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

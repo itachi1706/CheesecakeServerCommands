@@ -2,13 +2,16 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +45,8 @@ public class BurnCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0)
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot burn CONSOLE");
@@ -51,49 +54,49 @@ public class BurnCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot burn" + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot burn" + iCommandSender.getName());
                     return;
                 }
 
                 player.setFire(15);
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "You were burned");
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "You were burned");
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own self on fire");
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
-        if (astring.length == 1) {
+        if (args.length == 1) {
             player.setFire(15);
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Burned " + player.getCommandSenderName());
-            ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " on fire");
-            ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were burned");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Burned " + player.getName());
+            ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " on fire");
+            ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were burned");
             return;
         }
 
         // Burn for specified duration
-        int duration = CommandBase.parseIntWithMin(iCommandSender, astring[1], 0);
+        int duration = CommandBase.parseIntWithMin(iCommandSender, args[1], 0);
         player.setFire(duration);
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Burned " + player.getCommandSenderName() + " for " + duration + " seconds");
-        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " on fire for " + duration + " seconds");
-        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were burned");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Burned " + player.getName() + " for " + duration + " seconds");
+        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " on fire for " + duration + " seconds");
+        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were burned");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -104,7 +107,7 @@ public class BurnCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

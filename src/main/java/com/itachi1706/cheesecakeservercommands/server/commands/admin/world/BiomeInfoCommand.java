@@ -2,14 +2,17 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.world;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,28 +48,28 @@ public class BiomeInfoCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (!PlayerMPUtil.isPlayer(iCommandSender) && astring.length == 0) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (!PlayerMPUtil.isPlayer(iCommandSender) && args.length == 0) {
             ChatHelper.sendMessage(iCommandSender, "Cannot view biome for CONSOLE");
             return;
         }
 
-        if (astring.length == 0) {
+        if (args.length == 0) {
             EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
             if (player == null) {
-                ChatHelper.sendMessage(iCommandSender, "Cannot view biome for " + iCommandSender.getCommandSenderName());
+                ChatHelper.sendMessage(iCommandSender, "Cannot view biome for " + iCommandSender.getName());
                 return;
             }
 
             int x = (int) Math.floor(player.posX);
             int z = (int) Math.floor(player.posZ);
             BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(x, z);
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Current Biome: " + EnumChatFormatting.AQUA + biome.biomeName);
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Current Biome: " + ChatFormatting.AQUA + biome.biomeName);
             return;
         }
 
-        if (astring[0].equalsIgnoreCase("list")) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Registered Biome: ");
+        if (args[0].equalsIgnoreCase("list")) {
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Registered Biome: ");
             boolean skip = false;
             for (int i = 0; i < BiomeGenBase.getBiomeGenArray().length; i++)
             {
@@ -79,17 +82,17 @@ public class BiomeInfoCommand implements ICommand {
                 if (skip)
                 {
                     skip = false;
-                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "----");
+                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "----");
                 }
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "#" + i + ": " + EnumChatFormatting.AQUA + biome.biomeName);
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "#" + i + ": " + ChatFormatting.AQUA + biome.biomeName);
             }
         } else {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Command. Usage: /biomeinfo [list]");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Command. Usage: /biomeinfo [list]");
         }
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1) {
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "list");
         }
@@ -97,7 +100,7 @@ public class BiomeInfoCommand implements ICommand {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -108,7 +111,7 @@ public class BiomeInfoCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

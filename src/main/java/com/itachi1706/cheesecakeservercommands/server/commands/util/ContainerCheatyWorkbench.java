@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -19,7 +20,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
 
     public ContainerCheatyWorkbench(InventoryPlayer par1InventoryPlayer, World par2World)
     {
-        super(par1InventoryPlayer, par2World, 0, 0, 0);
+        super(par1InventoryPlayer, par2World, new BlockPos(0,0,0));
         worldObj = par2World;
     }
 

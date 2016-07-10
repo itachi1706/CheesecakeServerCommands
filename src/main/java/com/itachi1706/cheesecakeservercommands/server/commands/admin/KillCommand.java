@@ -2,14 +2,17 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +46,8 @@ public class KillCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0)
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot kill CONSOLE");
@@ -52,39 +55,39 @@ public class KillCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot kill" + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot kill" + iCommandSender.getName());
                     return;
                 }
 
                 player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "You were slain");
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "You were slain");
                 ChatHelper.sendAdminMessage(iCommandSender, "Took their own life");
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
         player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Killed " + player.getCommandSenderName());
-        ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getCommandSenderName());
-        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "You were slain");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Killed " + player.getName());
+        ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getName());
+        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were slain");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -95,7 +98,7 @@ public class KillCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

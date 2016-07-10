@@ -1,11 +1,11 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ import java.util.List;
  */
 public class ChatHelper {
 
-    public static ChatComponentText getText(String text) {
-        return new ChatComponentText(text);
+    public static TextComponentString getText(String text) {
+        return new TextComponentString(text);
     }
 
-    public static void sendMessage(ICommandSender sender, ChatComponentText text) {
+    public static void sendMessage(ICommandSender sender, TextComponentString text) {
         sender.addChatMessage(text);
     }
 
@@ -27,7 +27,7 @@ public class ChatHelper {
         sendMessage(sender, getText(text));
     }
 
-    public static void sendMessage(EntityPlayerMP sender, ChatComponentText text) {
+    public static void sendMessage(EntityPlayerMP sender, TextComponentString text) {
         sender.addChatMessage(text);
     }
 
@@ -35,7 +35,7 @@ public class ChatHelper {
         sendMessage(sender, getText(text));
     }
 
-    public static void sendMessage(EntityPlayer sender, ChatComponentText text) {
+    public static void sendMessage(EntityPlayer sender, TextComponentString text) {
         sender.addChatMessage(text);
     }
 
@@ -43,20 +43,20 @@ public class ChatHelper {
         sendMessage(sender, getText(text));
     }
 
-    public static void sendGlobalMessage(ChatComponentText text) {
-        MinecraftServer.getServer().getConfigurationManager().sendChatMsg(text);
+    public static void sendGlobalMessage(TextComponentString text) {
+        PlayerMPUtil.getServerInstance().getConfigurationManager().sendChatMsg(text);
     }
 
-    public static void sendAdminMessage(ICommandSender sender, ChatComponentText text) {
+    public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {
         // Send to everyone except admin
-        String texts = text.getUnformattedTextForChat();
+        String texts = text.getUnformattedText();
 
-        texts = "[" + sender.getCommandSenderName() + ": " + texts + "]";
-        ChatComponentText newtext = new ChatComponentText(EnumChatFormatting.GRAY + "" + EnumChatFormatting.ITALIC + texts);
+        texts = "[" + sender.getName() + ": " + texts + "]";
+        TextComponentString newtext = new TextComponentString(ChatFormatting.GRAY + "" + ChatFormatting.ITALIC + texts);
         List<EntityPlayerMP> players = PlayerMPUtil.getOnlinePlayers();
         LogHelper.info(texts);
         for (EntityPlayerMP playerMP : players) {
-            if (PlayerMPUtil.isOperator(playerMP) && !playerMP.getCommandSenderName().equals(sender.getCommandSenderName())) {
+            if (PlayerMPUtil.isOperator(playerMP) && !playerMP.getName().equals(sender.getName())) {
                 playerMP.addChatMessage(newtext);
             }
         }

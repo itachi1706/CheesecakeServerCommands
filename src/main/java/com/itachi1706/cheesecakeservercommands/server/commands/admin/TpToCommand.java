@@ -4,14 +4,16 @@ import com.itachi1706.cheesecakeservercommands.commons.selections.WarpPoint;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,46 +47,46 @@ public class TpToCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "CONSOLE cannot teleport");
             return;
         }
 
-        if(astring.length == 0)
+        if(args.length == 0)
         {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Usage: /tpto <player>");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /tpto <player>");
             return;
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
         EntityPlayerMP sender = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (sender == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.DARK_RED + "FATAL: Player Object not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.DARK_RED + "FATAL: Player Object not found");
             return;
         }
 
         TeleportHelper.teleport(sender, new WarpPoint(player));
 
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Teleporting to " + player.getCommandSenderName());
-        ChatHelper.sendAdminMessage(iCommandSender, "Teleported to " + player.getCommandSenderName());
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Teleporting to " + player.getName());
+        ChatHelper.sendAdminMessage(iCommandSender, "Teleported to " + player.getName());
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -95,7 +97,7 @@ public class TpToCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

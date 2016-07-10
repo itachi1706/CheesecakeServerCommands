@@ -2,11 +2,15 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,23 +45,23 @@ public class MainCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
-        if(astring.length == 0)
+        if(args.length == 0)
         {
             ChatHelper.sendMessage(iCommandSender, "/cheesecakeservercommands list");
             ChatHelper.sendMessage(iCommandSender, "/cheesecakeservercommands modulehelp");
             return;
         }
 
-        String subCommand = astring[0];
+        String subCommand = args[0];
         if (subCommand.equalsIgnoreCase("list")) {
             listModules(iCommandSender);
         } else if (subCommand.equalsIgnoreCase("modulehelp")) {
-            if (astring.length < 2)
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Please select a module. View modules with /csc list");
+            if (args.length < 2)
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Please select a module. View modules with /csc list");
             else
-                listCommands(astring[1], iCommandSender);
+                listCommands(args[1], iCommandSender);
         }
 
     }
@@ -66,80 +70,80 @@ public class MainCommand implements ICommand {
         boolean isOp = PlayerMPUtil.isOperatorOrConsole(sender);
         if (modules.equals("cheesecakelogger") || modules.equals("ccl")) {
             if (!isOp) {
-                ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "You do not have permission to view help for this module!");
+                ChatHelper.sendMessage(sender, ChatFormatting.RED + "You do not have permission to view help for this module!");
                 return;
             }
-            ChatHelper.sendMessage(sender, EnumChatFormatting.AQUA + "Cheesecake Logger Module Commands");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/cclogger stats"
-                    + EnumChatFormatting.WHITE + " Gets General Statistics Logged.");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/cclogger viewlogins <player> <#>"
-                    + EnumChatFormatting.WHITE + " View Player Login Info");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/cclogger viewplayerstats <player>"
-                    + EnumChatFormatting.WHITE + " View Player Stats");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/cclogger delloginhistory <player>"
-                    + EnumChatFormatting.WHITE + " Delete Player History");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/cclogger lastseen <player>"
-                    + EnumChatFormatting.WHITE + " Gets Last Seen of Player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/cclogger lastknownusername <player/UUID>"
-                    + EnumChatFormatting.WHITE + " Get list of last known names of a player");
+            ChatHelper.sendMessage(sender, ChatFormatting.AQUA + "Cheesecake Logger Module Commands");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/cclogger stats"
+                    + ChatFormatting.WHITE + " Gets General Statistics Logged.");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/cclogger viewlogins <player> <#>"
+                    + ChatFormatting.WHITE + " View Player Login Info");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/cclogger viewplayerstats <player>"
+                    + ChatFormatting.WHITE + " View Player Stats");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/cclogger delloginhistory <player>"
+                    + ChatFormatting.WHITE + " Delete Player History");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/cclogger lastseen <player>"
+                    + ChatFormatting.WHITE + " Gets Last Seen of Player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/cclogger lastknownusername <player/UUID>"
+                    + ChatFormatting.WHITE + " Get list of last known names of a player");
         } else if (modules.equals("serverproperties")) {
             if (!isOp) {
-                ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "You do not have permission to view help for this module!");
+                ChatHelper.sendMessage(sender, ChatFormatting.RED + "You do not have permission to view help for this module!");
                 return;
             }
-            ChatHelper.sendMessage(sender, EnumChatFormatting.AQUA + "Server Properties Module Commands");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/serverproperties"
-                    + EnumChatFormatting.WHITE + " View Server Properties");
+            ChatHelper.sendMessage(sender, ChatFormatting.AQUA + "Server Properties Module Commands");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/serverproperties"
+                    + ChatFormatting.WHITE + " View Server Properties");
         } else if (modules.equals("mojang")) {
-            ChatHelper.sendMessage(sender, EnumChatFormatting.AQUA + "Mojang Module Commands");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/mojang status"
-                    + EnumChatFormatting.WHITE + " View Mojang Server Status");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/mojang premium"
-                    + EnumChatFormatting.WHITE + " Check if name is purchased");
+            ChatHelper.sendMessage(sender, ChatFormatting.AQUA + "Mojang Module Commands");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/mojang status"
+                    + ChatFormatting.WHITE + " View Mojang Server Status");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/mojang premium"
+                    + ChatFormatting.WHITE + " Check if name is purchased");
         } else if (modules.equals("admin")) {
             if (!isOp) {
-                ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "You do not have permission to view help for this module!");
+                ChatHelper.sendMessage(sender, ChatFormatting.RED + "You do not have permission to view help for this module!");
                 return;
             }
-            ChatHelper.sendMessage(sender, EnumChatFormatting.AQUA + "Admin Module Commands");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/gmc [player]"
-                    + EnumChatFormatting.WHITE + " Set Gamemode to Creative");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/gms [player]"
-                    + EnumChatFormatting.WHITE + " Set Gamemode to Survival");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/gma [player]"
-                    + EnumChatFormatting.WHITE + " Set Gamemode to Adventure");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/gm <creative/adventure/survival> [player]"
-                    + EnumChatFormatting.WHITE + " Set Gamemode of Player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/speed <fly/walk/all> <speed/reset> [player]"
-                    + EnumChatFormatting.WHITE + " Set Fly/Walk speed of player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/heal [player]"
-                    + EnumChatFormatting.WHITE + " Heals a player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/zeus [player]"
-                    + EnumChatFormatting.WHITE + " Let a player suffer the Wrath of Zeus");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/smite [player/me/x] [y] [z]"
-                    + EnumChatFormatting.WHITE + " Smites a player or location");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/kill [player]"
-                    + EnumChatFormatting.WHITE + " Kills yourself or another player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/kick <player> [reason]"
-                    + EnumChatFormatting.WHITE + " Kicks a player from the server with an optional color coded reason");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/wow [player]"
-                    + EnumChatFormatting.WHITE + " Trolls yourself or another player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/tpto <player>"
-                    + EnumChatFormatting.WHITE + " Teleports to a player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/tphere <player>"
-                    + EnumChatFormatting.WHITE + " Teleports another player to you");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/fling [player]"
-                    + EnumChatFormatting.WHITE + " Flings yourself or another player into the air");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/invsee [player]"
-                    + EnumChatFormatting.WHITE + " Views player inventory");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/burn [player] [duration]"
-                    + EnumChatFormatting.WHITE + " Burns a player");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/locate [player]"
-                    + EnumChatFormatting.WHITE + " Locates a player's location");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "/sudo <player> <command>"
-                    + EnumChatFormatting.WHITE + " Runs a command as a user" + EnumChatFormatting.DARK_RED + " (VERY DANGEROUS)");
+            ChatHelper.sendMessage(sender, ChatFormatting.AQUA + "Admin Module Commands");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/gmc [player]"
+                    + ChatFormatting.WHITE + " Set Gamemode to Creative");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/gms [player]"
+                    + ChatFormatting.WHITE + " Set Gamemode to Survival");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/gma [player]"
+                    + ChatFormatting.WHITE + " Set Gamemode to Adventure");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/gm <creative/adventure/survival> [player]"
+                    + ChatFormatting.WHITE + " Set Gamemode of Player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/speed <fly/walk/all> <speed/reset> [player]"
+                    + ChatFormatting.WHITE + " Set Fly/Walk speed of player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/heal [player]"
+                    + ChatFormatting.WHITE + " Heals a player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/zeus [player]"
+                    + ChatFormatting.WHITE + " Let a player suffer the Wrath of Zeus");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/smite [player/me/x] [y] [z]"
+                    + ChatFormatting.WHITE + " Smites a player or location");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/kill [player]"
+                    + ChatFormatting.WHITE + " Kills yourself or another player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/kick <player> [reason]"
+                    + ChatFormatting.WHITE + " Kicks a player from the server with an optional color coded reason");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/wow [player]"
+                    + ChatFormatting.WHITE + " Trolls yourself or another player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/tpto <player>"
+                    + ChatFormatting.WHITE + " Teleports to a player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/tphere <player>"
+                    + ChatFormatting.WHITE + " Teleports another player to you");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/fling [player]"
+                    + ChatFormatting.WHITE + " Flings yourself or another player into the air");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/invsee [player]"
+                    + ChatFormatting.WHITE + " Views player inventory");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/burn [player] [duration]"
+                    + ChatFormatting.WHITE + " Burns a player");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/locate [player]"
+                    + ChatFormatting.WHITE + " Locates a player's location");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "/sudo <player> <command>"
+                    + ChatFormatting.WHITE + " Runs a command as a user" + ChatFormatting.DARK_RED + " (VERY DANGEROUS)");
         } else {
-            ChatHelper.sendMessage(sender, EnumChatFormatting.RED + "Invalid Module. View modules with /csc list");
+            ChatHelper.sendMessage(sender, ChatFormatting.RED + "Invalid Module. View modules with /csc list");
         }
     }
 
@@ -147,15 +151,15 @@ public class MainCommand implements ICommand {
         boolean isOp = PlayerMPUtil.isOperatorOrConsole(sender);
         ChatHelper.sendMessage(sender, "Modules List");
         if (isOp) {
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "serverproperties");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "cheesecakelogger");
-            ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "admin");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "serverproperties");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "cheesecakelogger");
+            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "admin");
         }
-        ChatHelper.sendMessage(sender, EnumChatFormatting.GOLD + "mojang");
+        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "mojang");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, "list", "modulehelp");
         if (typedValue.length == 2 && typedValue[0].equalsIgnoreCase("modulehelp")) {
@@ -169,7 +173,7 @@ public class MainCommand implements ICommand {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return true;
     }
 
@@ -180,7 +184,7 @@ public class MainCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

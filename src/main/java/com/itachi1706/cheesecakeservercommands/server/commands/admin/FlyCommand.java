@@ -3,14 +3,16 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.WorldUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +46,9 @@ public class FlyCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
-        if(astring.length == 0)
+        if(args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot set flight status of CONSOLE");
@@ -54,7 +56,7 @@ public class FlyCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getCommandSenderName() + "'s flight status");
+                    ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getName() + "'s flight status");
                     return;
                 }
                 player.capabilities.allowFlying = !player.capabilities.allowFlying;
@@ -63,16 +65,16 @@ public class FlyCommand implements ICommand {
                 if (!player.capabilities.allowFlying)
                     WorldUtil.placeInWorld(player);
                 player.sendPlayerAbilities();
-                ChatHelper.sendMessage(iCommandSender, "Flight Mode " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
+                ChatHelper.sendMessage(iCommandSender, "Flight Mode " + (player.capabilities.allowFlying ? ChatFormatting.GREEN + "Enabled" : ChatFormatting.RED + "Disabled"));
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
@@ -82,20 +84,20 @@ public class FlyCommand implements ICommand {
         if (!player.capabilities.allowFlying)
             WorldUtil.placeInWorld(player);
         player.sendPlayerAbilities();
-        ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " flight mode to " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
-        ChatHelper.sendMessage(player, "Flight Mode has been set to " + (player.capabilities.allowFlying ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
-        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
+        ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " flight mode to " + (player.capabilities.allowFlying ? ChatFormatting.GREEN + "Enabled" : ChatFormatting.RED + "Disabled"));
+        ChatHelper.sendMessage(player, "Flight Mode has been set to " + (player.capabilities.allowFlying ? ChatFormatting.GREEN + "Enabled" : ChatFormatting.RED + "Disabled"));
+        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -106,7 +108,7 @@ public class FlyCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

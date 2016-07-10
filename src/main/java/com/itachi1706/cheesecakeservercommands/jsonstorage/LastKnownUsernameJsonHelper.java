@@ -55,7 +55,7 @@ public class LastKnownUsernameJsonHelper {
     }
 
     public static void logGamemodeToLit(EntityPlayerMP player){
-        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName(), System.currentTimeMillis());
+        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayNameString(), System.currentTimeMillis());
         for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
             if (i.getUuid().equals(player.getUniqueID())) {
                 CheesecakeServerCommands.lastKnownUsernames.remove(i);
@@ -71,7 +71,7 @@ public class LastKnownUsernameJsonHelper {
     }
 
     public static void logLastSeenToList(EntityPlayer player, boolean state){
-        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName(), System.currentTimeMillis());
+        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayNameString(), System.currentTimeMillis());
         for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
             if (i.getUuid().equals(player.getUniqueID())) {
                 CheesecakeServerCommands.lastKnownUsernames.remove(i);
@@ -95,7 +95,7 @@ public class LastKnownUsernameJsonHelper {
     }
 
     public static void logUsernameToList(EntityPlayer player){
-        LastKnownUsernames playerUsername = new LastKnownUsernames(player.getUniqueID(), player.getDisplayName(), System.currentTimeMillis());
+        LastKnownUsernames playerUsername = new LastKnownUsernames(player.getUniqueID(), player.getDisplayNameString(), System.currentTimeMillis());
         for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
             if (i.getUuid().equals(player.getUniqueID())) {
                 CheesecakeServerCommands.lastKnownUsernames.remove(i);
@@ -104,7 +104,7 @@ public class LastKnownUsernameJsonHelper {
             }
         }
 
-        playerUsername.updateDisplayName(player.getDisplayName());
+        playerUsername.updateDisplayName(player.getDisplayNameString());
         CheesecakeServerCommands.lastKnownUsernames.add(playerUsername);
         writeToFile();
     }

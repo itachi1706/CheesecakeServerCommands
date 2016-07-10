@@ -7,8 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.List;
 
@@ -18,23 +20,28 @@ import java.util.List;
  */
 public class PlayerMPUtil {
 
-    public static boolean isOperatorOrConsole(ICommandSender sender) {
+    public static boolean isOperatorOrConsole(ICommandSender iCommandSender) {
         return !(sender instanceof EntityPlayer) || isOperator((EntityPlayer) sender);
     }
 
+    //TODO: Move to better area
+    public static MinecraftServer getServerInstance() {
+        return FMLCommonHandler.instance().getMinecraftServerInstance();
+    }
+
     public static boolean isOperator(EntityPlayer player){
-        if (MinecraftServer.getServer().isSinglePlayer())
+        if (getServerInstance().isSinglePlayer())
             return true;
 
         GameProfile profile = player.getGameProfile();
-        return MinecraftServer.getServer().getConfigurationManager().func_152596_g(profile);
+        return PlayerMPUtil.getServerInstance().getConfigurationManager().func_152596_g(profile);
     }
 
-    public static boolean isPlayer(ICommandSender sender){
+    public static boolean isPlayer(ICommandSender iCommandSender){
         return sender instanceof EntityPlayer;
     }
 
-    public static EntityPlayer castToPlayer(ICommandSender sender){
+    public static EntityPlayer castToPlayer(ICommandSender iCommandSender){
         if (isPlayer(sender))
             return (EntityPlayer) sender;
         return null;
@@ -42,13 +49,13 @@ public class PlayerMPUtil {
 
     @SuppressWarnings("unchecked")
     public static List<EntityPlayerMP> getOnlinePlayers(){
-        return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+        return PlayerMPUtil.getServerInstance().getConfigurationManager().playerEntityList;
     }
 
     public static EntityPlayerMP getPlayer(String username) {
         List<EntityPlayerMP> players = getOnlinePlayers();
         for (EntityPlayerMP playerMP : players) {
-            if (playerMP.getCommandSenderName().equals(username)) {
+            if (playerMP.getName().equals(username)) {
                 return playerMP;
             }
         }
@@ -99,15 +106,17 @@ public class PlayerMPUtil {
         while (itemstack > 64) {
             ItemStack senditem = item.copy();
             senditem.stackSize = 64;
-            EntityItem entityitem = player.dropPlayerItemWithRandomChoice(senditem, false);
-            entityitem.delayBeforeCanPickup = 0;
-            entityitem.func_145797_a(player.getCommandSenderName());
+            EntityItem entityitem = player.dropItem(senditem, false);
+            if (entityitem == null) continue;
+            entityitem.setNoPickupDelay();
+            entityitem.setOwner(player.getName());
             itemstack -= 64;
         }
         item.stackSize = itemstack;
-        EntityItem entityitem = player.dropPlayerItemWithRandomChoice(item, false);
-        entityitem.delayBeforeCanPickup = 0;
-        entityitem.func_145797_a(player.getCommandSenderName());
+        EntityItem entityitem = player.dropItem(item, false);
+        if (entityitem == null) return;
+        entityitem.setNoPickupDelay();
+        entityitem.setOwner(player.getName());
     }
 
     /**
@@ -119,8 +128,9 @@ public class PlayerMPUtil {
      */
     public static void giveNormal(EntityPlayer player, ItemStack item)
     {
-        EntityItem entityitem = player.dropPlayerItemWithRandomChoice(item, false);
-        entityitem.delayBeforeCanPickup = 0;
-        entityitem.func_145797_a(player.getCommandSenderName());
+        EntityItem entityitem = player.dropItem(item, false);
+        if (entityitem == null) return;
+        entityitem.setNoPickupDelay();
+        entityitem.setOwner(player.getName());
     }
 }

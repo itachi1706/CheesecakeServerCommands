@@ -2,12 +2,16 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +47,7 @@ public class MoreItemsCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "Cannot duplicate max stack items for CONSOLE");
             return;
@@ -51,21 +55,21 @@ public class MoreItemsCommand implements ICommand {
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate max stack items for " + iCommandSender.getCommandSenderName());
+            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate max stack items for " + iCommandSender.getName());
             return;
         }
 
         ItemStack stack = player.getCurrentEquippedItem();
         if (stack == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "No items selected");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "No items selected");
             return;
         }
 
         int stackSize = stack.getMaxStackSize() - stack.stackSize;
 
         if (stackSize == 0) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "You already have the max stack size of the item");
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Use /duplicate to create a new stack");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You already have the max stack size of the item");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Use /duplicate to create a new stack");
             return;
         }
 
@@ -74,19 +78,19 @@ public class MoreItemsCommand implements ICommand {
 
         PlayerMPUtil.giveNormal(player, newItem);
 
-        String message = EnumChatFormatting.GOLD + "Gave you more of " + stack.getDisplayName();
+        String message = ChatFormatting.GOLD + "Gave you more of " + stack.getDisplayName();
         String adminmessage = "Given more of " + stack.getDisplayName() + " to self";
         ChatHelper.sendMessage(iCommandSender, message);
         ChatHelper.sendAdminMessage(iCommandSender, adminmessage);
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -97,7 +101,7 @@ public class MoreItemsCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

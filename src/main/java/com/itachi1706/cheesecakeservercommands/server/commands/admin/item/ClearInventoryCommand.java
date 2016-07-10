@@ -1,20 +1,18 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
-import com.itachi1706.cheesecakeservercommands.server.commands.util.ContainerCheatyWorkbench;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
-import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.S2DPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +49,8 @@ public class ClearInventoryCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0)
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot clear inventory of CONSOLE");
@@ -60,58 +58,58 @@ public class ClearInventoryCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot clear inventory of " + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot clear inventory of " + iCommandSender.getName());
                     return;
                 }
 
                 int clearedcount = player.inventory.clearInventory(null, -1);
                 player.inventoryContainer.detectAndSendChanges();
 
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
                 ChatHelper.sendAdminMessage(iCommandSender, "Cleared own inventory of " + clearedcount + " items");
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
         Item itemToClear = null;
         int itemDamageValue = -1;
 
-        if (astring.length == 2) {
+        if (args.length == 2) {
             // Clears only an item
-            itemToClear = CommandBase.getItemByText(iCommandSender, astring[1]);
+            itemToClear = CommandBase.getItemByText(iCommandSender, args[1]);
         }
 
-        if (astring.length == 3) {
+        if (args.length == 3) {
             // Clears damage value
-            itemDamageValue = CommandBase.parseInt(iCommandSender, astring[2]);
+            itemDamageValue = CommandBase.parseInt(iCommandSender, args[2]);
         }
 
         int clearedcount = player.inventory.clearInventory(itemToClear, itemDamageValue);
         player.inventoryContainer.detectAndSendChanges();
 
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Cleared Inventory of " + player.getCommandSenderName() + " of " + clearedcount + " items");
-        ChatHelper.sendAdminMessage(iCommandSender, "Cleared Inventory of " + player.getCommandSenderName() + " of " + clearedcount + " items");
-        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Cleared Inventory of " + player.getName() + " of " + clearedcount + " items");
+        ChatHelper.sendAdminMessage(iCommandSender, "Cleared Inventory of " + player.getName() + " of " + clearedcount + " items");
+        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         if (typedValue.length == 2)
             return CommandBase.getListOfStringsFromIterableMatchingLastWord(typedValue, Item.itemRegistry.getKeys());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -122,7 +120,7 @@ public class ClearInventoryCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }
