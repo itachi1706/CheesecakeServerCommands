@@ -60,7 +60,7 @@ public class DuplicateCommand implements ICommand {
             return;
         }
 
-        ItemStack stack = player.getCurrentEquippedItem();
+        ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "No items selected");
             return;
@@ -68,7 +68,7 @@ public class DuplicateCommand implements ICommand {
 
         int stackSize = 0;
         if (args.length > 0) {
-            stackSize = CommandBase.parseInt(iCommandSender, args[0]);
+            stackSize = CommandBase.parseInt(args[0]);
         }
 
         ItemStack newItem = stack.copy();
@@ -78,7 +78,7 @@ public class DuplicateCommand implements ICommand {
 
         boolean overflow = false;
         if (args.length > 1) {
-            overflow = CommandBase.parseBoolean(iCommandSender, args[1]);
+            overflow = CommandBase.parseBoolean(args[1]);
         }
 
         if (overflow)

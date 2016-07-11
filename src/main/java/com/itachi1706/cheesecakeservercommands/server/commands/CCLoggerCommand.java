@@ -6,14 +6,13 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJson
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import ibxm.Player;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -145,7 +144,7 @@ public class CCLoggerCommand implements ICommand {
                 LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, 1);
             } else {
                 // Check login logs for whatever page is passed
-                value = CommandBase.parseInt(iCommandSender, args[2], 1);
+                value = CommandBase.parseInt(args[2], 1);
                 LoginLogoutDB.checkLoginLogs(iCommandSender, playerName, value);
             }
             return;
@@ -270,7 +269,7 @@ public class CCLoggerCommand implements ICommand {
         List<EntityPlayerMP> onlinePlayers = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP player : onlinePlayers){
             if (player.getUniqueID().equals(uuid)){
-                ChatHelper.sendMessage(sender, ChatFormatting.GOLD + player.getDisplayNameString().getFormattedText() + ChatFormatting.WHITE + " is currently " + ChatFormatting.GREEN + "Online");
+                ChatHelper.sendMessage(sender, ChatFormatting.GOLD + player.getDisplayNameString() + ChatFormatting.WHITE + " is currently " + ChatFormatting.GREEN + "Online");
                 return;
             }
         }

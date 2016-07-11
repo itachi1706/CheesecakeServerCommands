@@ -79,7 +79,7 @@ public class SpeedCommand implements ICommand {
             // Reset
             resetSpeed = true;
         } else {
-            multiplier = CommandBase.parseIntBounded(iCommandSender, speedStr, 1, 10);
+            multiplier = CommandBase.parseInt(speedStr, 1, 10);
             if (multiplier > 10) {
                 multiplier = 10;
             }

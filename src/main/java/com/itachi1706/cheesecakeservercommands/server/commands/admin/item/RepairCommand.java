@@ -62,15 +62,15 @@ public class RepairCommand implements ICommand {
                 return;
             }
 
-            ItemStack item = player.getHeldItem();
+            ItemStack item = player.getHeldItemMainhand();
             if (item == null) {
                 ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You are not holding an item that can be repaired");
                 return;
             }
 
             item.setItemDamage(0);
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayNameString());
-            ChatHelper.sendAdminMessage(iCommandSender, "Repaired durability for " + item.getDisplayNameString());
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayName());
+            ChatHelper.sendAdminMessage(iCommandSender, "Repaired durability for " + item.getDisplayName());
             return;
         }
 
@@ -84,15 +84,15 @@ public class RepairCommand implements ICommand {
 
 
 
-        ItemStack item = player.getHeldItem();
+        ItemStack item = player.getHeldItemMainhand();
         if (item == null) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + player.getName() + " is not holding an item that can be repaired");
             return;
         }
 
         item.setItemDamage(0);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayNameString() + " in " + player.getName() + "'s hand");
-        ChatHelper.sendAdminMessage(iCommandSender, "Helped to repair " + player.getName() + "'s durability for " + item.getDisplayNameString());
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayName() + " in " + player.getName() + "'s hand");
+        ChatHelper.sendAdminMessage(iCommandSender, "Helped to repair " + player.getName() + "'s durability for " + item.getDisplayName());
         ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Item Durability repaired");
         return;
     }

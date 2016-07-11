@@ -66,7 +66,7 @@ public class RenameCommand implements ICommand {
             return;
         }
 
-        ItemStack item = player.getCurrentEquippedItem();
+        ItemStack item = player.getHeldItemMainhand();
         if (item == null) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You are not holding an item");
             return;
@@ -77,7 +77,7 @@ public class RenameCommand implements ICommand {
             builder.append(s + " ");
         }
 
-        String oldname = item.getDisplayNameString();
+        String oldname = item.getDisplayName();
         String finalnewname = builder.toString().trim();
         item.setStackDisplayName(finalnewname);
 

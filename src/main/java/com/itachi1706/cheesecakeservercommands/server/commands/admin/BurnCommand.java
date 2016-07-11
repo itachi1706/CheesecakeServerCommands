@@ -81,7 +81,7 @@ public class BurnCommand implements ICommand {
         }
 
         // Burn for specified duration
-        int duration = CommandBase.parseIntWithMin(iCommandSender, args[1], 0);
+        int duration = CommandBase.parseInt(args[1], 0);
         player.setFire(duration);
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Burned " + player.getName() + " for " + duration + " seconds");
         ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " on fire for " + duration + " seconds");

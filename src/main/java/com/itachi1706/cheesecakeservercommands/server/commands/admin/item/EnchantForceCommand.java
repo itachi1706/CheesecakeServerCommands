@@ -12,8 +12,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class EnchantForceCommand implements ICommand {
             return;
         }
 
-        ItemStack stack = player.getCurrentEquippedItem();
+        ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Item held");
             return;
@@ -82,16 +82,16 @@ public class EnchantForceCommand implements ICommand {
         @SuppressWarnings("unchecked")
         List<String> validEnchantmentNames = new ArrayList<String>();
         Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.REGISTRY) {
             if (enchantment != null) {
-                String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+                String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                 validEnchantmentNames.add(name);
                 validEnchantments.put(name.toLowerCase(), enchantment);
             }
         }
 
         @SuppressWarnings("unchecked")
-        Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
         Enchantment enchantment = validEnchantments.get(enchantstring.toLowerCase());
         if (enchantment == null) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid enchantment: " + enchantstring);
@@ -100,10 +100,10 @@ public class EnchantForceCommand implements ICommand {
 
         int enchantlevel = enchantment.getMaxLevel();
          if (args.length == 2) {
-             enchantlevel = CommandBase.parseInt(iCommandSender, args[1]);
+             enchantlevel = CommandBase.parseInt(args[1]);
          }
 
-        enchantments.put(enchantment.effectId, enchantlevel);
+        enchantments.put(enchantment, enchantlevel);
 
 
         EnchantmentHelper.setEnchantments(enchantments, stack);
@@ -125,7 +125,7 @@ public class EnchantForceCommand implements ICommand {
                 return null;
             }
 
-            ItemStack stack = player.getCurrentEquippedItem();
+            ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
                 return null;
             }
@@ -134,9 +134,9 @@ public class EnchantForceCommand implements ICommand {
             @SuppressWarnings("unchecked")
             List<String> validEnchantmentNames = new ArrayList<String>();
             Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
-            for (Enchantment enchantment : Enchantment.enchantmentsList) {
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
                 if (enchantment != null) {
-                    String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+                    String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                     validEnchantmentNames.add(name);
                 }
             }

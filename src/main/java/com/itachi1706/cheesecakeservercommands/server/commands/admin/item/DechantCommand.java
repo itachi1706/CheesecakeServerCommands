@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class DechantCommand implements ICommand {
                 return;
             }
 
-            ItemStack stack = player.getCurrentEquippedItem();
+            ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
                 ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Item held");
                 return;
@@ -77,12 +78,12 @@ public class DechantCommand implements ICommand {
 
             // Get Enchantment List
             @SuppressWarnings("unchecked")
-            Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+            Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
             List<String> validEnchantmentNames = new ArrayList<String>();
             Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
-            for (Enchantment enchantment : Enchantment.enchantmentsList) {
-                if (enchantment != null && enchantments.containsKey(enchantment.effectId)) {
-                    String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
+                if (enchantment != null && enchantments.containsKey(enchantment)) {
+                    String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                     validEnchantmentNames.add(name);
                     validEnchantments.put(name.toLowerCase(), enchantment);
                 }
@@ -101,7 +102,7 @@ public class DechantCommand implements ICommand {
                     ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid enchantment: " + enchantstring);
                     return;
                 }
-                enchantments.remove(enchantment.effectId);
+                enchantments.remove(enchantment);
             }
 
             EnchantmentHelper.setEnchantments(enchantments, stack);
@@ -124,18 +125,18 @@ public class DechantCommand implements ICommand {
                 return null;
             }
 
-            ItemStack stack = player.getCurrentEquippedItem();
+            ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
                 return null;
             }
 
             // Get Enchantment List
             @SuppressWarnings("unchecked")
-            Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+            Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
             List<String> validEnchantmentNames = new ArrayList<String>();
-            for (Enchantment enchantment : Enchantment.enchantmentsList) {
-                if (enchantment != null && enchantments.containsKey(enchantment.effectId)) {
-                    String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
+                if (enchantment != null && enchantments.containsKey(enchantment)) {
+                    String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                     validEnchantmentNames.add(name);
                 }
             }

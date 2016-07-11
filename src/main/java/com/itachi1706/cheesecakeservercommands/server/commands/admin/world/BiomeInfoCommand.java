@@ -10,7 +10,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -63,28 +63,26 @@ public class BiomeInfoCommand implements ICommand {
 
             int x = (int) Math.floor(player.posX);
             int z = (int) Math.floor(player.posZ);
-            BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(x, z);
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Current Biome: " + ChatFormatting.AQUA + biome.biomeName);
+            Biome biome = player.worldObj.getBiomeGenForCoords(new BlockPos(x, 0, z));
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Current Biome: " + ChatFormatting.AQUA + biome.getBiomeName());
             return;
         }
 
         if (args[0].equalsIgnoreCase("list")) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Registered Biome: ");
             boolean skip = false;
-            for (int i = 0; i < BiomeGenBase.getBiomeGenArray().length; i++)
-            {
-                BiomeGenBase biome = BiomeGenBase.getBiomeGenArray()[i];
-                if (biome == null)
-                {
+            int i = 0;
+            for (Biome biome : Biome.REGISTRY) {
+                if (biome == null) {
                     skip = true;
                     continue;
                 }
-                if (skip)
-                {
+                if (skip) {
                     skip = false;
                     ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "----");
                 }
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "#" + i + ": " + ChatFormatting.AQUA + biome.biomeName);
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "#" + i + ": " + ChatFormatting.AQUA + biome.getBiomeName());
+                i++;
             }
         } else {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Command. Usage: /biomeinfo [list]");

@@ -75,12 +75,12 @@ public class GiveItemCommand implements ICommand {
 
         if (args.length >= 2) {
             // Set item stack size
-            stacksize = CommandBase.parseInt(iCommandSender, args[1]);
+            stacksize = CommandBase.parseInt(args[1]);
         }
 
         if (args.length >= 3) {
             // Gets item damage value
-            itemDamageValue = CommandBase.parseInt(iCommandSender, args[2]);
+            itemDamageValue = CommandBase.parseInt(args[2]);
         }
 
         ItemStack itemStack = new ItemStack(itemToAdd, stacksize, itemDamageValue);
@@ -105,7 +105,7 @@ public class GiveItemCommand implements ICommand {
 
         boolean spillover = false;
         if (args.length == 5) {
-            spillover = CommandBase.parseBoolean(iCommandSender, args[4]);
+            spillover = CommandBase.parseBoolean(args[4]);
         }
 
         if (spillover) {

@@ -55,7 +55,7 @@ public class ModlistCommand implements ICommand {
 
         int page = 0;
         if (args.length > 0) {
-            page = CommandBase.parseInt(iCommandSender, args[0]);
+            page = CommandBase.parseInt(args[0]);
             page -= 1;
         }
         int min = Math.min(page * perPage, size);

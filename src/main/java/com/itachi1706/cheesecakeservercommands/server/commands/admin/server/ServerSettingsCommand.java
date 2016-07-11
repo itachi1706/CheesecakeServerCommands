@@ -12,7 +12,6 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.GameType;
-import net.minecraft.world.WorldSettings;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,7 +74,6 @@ public class ServerSettingsCommand implements ICommand {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You can only use this command on dedicated servers");
             return;
         }
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if (args.length == 0) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /serversettings <option> [value]");
@@ -94,7 +92,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Allow flight: %s", Boolean.toString(server.isFlightAllowed())));
             else {
-                boolean allowFlight = CommandBase.parseBoolean(iCommandSender, value);
+                boolean allowFlight = CommandBase.parseBoolean(value);
                 server.setAllowFlight(allowFlight);
                 setProperty("allow-flight", allowFlight);
                 ChatHelper.sendMessage(iCommandSender, String.format("Allow flight set to %s", Boolean.toString(allowFlight)));
@@ -104,7 +102,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Allow PvP: %s", Boolean.toString(server.isPVPEnabled())));
             else {
-                boolean allowPvP = CommandBase.parseBoolean(iCommandSender, value);
+                boolean allowPvP = CommandBase.parseBoolean(value);
                 server.setAllowPvp(allowPvP);
                 setProperty("pvp", allowPvP);
                 ChatHelper.sendMessage(iCommandSender, String.format("PvP set to %s", Boolean.toString(allowPvP)));
@@ -114,7 +112,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Build Limit: %d", server.getBuildLimit()));
             else {
-                int buildlimit = CommandBase.parseIntBounded(iCommandSender, value, 1, 256);
+                int buildlimit = CommandBase.parseInt(value, 1, 256);
                 server.setBuildLimit(buildlimit);
                 setProperty("max-build-height", buildlimit);
                 ChatHelper.sendMessage(iCommandSender, String.format("Build Limit set to %d", buildlimit));
@@ -124,7 +122,7 @@ public class ServerSettingsCommand implements ICommand {
             if (!setValue)
                 ChatHelper.sendMessage(iCommandSender, String.format("Spawn protection size: %d", server.getSpawnProtectionSize()));
             else {
-                int spawnprotection = CommandBase.parseIntWithMin(iCommandSender, value, 0);
+                int spawnprotection = CommandBase.parseInt(value, 0);
                 setProperty("spawn-protection", spawnprotection);
                 ChatHelper.sendMessage(iCommandSender, String.format("Set spawn-protection to %d", spawnprotection));
             }
