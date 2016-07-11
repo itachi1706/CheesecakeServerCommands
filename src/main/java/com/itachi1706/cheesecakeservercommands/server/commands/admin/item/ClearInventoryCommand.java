@@ -62,7 +62,7 @@ public class ClearInventoryCommand implements ICommand {
                     return;
                 }
 
-                int clearedcount = player.inventory.clearMatchingItems(null, -1, 0, null);
+                int clearedcount = player.inventory.clearMatchingItems(null, -1, -1, null);
                 player.inventoryContainer.detectAndSendChanges();
 
                 ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
@@ -91,7 +91,7 @@ public class ClearInventoryCommand implements ICommand {
             itemDamageValue = CommandBase.parseInt(args[2]);
         }
 
-        int clearedcount = player.inventory.clearMatchingItems(itemToClear, itemDamageValue, 0, null);
+        int clearedcount = player.inventory.clearMatchingItems(itemToClear, itemDamageValue, -1, null);
         player.inventoryContainer.detectAndSendChanges();
 
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Cleared Inventory of " + player.getName() + " of " + clearedcount + " items");

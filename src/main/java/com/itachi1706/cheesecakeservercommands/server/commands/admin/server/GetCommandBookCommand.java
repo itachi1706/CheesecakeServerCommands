@@ -90,10 +90,8 @@ public class GetCommandBookCommand implements ICommand {
         }
 
         Set<String> pages = new TreeSet<String>();
-        for (Object cmdObj : PlayerMPUtil.getServerInstance().getCommandManager().getCommands().values())
+        for (ICommand cmd : PlayerMPUtil.getServerInstance().getCommandManager().getCommands().values())
         {
-            ICommand cmd = (ICommand) cmdObj;
-
             Set<String> commands = new HashSet<String>();
             commands.add("/" + cmd.getCommandName());
 
@@ -112,7 +110,8 @@ public class GetCommandBookCommand implements ICommand {
 
         NBTTagList pagesNbt = new NBTTagList();
         for (String page : pages)
-            pagesNbt.appendTag(new NBTTagString(page));
+            pagesNbt.appendTag(new NBTTagString("{\"text\":\"" + page + "\"}"));
+
 
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("author", "Cheesecake Network");

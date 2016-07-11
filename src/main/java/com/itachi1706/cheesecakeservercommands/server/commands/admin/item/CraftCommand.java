@@ -4,12 +4,12 @@ import com.itachi1706.cheesecakeservercommands.server.commands.util.ContainerChe
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.block.BlockWorkbench;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.SPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
@@ -62,7 +62,7 @@ public class CraftCommand implements ICommand {
                 }
 
                 player.getNextWindowId();
-                player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:crafting_table", player.getDisplayName(), 9, player.getEntityId()));
+                player.displayGui(new BlockWorkbench.InterfaceCraftingTable(player.worldObj, new BlockPos(player.posX, player.posY, player.posZ)));
                 player.openContainer = new ContainerCheatyWorkbench(player.inventory, player.worldObj);
                 player.openContainer.windowId = player.currentWindowId;
                 player.openContainer.addListener(player);
@@ -81,7 +81,7 @@ public class CraftCommand implements ICommand {
         }
 
         player.getNextWindowId();
-        player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:crafting_table", player.getDisplayName(), 9, player.getEntityId()));
+        player.displayGui(new BlockWorkbench.InterfaceCraftingTable(player.worldObj, new BlockPos(player.posX, player.posY, player.posZ)));
         player.openContainer = new ContainerCheatyWorkbench(player.inventory, player.worldObj);
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addListener(player);
