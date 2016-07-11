@@ -10,9 +10,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.InventoryEnderChest;
-import net.minecraft.network.play.server.S2DPacketOpenWindow;
+import net.minecraft.network.play.server.SPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -71,10 +72,10 @@ public class InvSeeEnderChestCommand implements ICommand {
         if (args.length == 0)
         {
             InventoryEnderChest chest = player.getInventoryEnderChest();
-            player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
-            player.openContainer = new ContainerChest(player.inventory, chest);
+            player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:ender_chest", new TextComponentString("Ender Chest"), chest.getSizeInventory(), player.getEntityId()));
+            player.openContainer = new ContainerChest(player.inventory, chest, player);
             player.openContainer.windowId = player.currentWindowId;
-            player.openContainer.addCraftingToCrafters(player);
+            player.openContainer.addListener(player);
 
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Viewing your own Ender Chest");
             ChatHelper.sendAdminMessage(iCommandSender, "Viewing own Ender Chest");
@@ -89,10 +90,10 @@ public class InvSeeEnderChestCommand implements ICommand {
         }
 
         InventoryEnderChest chest = victim.getInventoryEnderChest();
-        player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, victim.getName() + "'s Ender Chest", chest.getSizeInventory(), true));
+        player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:ender_chest", new TextComponentString(victim.getName() + "'s Ender Chest"), chest.getSizeInventory(), player.getEntityId()));
         player.openContainer = new ContainerChest(player.inventory, chest, player);
         player.openContainer.windowId = player.currentWindowId;
-        player.openContainer.addCraftingToCrafters(player);
+        player.openContainer.addListener(player);
 
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Viewing " + player.getName() + "'s Ender Chest");
         ChatHelper.sendAdminMessage(iCommandSender, "Viewing ender chest of " + player.getName());

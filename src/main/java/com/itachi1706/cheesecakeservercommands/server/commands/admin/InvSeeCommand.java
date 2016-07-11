@@ -10,6 +10,7 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerChest;
+import net.minecraft.network.play.server.SPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
@@ -66,10 +67,10 @@ public class InvSeeCommand implements ICommand {
             commandSender.getNextWindowId();
 
             PlayerInvChest chest = new PlayerInvChest(commandSender, commandSender);
-            commandSender.connection.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
-            commandSender.openContainer = new ContainerChest(commandSender.inventory, chest);
+            commandSender.connection.sendPacket(new SPacketOpenWindow(commandSender.currentWindowId, "minecraft:chest", chest.getDisplayName(), chest.getSizeInventory(), commandSender.getEntityId()));
+            commandSender.openContainer = new ContainerChest(commandSender.inventory, chest, commandSender);
             commandSender.openContainer.windowId = commandSender.currentWindowId;
-            commandSender.openContainer.addCraftingToCrafters(commandSender);
+            commandSender.openContainer.addListener(commandSender);
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened your inventory");
             ChatHelper.sendAdminMessage(iCommandSender, "Seen own inventory");
             return;
@@ -89,10 +90,10 @@ public class InvSeeCommand implements ICommand {
         commandSender.getNextWindowId();
 
         PlayerInvChest chest = new PlayerInvChest(player, commandSender);
-        commandSender.connection.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
-        commandSender.openContainer = new ContainerChest(commandSender.inventory, chest);
+        commandSender.connection.sendPacket(new SPacketOpenWindow(commandSender.currentWindowId, "minecraft:chest", chest.getDisplayName(), chest.getSizeInventory(), commandSender.getEntityId()));
+        commandSender.openContainer = new ContainerChest(commandSender.inventory, chest, commandSender);
         commandSender.openContainer.windowId = commandSender.currentWindowId;
-        commandSender.openContainer.addCraftingToCrafters(commandSender);
+        commandSender.openContainer.addListener(commandSender);
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened " + player.getName() + "'s inventory");
         ChatHelper.sendAdminMessage(iCommandSender, "Seen " + player.getName() + "'s inventory");
     }

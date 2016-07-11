@@ -3,8 +3,11 @@ package com.itachi1706.cheesecakeservercommands.util;
 import com.itachi1706.cheesecakeservercommands.commons.selections.WarpPoint;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.SPacketEntityEffect;
+import net.minecraft.network.play.server.SPacketRespawn;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -37,9 +40,9 @@ public class TeleportHelper {
         }
 
         @Override
-        public boolean placeInExistingPortal(Entity entity, double x, double y, double z, float rotationYaw)
+        public boolean placeInExistingPortal(Entity entity, float rotationYaw)
         {
-            entity.setLocationAndAngles(x, y, z, rotationYaw, entity.rotationPitch);
+            entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, rotationYaw, entity.rotationPitch);
             return true;
         }
 
@@ -50,9 +53,8 @@ public class TeleportHelper {
         }
 
         @Override
-        public void placeInPortal(Entity entity, double x, double y, double z, float rotationYaw)
-        {
-            placeInExistingPortal(entity, x, y, z, rotationYaw);
+        public void placeInPortal(Entity entityIn, float rotationYaw) {
+            placeInExistingPortal(entityIn, rotationYaw);
         }
 
     }
@@ -133,11 +135,16 @@ public class TeleportHelper {
     {
         if (point.getY() < 0)
             return false;
-        Block block1 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY(), point.getBlockZ())).getBlock();
-        Block block2 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY() + 1, point.getBlockZ())).getBlock();
-        boolean block1Free = !block1.getMaterial().isSolid() || block1.getBlockBoundsMaxX() < 1 || block1.getBlockBoundsMaxY() > 0;
-        boolean block2Free = !block2.getMaterial().isSolid() || block2.getBlockBoundsMaxX() < 1 || block2.getBlockBoundsMaxY() > 0;
-        return block1Free && block2Free;
+        IBlockState blockS1 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY(), point.getBlockZ()));
+        IBlockState blockS2 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY() + 1, point.getBlockZ()));
+
+        Block block1 = blockS1.getBlock();
+        Block block2 = blockS2.getBlock();
+        // TODO: Figure out how to do this, returning true for now
+        //boolean block1Free = !block1.getMaterial(blockS1).isSolid() || block1.getBlockBoundsMaxX() < 1 || block1.getBlockBoundsMaxY() > 0;
+        //boolean block2Free = !block2.getMaterial(blockS2).isSolid() || block2.getBlockBoundsMaxX() < 1 || block2.getBlockBoundsMaxY() > 0;
+        //return block1Free && block2Free;
+        return true;
     }
 
     public static void checkedTeleport(EntityPlayerMP player, WarpPoint point)
@@ -205,9 +212,9 @@ public class TeleportHelper {
         WorldServer oldWorld = mcServer.worldServerForDimension(player.dimension);
         player.dimension = dimension;
         WorldServer newWorld = mcServer.worldServerForDimension(player.dimension);
-        player.connection.sendPacket(new S07PacketRespawn(player.dimension, newWorld.difficultySetting,
+        player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(),
                 newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType())); // Forge: Use new dimensions information
-        oldWorld.removePlayerEntityDangerously(player);
+        oldWorld.removeEntityDangerously(player);
         player.isDead = false;
 
         transferEntityToWorld(player, oldDim, oldWorld, newWorld, teleporter);
@@ -222,7 +229,7 @@ public class TeleportHelper {
         while (iterator.hasNext())
         {
             PotionEffect potioneffect = (PotionEffect) iterator.next();
-            player.connection.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potioneffect));
+            player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
         }
         FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
     }
@@ -243,7 +250,7 @@ public class TeleportHelper {
         if (entity.isEntityAlive())
         {
             entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
-            teleporter.placeInPortal(entity, d3, d4, d5, f);
+            teleporter.placeInPortal(entity, f);
             newWorld.spawnEntityInWorld(entity);
             newWorld.updateEntityWithOptionalForce(entity, false);
         }

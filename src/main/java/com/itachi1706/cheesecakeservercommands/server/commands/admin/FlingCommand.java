@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.WorldServer;
@@ -67,10 +67,10 @@ public class FlingCommand implements ICommand {
                 player.motionY = 10;
                 player.velocityChanged = true;
                 ;
-                player.addPotionEffect(new PotionEffect(Potion.resistance.id, 300, 100, true));
+                player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("resistance"), 300, 100, true, false));
                 WorldServer worldServer = (WorldServer) player.worldObj;
-                worldServer.func_147487_a("hugeexplosion", player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0);
-                Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0);
+                worldServer.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0, new int[0]);
+                Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0, true, true);
                 explosion.doExplosionB(true);
                 ChatHelper.sendMessage(iCommandSender, ChatFormatting.DARK_PURPLE + "You were flung into the air");
                 ChatHelper.sendAdminMessage(iCommandSender, "Flung own self into the air!");
@@ -87,10 +87,10 @@ public class FlingCommand implements ICommand {
 
         player.motionY = 10;
         player.velocityChanged = true;
-        player.addPotionEffect(new PotionEffect(Potion.resistance.id, 300, 100, true));
+        player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("resistance"), 300, 100, true, false));
         WorldServer worldServer = (WorldServer) player.worldObj;
-        worldServer.func_147487_a("hugeexplosion", player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0);
-        Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0);
+        worldServer.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0, new int[0]);
+        Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0, true, true);
         explosion.doExplosionB(true);
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Flung " + player.getName() + " into the air!");
         ChatHelper.sendAdminMessage(iCommandSender, "Flung " + player.getName() + " into the air");

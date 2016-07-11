@@ -9,7 +9,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S2DPacketOpenWindow;
+import net.minecraft.network.play.server.SPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
@@ -62,10 +62,10 @@ public class CraftCommand implements ICommand {
                 }
 
                 player.getNextWindowId();
-                player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 1, "Crafting", 9, true));
+                player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:crafting_table", player.getDisplayName(), 9, player.getEntityId()));
                 player.openContainer = new ContainerCheatyWorkbench(player.inventory, player.worldObj);
                 player.openContainer.windowId = player.currentWindowId;
-                player.openContainer.addCraftingToCrafters(player);
+                player.openContainer.addListener(player);
 
                 ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Crafting Window");
                 ChatHelper.sendAdminMessage(iCommandSender, "Opened crafting window");
@@ -81,10 +81,10 @@ public class CraftCommand implements ICommand {
         }
 
         player.getNextWindowId();
-        player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 1, "Crafting", 9, true));
+        player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:crafting_table", player.getDisplayName(), 9, player.getEntityId()));
         player.openContainer = new ContainerCheatyWorkbench(player.inventory, player.worldObj);
         player.openContainer.windowId = player.currentWindowId;
-        player.openContainer.addCraftingToCrafters(player);
+        player.openContainer.addListener(player);
 
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Crafting Window for " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Opened crafting window for " + player.getName());

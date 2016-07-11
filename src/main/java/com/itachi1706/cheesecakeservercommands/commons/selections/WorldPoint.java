@@ -2,9 +2,7 @@ package com.itachi1706.cheesecakeservercommands.commons.selections;
 
 import com.google.gson.annotations.Expose;
 import net.minecraft.block.Block;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -50,10 +48,12 @@ public class WorldPoint extends Point {
         this(world, location.getBlockPos().getX(), location.getBlockPos().getY(), location.getBlockPos().getZ());
     }
 
-    public WorldPoint(World world, ChunkPosition location)
+    // TODO: Figure out how to convert this
+    /*public WorldPoint(World world, ChunkPosition location)
     {
+        ChunkPos locate;
         this(world, location.chunkPosX, location.chunkPosY, location.chunkPosZ);
-    }
+    }*/
 
     public WorldPoint(Entity entity)
     {
@@ -85,13 +85,14 @@ public class WorldPoint extends Point {
 
     public WorldPoint(BlockEvent event)
     {
-        this(event.world, event.x, event.y, event.z);
+        this(event.getWorld(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
     }
 
-    public static WorldPoint create(ICommandSender sender)
+    // TODO: Figure out how to convert this
+    /*public static WorldPoint create(ICommandSender sender)
     {
         return new WorldPoint(sender.getEntityWorld(), sender.getPlayerCoordinates());
-    }
+    }*/
 
     // ------------------------------------------------------------
 
@@ -144,15 +145,17 @@ public class WorldPoint extends Point {
         return getWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
     }
 
-    public int getBlockMeta()
+    // TODO: Figure out how to convert this
+    /*public int getBlockMeta()
     {
         return getWorld().getBlockMetadata(x, y, z);
-    }
+    }*/
 
-    public TileEntity getTileEntity()
+    // TODO: Figure out how to convert this
+    /*public TileEntity getTileEntity()
     {
         return getWorld().getTileEntity(x, y, z);
-    }
+    }*/
 
     // ------------------------------------------------------------
 

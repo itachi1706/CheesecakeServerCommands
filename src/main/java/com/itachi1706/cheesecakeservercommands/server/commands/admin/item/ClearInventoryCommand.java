@@ -62,7 +62,7 @@ public class ClearInventoryCommand implements ICommand {
                     return;
                 }
 
-                int clearedcount = player.inventory.clearInventory(null, -1);
+                int clearedcount = player.inventory.clearMatchingItems(null, -1, 0, null);
                 player.inventoryContainer.detectAndSendChanges();
 
                 ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Inventory Cleared of " + clearedcount + " items");
@@ -88,10 +88,10 @@ public class ClearInventoryCommand implements ICommand {
 
         if (args.length == 3) {
             // Clears damage value
-            itemDamageValue = CommandBase.parseInt(iCommandSender, args[2]);
+            itemDamageValue = CommandBase.parseInt(args[2]);
         }
 
-        int clearedcount = player.inventory.clearInventory(itemToClear, itemDamageValue);
+        int clearedcount = player.inventory.clearMatchingItems(itemToClear, itemDamageValue, 0, null);
         player.inventoryContainer.detectAndSendChanges();
 
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Cleared Inventory of " + player.getName() + " of " + clearedcount + " items");
@@ -104,7 +104,7 @@ public class ClearInventoryCommand implements ICommand {
         if (typedValue.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         if (typedValue.length == 2)
-            return CommandBase.getListOfStringsFromIterableMatchingLastWord(typedValue, Item.itemRegistry.getKeys());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, Item.REGISTRY.getKeys());
         return null;
     }
 
