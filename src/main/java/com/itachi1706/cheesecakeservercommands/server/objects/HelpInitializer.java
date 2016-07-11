@@ -18,6 +18,8 @@ public class HelpInitializer {
         help.add(new HelpMain("mojang", "Mojang Module Commands", initializeMojang()));
         help.add(new HelpMain("serverproperties", "Server Properties Module Command", initializeServerProperties(), true));
         help.add(new HelpMain("admin", "Admin Module Commands", initializeAdmin(), true));
+        help.add(new HelpMain("adminitem", "Admin (Items) Module Commands", initializeAdminItem(), true));
+        help.add(new HelpMain("adminworld", "Admin (World/Server) Module Commands", initializeAdminWorldServer(), true));
         return help.toArray(new HelpMain[help.size()]);
     }
 
@@ -44,15 +46,11 @@ public class HelpInitializer {
         sub.add(new HelpSub("/tpto <player>", "Teleports to a player"));
         sub.add(new HelpSub("/wow [player]", "Trolls yourself or another player"));
         sub.add(new HelpSub("/zeus [player]", "Let a player suffer the Wrath of Zeus"));
+        return sub.toArray(new HelpSub[sub.size()]);
+    }
 
-        // World Commands
-        sub.add(new HelpSub("/biomeinfo [list]", "Show current biome info or list of all available biomes"));
-
-        // Server Commands
-        sub.add(new HelpSub("/getcommandbook [player]", "Gives yourself or a player a book containing all commands on the server"));
-        sub.add(new HelpSub("/modlist [page]", "List of mods on the server"));
-        sub.add(new HelpSub("/serversettings <option> [value]", "Set or Get Server Settings dynamically"));
-
+    private static HelpSub[] initializeAdminItem() {
+        List<HelpSub> sub = new ArrayList<HelpSub>();
         // Item Commands
         sub.add(new HelpSub("/ci [player] [item] [damage]", "Clears player inventory of everything or a specific item"));
         sub.add(new HelpSub("/craft [player]", "Shows the crafting GUI to a player"));
@@ -66,7 +64,18 @@ public class HelpInitializer {
         sub.add(new HelpSub("/more", "Max Stack your current main held item"));
         sub.add(new HelpSub("/renameitem", "Rename the item current held in your main hand"));
         sub.add(new HelpSub("/repairitem", "Restores Full Durability to the item currently held in your main hand"));
+        return sub.toArray(new HelpSub[sub.size()]);
+    }
 
+    private static HelpSub[] initializeAdminWorldServer() {
+        List<HelpSub> sub = new ArrayList<HelpSub>();
+        // World Commands
+        sub.add(new HelpSub("/biomeinfo [list]", "Show current biome info or list of all available biomes"));
+
+        // Server Commands
+        sub.add(new HelpSub("/getcommandbook [player]", "Gives yourself or a player a book containing all commands on the server"));
+        sub.add(new HelpSub("/modlist [page]", "List of mods on the server"));
+        sub.add(new HelpSub("/serversettings <option> [value]", "Set or Get Server Settings dynamically"));
         return sub.toArray(new HelpSub[sub.size()]);
     }
 
@@ -91,6 +100,12 @@ public class HelpInitializer {
         List<HelpSub> sub = new ArrayList<HelpSub>();
         sub.add(new HelpSub("/mojang status", "View Mojang Server Status"));
         sub.add(new HelpSub("/mojang premium <name>", "Check if name is purchased"));
+        return sub.toArray(new HelpSub[sub.size()]);
+    }
+
+    @SuppressWarnings("unused")
+    private static HelpSub[] sample() {
+        List<HelpSub> sub = new ArrayList<HelpSub>();
         return sub.toArray(new HelpSub[sub.size()]);
     }
 }
