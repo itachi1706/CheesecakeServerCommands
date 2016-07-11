@@ -77,7 +77,7 @@ public class RenameCommand implements ICommand {
             builder.append(s + " ");
         }
 
-        String oldname = item.getDisplayName();
+        String oldname = item.getDisplayNameString();
         String finalnewname = builder.toString().trim();
         item.setStackDisplayName(finalnewname);
 

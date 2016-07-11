@@ -71,11 +71,11 @@ public class LoginLogoutDB {
 
     private static void addLog(EntityPlayerMP player, String type){
         if (player == null) return;
-        if (player.playerNetServerHandler == null) return;
+        if (player.connection == null) return;
         if (player.getPlayerIP() == null) return;
         String ip = player.getPlayerIP();
         String insertQuery = "INSERT INTO LOGINS (NAME,UUID,IP,X,Y,Z,WORLD,TYPE) " +
-                "VALUES('" + player.getDisplayName() + "','" + player.getUniqueID().toString() + "','" + ip + "','"
+                "VALUES('" + player.getDisplayNameString() + "','" + player.getUniqueID().toString() + "','" + ip + "','"
                 + (Math.round(player.posX * 100.0) / 100.0) + "','" + (Math.round(player.posY * 100.0) / 100.0) + "','"
                 + (Math.round(player.posZ * 100.0) / 100.0) + "','" + player.worldObj.getWorldInfo().getWorldName() + "','"
                 + type + "');";
@@ -253,11 +253,11 @@ public class LoginLogoutDB {
         // Check if EntityPlayer is online
         List<EntityPlayerMP> playerEntityList = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP pl : playerEntityList){
-            if (pl.getDisplayName().equals(target) || pl.getUniqueID().equals(uuid)){
+            if (pl.getDisplayNameString().equals(target) || pl.getUniqueID().equals(uuid)){
                 status = ChatFormatting.GREEN + "Online";
                 isOnline = true;
-                nick = pl.getDisplayName();
-                switch (pl.theItemInWorldManager.getGameType()){
+                nick = pl.getDisplayNameString();
+                switch (pl.interactionManager.getGameType()){
                     case CREATIVE: gamemode = ChatFormatting.GREEN + "CREATIVE"; break;
                     case SURVIVAL: gamemode = ChatFormatting.GREEN + "SURVIVAL"; break;
                     case ADVENTURE: gamemode = ChatFormatting.GREEN + "ADVENTURE"; break;
@@ -268,7 +268,7 @@ public class LoginLogoutDB {
                     opStatus = ChatFormatting.GREEN + "Opped";
                 }
 
-                currentlocation = pl.getPlayerCoordinates().posX + ", " + pl.getPlayerCoordinates().posY + ", " + pl.getPlayerCoordinates().posZ;
+                currentlocation = pl.posX + ", " + pl.posY + ", " + pl.posZ;
                 break;
             }
         }

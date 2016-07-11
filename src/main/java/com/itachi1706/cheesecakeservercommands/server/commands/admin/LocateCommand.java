@@ -64,7 +64,7 @@ public class LocateCommand implements ICommand {
                 float toHeal = player.getMaxHealth() - player.getHealth();
                 WorldPoint point = new WorldPoint(player);
                 ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "You are at %d, %d, %d in dimension %d with a gamemode of %s",
-                        point.getX(), point.getY(), point.getZ(), point.getDimension(), player.theItemInWorldManager.getGameType().getName()));
+                        point.getX(), point.getY(), point.getZ(), point.getDimension(), player.interactionManager.getGameType().getName()));
                 ChatHelper.sendAdminMessage(iCommandSender, "Located Own location");
                 return;
             }
@@ -79,7 +79,7 @@ public class LocateCommand implements ICommand {
 
         WorldPoint point = new WorldPoint(player);
         ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "%s is at %d, %d, %d in dimension %d with a gamemode of %s",
-                player.getName(), point.getX(), point.getY(), point.getZ(), point.getDimension(), player.theItemInWorldManager.getGameType().getName()));
+                player.getName(), point.getX(), point.getY(), point.getZ(), point.getDimension(), player.interactionManager.getGameType().getName()));
         ChatHelper.sendAdminMessage(iCommandSender, "Located " + player.getName() + "'s location");
     }
 

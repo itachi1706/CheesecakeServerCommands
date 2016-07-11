@@ -16,7 +16,7 @@ public class ZeusDamage extends DamageSource {
     }
 
     @Override
-    public ITextComponent func_151519_b(EntityLivingBase p_151519_1_)
+    public ITextComponent getDeathMessage(EntityLivingBase p_151519_1_)
     {
         String text = "%s suffered the Wrath of Zeus!";
         String username = p_151519_1_.getName();

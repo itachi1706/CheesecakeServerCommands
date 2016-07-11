@@ -62,7 +62,7 @@ public class CraftCommand implements ICommand {
                 }
 
                 player.getNextWindowId();
-                player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 1, "Crafting", 9, true));
+                player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 1, "Crafting", 9, true));
                 player.openContainer = new ContainerCheatyWorkbench(player.inventory, player.worldObj);
                 player.openContainer.windowId = player.currentWindowId;
                 player.openContainer.addCraftingToCrafters(player);
@@ -81,7 +81,7 @@ public class CraftCommand implements ICommand {
         }
 
         player.getNextWindowId();
-        player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 1, "Crafting", 9, true));
+        player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 1, "Crafting", 9, true));
         player.openContainer = new ContainerCheatyWorkbench(player.inventory, player.worldObj);
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addCraftingToCrafters(player);

@@ -92,13 +92,13 @@ public class ServerPropertiesCommand implements ICommand {
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server IP: " + ChatFormatting.AQUA + tmp.getServerHostname() + ":" + tmp.getServerPort());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Max Allowed Players: " + ChatFormatting.AQUA + tmp.getMaxPlayers());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Spawn Protection Size: " + ChatFormatting.AQUA + tmp.getSpawnProtectionSize());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server View Distance: " + ChatFormatting.AQUA + tmp.getConfigurationManager().getViewDistance());
+        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server View Distance: " + ChatFormatting.AQUA + tmp.getPlayerList().getViewDistance());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server World: " + ChatFormatting.AQUA + tmp.getEntityWorld().getWorldInfo().getWorldName());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Allow Nether: " + ChatFormatting.AQUA + tmp.getAllowNether());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Allow Flight: " + ChatFormatting.AQUA + tmp.isFlightAllowed());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Default Gamemode: " + ChatFormatting.AQUA + tmp.getGameType().getName());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Generate Structure: " + ChatFormatting.AQUA + tmp.canStructuresSpawn());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Whitelist: " + ChatFormatting.AQUA + tmp.getConfigurationManager().isWhiteListEnabled());
+        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Whitelist: " + ChatFormatting.AQUA + tmp.getPlayerList().isWhiteListEnabled());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Hardcore Mode: " + ChatFormatting.AQUA + tmp.isHardcore());
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
     }

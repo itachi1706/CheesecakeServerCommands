@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeservercommands.util;
 import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -24,7 +25,7 @@ public class WorldUtil {
     {
         for (int i = 0; i < h; i++)
         {
-            Block block = world.getBlock(x, y + i, z);
+            Block block = world.getBlockState(new BlockPos(x, y + i, z)).getBlock();
             if (block.getMaterial().isSolid() || block.getMaterial().isLiquid())
                 return false;
         }

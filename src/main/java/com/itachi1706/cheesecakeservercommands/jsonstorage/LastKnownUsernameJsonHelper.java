@@ -64,7 +64,7 @@ public class LastKnownUsernameJsonHelper {
             }
         }
 
-        playerLastSeen.setLastKnownGamemode(player.theItemInWorldManager.getGameType().getName());
+        playerLastSeen.setLastKnownGamemode(player.interactionManager.getGameType().getName());
 
         CheesecakeServerCommands.lastKnownUsernames.add(playerLastSeen);
         writeToFile();

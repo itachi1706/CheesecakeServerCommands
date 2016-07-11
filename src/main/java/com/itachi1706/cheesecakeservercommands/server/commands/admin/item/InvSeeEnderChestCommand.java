@@ -71,7 +71,7 @@ public class InvSeeEnderChestCommand implements ICommand {
         if (args.length == 0)
         {
             InventoryEnderChest chest = player.getInventoryEnderChest();
-            player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
+            player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
             player.openContainer = new ContainerChest(player.inventory, chest);
             player.openContainer.windowId = player.currentWindowId;
             player.openContainer.addCraftingToCrafters(player);
@@ -89,7 +89,7 @@ public class InvSeeEnderChestCommand implements ICommand {
         }
 
         InventoryEnderChest chest = victim.getInventoryEnderChest();
-        player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, victim.getName() + "'s Ender Chest", chest.getSizeInventory(), true));
+        player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, victim.getName() + "'s Ender Chest", chest.getSizeInventory(), true));
         player.openContainer = new ContainerChest(player.inventory, chest);
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addCraftingToCrafters(player);

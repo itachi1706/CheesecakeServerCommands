@@ -69,8 +69,8 @@ public class RepairCommand implements ICommand {
             }
 
             item.setItemDamage(0);
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayName());
-            ChatHelper.sendAdminMessage(iCommandSender, "Repaired durability for " + item.getDisplayName());
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayNameString());
+            ChatHelper.sendAdminMessage(iCommandSender, "Repaired durability for " + item.getDisplayNameString());
             return;
         }
 
@@ -91,8 +91,8 @@ public class RepairCommand implements ICommand {
         }
 
         item.setItemDamage(0);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayName() + " in " + player.getName() + "'s hand");
-        ChatHelper.sendAdminMessage(iCommandSender, "Helped to repair " + player.getName() + "'s durability for " + item.getDisplayName());
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayNameString() + " in " + player.getName() + "'s hand");
+        ChatHelper.sendAdminMessage(iCommandSender, "Helped to repair " + player.getName() + "'s durability for " + item.getDisplayNameString());
         ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Item Durability repaired");
         return;
     }

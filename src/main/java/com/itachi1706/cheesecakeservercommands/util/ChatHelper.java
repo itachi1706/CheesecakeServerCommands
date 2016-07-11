@@ -4,7 +4,6 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class ChatHelper {
     }
 
     public static void sendGlobalMessage(TextComponentString text) {
-        PlayerMPUtil.getServerInstance().getConfigurationManager().sendChatMsg(text);
+        PlayerMPUtil.getServerInstance().getPlayerList().sendChatMsg(text);
     }
 
     public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {

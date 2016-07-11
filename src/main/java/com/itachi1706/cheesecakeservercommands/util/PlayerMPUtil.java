@@ -7,9 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class PlayerMPUtil {
 
-    public static boolean isOperatorOrConsole(ICommandSender iCommandSender) {
+    public static boolean isOperatorOrConsole(ICommandSender sender) {
         return !(sender instanceof EntityPlayer) || isOperator((EntityPlayer) sender);
     }
 
@@ -34,14 +33,14 @@ public class PlayerMPUtil {
             return true;
 
         GameProfile profile = player.getGameProfile();
-        return PlayerMPUtil.getServerInstance().getConfigurationManager().func_152596_g(profile);
+        return PlayerMPUtil.getServerInstance().getPlayerList().canSendCommands(profile);
     }
 
-    public static boolean isPlayer(ICommandSender iCommandSender){
+    public static boolean isPlayer(ICommandSender sender){
         return sender instanceof EntityPlayer;
     }
 
-    public static EntityPlayer castToPlayer(ICommandSender iCommandSender){
+    public static EntityPlayer castToPlayer(ICommandSender sender){
         if (isPlayer(sender))
             return (EntityPlayer) sender;
         return null;
@@ -49,7 +48,7 @@ public class PlayerMPUtil {
 
     @SuppressWarnings("unchecked")
     public static List<EntityPlayerMP> getOnlinePlayers(){
-        return PlayerMPUtil.getServerInstance().getConfigurationManager().playerEntityList;
+        return PlayerMPUtil.getServerInstance().getPlayerList().getPlayerList();
     }
 
     public static EntityPlayerMP getPlayer(String username) {
@@ -66,12 +65,12 @@ public class PlayerMPUtil {
      * Get player's looking-at spot.
      *
      * @param player
-     * @return The position as a MovingObjectPosition Null if not existent.
+     * @return The position as a RayTraceResult Null if not existent.
      */
-    public static MovingObjectPosition getPlayerLookingSpot(EntityPlayer player)
+    public static RayTraceResult getPlayerLookingSpot(EntityPlayer player)
     {
         if (player instanceof EntityPlayerMP)
-            return getPlayerLookingSpot(player, ((EntityPlayerMP) player).theItemInWorldManager.getBlockReachDistance());
+            return getPlayerLookingSpot(player, ((EntityPlayerMP) player).interactionManager.getBlockReachDistance());
         else
             return getPlayerLookingSpot(player, 5);
     }
@@ -82,14 +81,14 @@ public class PlayerMPUtil {
      * @param player
      * @param maxDistance
      *            Keep max distance to 5.
-     * @return The position as a MovingObjectPosition Null if not existent.
+     * @return The position as a RayTraceResult Null if not existent.
      */
-    public static MovingObjectPosition getPlayerLookingSpot(EntityPlayer player, double maxDistance)
+    public static RayTraceResult getPlayerLookingSpot(EntityPlayer player, double maxDistance)
     {
-        Vec3 lookAt = player.getLook(1);
-        Vec3 playerPos = Vec3.createVectorHelper(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
-        Vec3 pos1 = playerPos.addVector(0, player.getEyeHeight(), 0);
-        Vec3 pos2 = pos1.addVector(lookAt.xCoord * maxDistance, lookAt.yCoord * maxDistance, lookAt.zCoord * maxDistance);
+        Vec3d lookAt = player.getLook(1);
+        Vec3d playerPos = new Vec3d(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
+        Vec3d pos1 = playerPos.addVector(0, player.getEyeHeight(), 0);
+        Vec3d pos2 = pos1.addVector(lookAt.xCoord * maxDistance, lookAt.yCoord * maxDistance, lookAt.zCoord * maxDistance);
         return player.worldObj.rayTraceBlocks(pos1, pos2);
     }
 

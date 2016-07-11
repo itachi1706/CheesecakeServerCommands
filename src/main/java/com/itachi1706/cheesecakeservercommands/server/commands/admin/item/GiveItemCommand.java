@@ -137,7 +137,7 @@ public class GiveItemCommand implements ICommand {
     @Override
     public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsFromIterableMatchingLastWord(typedValue, Item.itemRegistry.getKeys());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, Item.REGISTRY.getKeys());
         if (typedValue.length == 4)
             return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
         return null;

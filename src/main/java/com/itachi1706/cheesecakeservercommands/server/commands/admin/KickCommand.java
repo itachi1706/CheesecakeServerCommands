@@ -71,7 +71,7 @@ public class KickCommand implements ICommand {
 
         reason = ChatHelper.formatString(reason);
 
-        player.playerNetServerHandler.kickPlayerFromServer(reason);
+        player.connection.kickPlayerFromServer(reason);
         ChatHelper.sendMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
         ChatHelper.sendAdminMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
     }

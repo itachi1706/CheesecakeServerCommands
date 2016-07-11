@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.commons.selections;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
@@ -198,9 +198,9 @@ public class WarpPoint {
             yd = 0;
     }
 
-    public Vec3 toVec3()
+    public Vec3d toVec3d()
     {
-        return Vec3.createVectorHelper(xd, yd, zd);
+        return Vec3d.createVectorHelper(xd, yd, zd);
     }
 
     public WorldPoint toWorldPoint()

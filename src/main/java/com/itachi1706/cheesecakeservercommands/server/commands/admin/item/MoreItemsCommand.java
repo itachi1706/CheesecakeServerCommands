@@ -59,7 +59,7 @@ public class MoreItemsCommand implements ICommand {
             return;
         }
 
-        ItemStack stack = player.getCurrentEquippedItem();
+        ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "No items selected");
             return;

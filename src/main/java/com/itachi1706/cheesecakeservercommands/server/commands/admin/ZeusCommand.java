@@ -62,7 +62,7 @@ public class ZeusCommand implements ICommand {
                 return;
             }
 
-            player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
+            player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
             player.attackEntityFrom(getDamageSource(), Float.MAX_VALUE);
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "You angered Zeus and hence suffered the Wrath of Zeus!");
             ChatHelper.sendAdminMessage(iCommandSender, "Made own self suffer the wrath of Zeus");
@@ -79,7 +79,7 @@ public class ZeusCommand implements ICommand {
             return;
         }
 
-        player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ));
+        player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
         player.attackEntityFrom(getDamageSource(), Float.MAX_VALUE);
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Made " + player.getName() + " suffer the Wrath of Zeus");
         ChatHelper.sendAdminMessage(iCommandSender, "Made " + player.getName() + " suffer the Wrath of Zeus");

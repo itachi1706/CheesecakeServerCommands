@@ -8,7 +8,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -63,7 +63,7 @@ public class WorldPoint extends Point {
         this.world = entity.worldObj;
     }
 
-    public WorldPoint(int dim, Vec3 vector)
+    public WorldPoint(int dim, Vec3d vector)
     {
         super(vector);
         this.dim = dim;

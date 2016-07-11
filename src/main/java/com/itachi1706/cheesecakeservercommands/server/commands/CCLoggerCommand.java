@@ -270,7 +270,7 @@ public class CCLoggerCommand implements ICommand {
         List<EntityPlayerMP> onlinePlayers = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP player : onlinePlayers){
             if (player.getUniqueID().equals(uuid)){
-                ChatHelper.sendMessage(sender, ChatFormatting.GOLD + player.getDisplayName().getFormattedText() + ChatFormatting.WHITE + " is currently " + ChatFormatting.GREEN + "Online");
+                ChatHelper.sendMessage(sender, ChatFormatting.GOLD + player.getDisplayNameString().getFormattedText() + ChatFormatting.WHITE + " is currently " + ChatFormatting.GREEN + "Online");
                 return;
             }
         }

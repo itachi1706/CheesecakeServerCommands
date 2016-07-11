@@ -10,7 +10,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.InventoryEnderChest;
-import net.minecraft.network.play.server.S2DPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
@@ -70,7 +69,7 @@ public class EnderChestCommand implements ICommand {
                 player.getNextWindowId();
 
                 InventoryEnderChest chest = player.getInventoryEnderChest();
-                player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
+                player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
                 player.openContainer = new ContainerChest(player.inventory, chest);
                 player.openContainer.windowId = player.currentWindowId;
                 player.openContainer.addCraftingToCrafters(player);
@@ -95,7 +94,7 @@ public class EnderChestCommand implements ICommand {
         player.getNextWindowId();
 
         InventoryEnderChest chest = player.getInventoryEnderChest();
-        player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
+        player.connection.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
         player.openContainer = new ContainerChest(player.inventory, chest);
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addCraftingToCrafters(player);

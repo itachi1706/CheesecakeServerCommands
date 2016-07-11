@@ -67,7 +67,7 @@ public class InvSeeCommand implements ICommand {
             commandSender.getNextWindowId();
 
             PlayerInvChest chest = new PlayerInvChest(commandSender, commandSender);
-            commandSender.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
+            commandSender.connection.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
             commandSender.openContainer = new ContainerChest(commandSender.inventory, chest);
             commandSender.openContainer.windowId = commandSender.currentWindowId;
             commandSender.openContainer.addCraftingToCrafters(commandSender);
@@ -90,7 +90,7 @@ public class InvSeeCommand implements ICommand {
         commandSender.getNextWindowId();
 
         PlayerInvChest chest = new PlayerInvChest(player, commandSender);
-        commandSender.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
+        commandSender.connection.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
         commandSender.openContainer = new ContainerChest(commandSender.inventory, chest);
         commandSender.openContainer.windowId = commandSender.currentWindowId;
         commandSender.openContainer.addCraftingToCrafters(commandSender);

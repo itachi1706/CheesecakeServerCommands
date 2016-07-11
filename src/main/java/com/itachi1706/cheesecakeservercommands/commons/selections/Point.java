@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * Created by Kenneth on 2/5/2016.
@@ -46,7 +47,7 @@ public class Point {
         this(location.posX, location.posY, location.posZ);
     }
 
-    public Point(Vec3 vector)
+    public Point(Vec3d vector)
     {
         this((int) vector.xCoord, (int) vector.yCoord, (int) vector.zCoord);
     }
@@ -153,9 +154,9 @@ public class Point {
             y = 0;
     }
 
-    public Vec3 toVec3()
+    public Vec3d toVec3d()
     {
-        return Vec3.createVectorHelper(x, y, z);
+        return Vec3d.createVectorHelper(x, y, z);
     }
 
     // ------------------------------------------------------------

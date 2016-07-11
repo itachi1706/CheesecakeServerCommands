@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldProvider;
@@ -132,8 +133,8 @@ public class TeleportHelper {
     {
         if (point.getY() < 0)
             return false;
-        Block block1 = point.getWorld().getBlock(point.getBlockX(), point.getBlockY(), point.getBlockZ());
-        Block block2 = point.getWorld().getBlock(point.getBlockX(), point.getBlockY() + 1, point.getBlockZ());
+        Block block1 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY(), point.getBlockZ())).getBlock();
+        Block block2 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY() + 1, point.getBlockZ())).getBlock();
         boolean block1Free = !block1.getMaterial().isSolid() || block1.getBlockBoundsMaxX() < 1 || block1.getBlockBoundsMaxY() > 0;
         boolean block2Free = !block2.getMaterial().isSolid() || block2.getBlockBoundsMaxX() < 1 || block2.getBlockBoundsMaxY() > 0;
         return block1Free && block2Free;
@@ -165,7 +166,7 @@ public class TeleportHelper {
             SimpleTeleporter teleporter = new SimpleTeleporter(point.getWorld());
             transferPlayerToDimension(player, point.getDimension(), teleporter);
         }
-        player.playerNetServerHandler.setPlayerLocation(point.getX(), point.getY(), point.getZ(), point.getYaw(), point.getPitch());
+        player.connection.setPlayerLocation(point.getX(), point.getY(), point.getZ(), point.getYaw(), point.getPitch());
     }
 
     public static void doTeleportEntity(Entity entity, WarpPoint point)
@@ -204,24 +205,24 @@ public class TeleportHelper {
         WorldServer oldWorld = mcServer.worldServerForDimension(player.dimension);
         player.dimension = dimension;
         WorldServer newWorld = mcServer.worldServerForDimension(player.dimension);
-        player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, newWorld.difficultySetting,
-                newWorld.getWorldInfo().getTerrainType(), player.theItemInWorldManager.getGameType())); // Forge: Use new dimensions information
+        player.connection.sendPacket(new S07PacketRespawn(player.dimension, newWorld.difficultySetting,
+                newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType())); // Forge: Use new dimensions information
         oldWorld.removePlayerEntityDangerously(player);
         player.isDead = false;
 
         transferEntityToWorld(player, oldDim, oldWorld, newWorld, teleporter);
 
-        mcServer.getConfigurationManager().func_72375_a(player, oldWorld);
-        player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw,
+        mcServer.getPlayerList().preparePlayer(player, oldWorld);
+        player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw,
                 player.rotationPitch);
-        player.theItemInWorldManager.setWorld(newWorld);
-        mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(player, newWorld);
-        mcServer.getConfigurationManager().syncPlayerInventory(player);
+        player.interactionManager.setWorld(newWorld);
+        mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, newWorld);
+        mcServer.getPlayerList().syncPlayerInventory(player);
         Iterator<?> iterator = player.getActivePotionEffects().iterator();
         while (iterator.hasNext())
         {
             PotionEffect potioneffect = (PotionEffect) iterator.next();
-            player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potioneffect));
+            player.connection.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potioneffect));
         }
         FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
     }
