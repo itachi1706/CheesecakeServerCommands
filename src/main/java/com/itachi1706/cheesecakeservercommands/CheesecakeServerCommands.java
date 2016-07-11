@@ -80,6 +80,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new GMCCommand());
         event.registerServerCommand(new GMSCommand());
         event.registerServerCommand(new GMACommand());
+        event.registerServerCommand(new GMSPCommand());
         event.registerServerCommand(new ZeusCommand());
         event.registerServerCommand(new WowCommand());
         event.registerServerCommand(new FlingCommand());
