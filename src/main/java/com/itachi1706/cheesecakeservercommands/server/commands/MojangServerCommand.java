@@ -11,6 +11,7 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class MojangServerCommand implements ICommand {
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/mojang status"
                 + ChatFormatting.AQUA + " View Mojang Server Status");
         ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/mojang premium"
-                + ChatFormatting.AQUA + " Check if name is purchased");
+                + ChatFormatting.AQUA + " Check if name is purchased" + ChatFormatting.RED + " (BROKEN)");
     }
 
     @Override
@@ -80,12 +81,14 @@ public class MojangServerCommand implements ICommand {
         }
 
         if (subCommand.equalsIgnoreCase("premium")){
-            if (args.length != 2){
+            iCommandSender.addChatMessage(new TextComponentString(ChatFormatting.RED + "Command has been broken by Mojang"));
+            // TODO: Broken by Mojang
+            /*if (args.length != 2){
                 sendHelp(iCommandSender);
                 return;
             }
 
-            getPremium(iCommandSender, args[1]);
+            getPremium(iCommandSender, args[1]);*/
             return;
         }
 

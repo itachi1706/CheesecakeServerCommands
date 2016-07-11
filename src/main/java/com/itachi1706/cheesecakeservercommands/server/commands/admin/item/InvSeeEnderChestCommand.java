@@ -95,8 +95,8 @@ public class InvSeeEnderChestCommand implements ICommand {
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addListener(player);
 
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Viewing " + player.getName() + "'s Ender Chest");
-        ChatHelper.sendAdminMessage(iCommandSender, "Viewing ender chest of " + player.getName());
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Viewing " + victim.getName() + "'s Ender Chest");
+        ChatHelper.sendAdminMessage(iCommandSender, "Viewing ender chest of " + victim.getName());
     }
 
     @Override
