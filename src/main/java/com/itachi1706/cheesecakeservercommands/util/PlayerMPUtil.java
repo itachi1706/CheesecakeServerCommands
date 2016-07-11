@@ -6,10 +6,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.List;
 
@@ -23,17 +21,12 @@ public class PlayerMPUtil {
         return !(sender instanceof EntityPlayer) || isOperator((EntityPlayer) sender);
     }
 
-    //TODO: Move to better area
-    public static MinecraftServer getServerInstance() {
-        return FMLCommonHandler.instance().getMinecraftServerInstance();
-    }
-
     public static boolean isOperator(EntityPlayer player){
-        if (getServerInstance().isSinglePlayer())
+        if (ServerUtil.getServerInstance().isSinglePlayer())
             return true;
 
         GameProfile profile = player.getGameProfile();
-        return PlayerMPUtil.getServerInstance().getPlayerList().canSendCommands(profile);
+        return ServerUtil.getServerInstance().getPlayerList().canSendCommands(profile);
     }
 
     public static boolean isPlayer(ICommandSender sender){
@@ -48,7 +41,7 @@ public class PlayerMPUtil {
 
     @SuppressWarnings("unchecked")
     public static List<EntityPlayerMP> getOnlinePlayers(){
-        return PlayerMPUtil.getServerInstance().getPlayerList().getPlayerList();
+        return ServerUtil.getServerInstance().getPlayerList().getPlayerList();
     }
 
     public static EntityPlayerMP getPlayer(String username) {

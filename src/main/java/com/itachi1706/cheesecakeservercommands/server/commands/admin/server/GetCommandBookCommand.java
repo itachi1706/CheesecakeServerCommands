@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -20,8 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -90,7 +89,7 @@ public class GetCommandBookCommand implements ICommand {
         }
 
         Set<String> pages = new TreeSet<String>();
-        for (ICommand cmd : PlayerMPUtil.getServerInstance().getCommandManager().getCommands().values())
+        for (ICommand cmd : ServerUtil.getServerInstance().getCommandManager().getCommands().values())
         {
             Set<String> commands = new HashSet<String>();
             commands.add("/" + cmd.getCommandName());
@@ -135,7 +134,7 @@ public class GetCommandBookCommand implements ICommand {
     @Override
     public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1) {
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         }
         return null;
     }

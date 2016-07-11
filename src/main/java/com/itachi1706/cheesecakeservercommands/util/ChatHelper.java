@@ -43,7 +43,7 @@ public class ChatHelper {
     }
 
     public static void sendGlobalMessage(TextComponentString text) {
-        PlayerMPUtil.getServerInstance().getPlayerList().sendChatMsg(text);
+        ServerUtil.getServerInstance().getPlayerList().sendChatMsg(text);
     }
 
     public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {

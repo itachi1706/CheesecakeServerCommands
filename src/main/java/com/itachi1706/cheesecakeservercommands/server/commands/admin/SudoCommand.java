@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -10,7 +11,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -64,7 +64,7 @@ public class SudoCommand implements ICommand {
         String[] args = Arrays.copyOfRange(astring, 1, astring.length);
         String cmd = StringUtils.join(args, " ");
 
-        FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(player, cmd);
+        ServerUtil.getServerInstance().getCommandManager().executeCommand(player, cmd);
         ChatHelper.sendMessage(iCommandSender, "Executed \"" + cmd + "\" as " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Executed \"" + cmd + "\" as " + player.getName());
     }
@@ -72,7 +72,7 @@ public class SudoCommand implements ICommand {
     @Override
     public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         return null;
     }
 

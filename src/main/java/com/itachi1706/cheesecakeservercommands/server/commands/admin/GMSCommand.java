@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -81,7 +82,7 @@ public class GMSCommand implements ICommand {
     @Override
     public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         return null;
     }
 

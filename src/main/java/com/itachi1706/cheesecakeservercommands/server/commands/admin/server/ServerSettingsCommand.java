@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -21,8 +22,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -57,7 +56,7 @@ public class ServerSettingsCommand implements ICommand {
     @SideOnly(Side.SERVER)
     public void doSetProperty(String id, Object value)
     {
-        DedicatedServer server = (DedicatedServer) FMLCommonHandler.instance().getMinecraftServerInstance();
+        DedicatedServer server = (DedicatedServer) ServerUtil.getServerInstance();
         server.setProperty(id, value);
         server.saveProperties();
     }
@@ -70,7 +69,7 @@ public class ServerSettingsCommand implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
-        if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+        if (!ServerUtil.getServerInstance().isDedicatedServer()) {
             ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You can only use this command on dedicated servers");
             return;
         }

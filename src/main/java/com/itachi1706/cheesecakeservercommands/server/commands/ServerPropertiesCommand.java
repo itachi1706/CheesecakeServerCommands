@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -80,7 +81,7 @@ public class ServerPropertiesCommand implements ICommand {
     }
 
     private void getServerStats(ICommandSender sender){
-        MinecraftServer tmp = PlayerMPUtil.getServerInstance();
+        MinecraftServer tmp = ServerUtil.getServerInstance();
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
         ChatHelper.sendMessage(sender, ChatFormatting.BLUE + "                    Server Status");
         ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");

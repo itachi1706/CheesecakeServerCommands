@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -15,8 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -100,7 +99,7 @@ public class RepairCommand implements ICommand {
     @Override
     public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1) {
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, PlayerMPUtil.getServerInstance().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         }
         return null;
     }

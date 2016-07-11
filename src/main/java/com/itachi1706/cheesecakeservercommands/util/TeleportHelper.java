@@ -207,7 +207,7 @@ public class TeleportHelper {
     public static void transferPlayerToDimension(EntityPlayerMP player, int dimension, Teleporter teleporter)
     {
         int oldDim = player.dimension;
-        MinecraftServer mcServer = PlayerMPUtil.getServerInstance();
+        MinecraftServer mcServer = ServerUtil.getServerInstance();
 
         WorldServer oldWorld = mcServer.worldServerForDimension(player.dimension);
         player.dimension = dimension;
