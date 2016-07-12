@@ -23,7 +23,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "1.10.2-2.2-dev"
+version = "1.10.2-2.3"
 group= "com.itachi1706.cheesecakeservercommands" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "CheesecakeServerCommands"
