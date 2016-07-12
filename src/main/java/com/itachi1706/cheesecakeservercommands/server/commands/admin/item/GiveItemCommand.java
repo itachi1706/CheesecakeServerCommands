@@ -3,19 +3,21 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -48,14 +50,14 @@ public class GiveItemCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Usage: /giveitem <item> [amount] [data] [player] [spillover]");
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Spillover will spew items on the ground after inventory is filled");
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0) {
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /giveitem <item> [amount] [data] [player] [spillover]");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Spillover will spew items on the ground after inventory is filled");
             return;
         }
 
-        if (astring.length == 1)
+        if (args.length == 1)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot give items to CONSOLE");
@@ -67,42 +69,42 @@ public class GiveItemCommand implements ICommand {
         int itemDamageValue = 0;
         int stacksize = 1;
 
-        itemToAdd = CommandBase.getItemByText(iCommandSender, astring[0]);
+        itemToAdd = CommandBase.getItemByText(iCommandSender, args[0]);
         LogHelper.info(itemToAdd.getUnlocalizedName());
 
-        if (astring.length >= 2) {
+        if (args.length >= 2) {
             // Set item stack size
-            stacksize = CommandBase.parseInt(iCommandSender, astring[1]);
+            stacksize = CommandBase.parseInt(args[1]);
         }
 
-        if (astring.length >= 3) {
+        if (args.length >= 3) {
             // Gets item damage value
-            itemDamageValue = CommandBase.parseInt(iCommandSender, astring[2]);
+            itemDamageValue = CommandBase.parseInt(args[2]);
         }
 
         ItemStack itemStack = new ItemStack(itemToAdd, stacksize, itemDamageValue);
 
         EntityPlayerMP player;
         boolean toOthers = false;
-        if (astring.length >= 4) {
-            String subname = astring[3];
+        if (args.length >= 4) {
+            String subname = args[3];
             player = PlayerMPUtil.getPlayer(subname);
             if (player == null) {
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
                 return;
             }
             toOthers = true;
         } else {
             player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
             if (player == null) {
-                ChatHelper.sendMessage(iCommandSender, "Cannot give items to " + iCommandSender.getCommandSenderName());
+                ChatHelper.sendMessage(iCommandSender, "Cannot give items to " + iCommandSender.getName());
                 return;
             }
         }
 
         boolean spillover = false;
-        if (astring.length == 5) {
-            spillover = CommandBase.parseBoolean(iCommandSender, astring[4]);
+        if (args.length == 5) {
+            spillover = CommandBase.parseBoolean(args[4]);
         }
 
         if (spillover) {
@@ -114,16 +116,16 @@ public class GiveItemCommand implements ICommand {
         String messageToSender;
         String adminMessage;
         if (toOthers) {
-            messageToSender = EnumChatFormatting.GOLD + "Gave " + EnumChatFormatting.AQUA + stacksize + EnumChatFormatting.GOLD
-                    + " of " + EnumChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName() + EnumChatFormatting.GOLD + " to " + player.getCommandSenderName();
-            adminMessage = "Gave " + stacksize + " of " + itemStack.getDisplayName() + " to " + player.getCommandSenderName();
-            String messageToRecepient = EnumChatFormatting.GOLD +  "Received " + EnumChatFormatting.AQUA + stacksize + EnumChatFormatting.GOLD
-                    + " of " + EnumChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName();
+            messageToSender = ChatFormatting.GOLD + "Gave " + ChatFormatting.AQUA + stacksize + ChatFormatting.GOLD
+                    + " of " + ChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName() + ChatFormatting.GOLD + " to " + player.getName();
+            adminMessage = "Gave " + stacksize + " of " + itemStack.getDisplayName() + " to " + player.getName();
+            String messageToRecepient = ChatFormatting.GOLD +  "Received " + ChatFormatting.AQUA + stacksize + ChatFormatting.GOLD
+                    + " of " + ChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName();
 
             ChatHelper.sendMessage(player, messageToRecepient);
         } else {
-            messageToSender = EnumChatFormatting.GOLD +  "Received " + EnumChatFormatting.AQUA + stacksize + EnumChatFormatting.GOLD
-                    + " of " + EnumChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName();;
+            messageToSender = ChatFormatting.GOLD +  "Received " + ChatFormatting.AQUA + stacksize + ChatFormatting.GOLD
+                    + " of " + ChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName();;
             adminMessage = "Gave " + stacksize + " of " + itemStack.getDisplayName() + " to self";
         }
 
@@ -132,16 +134,16 @@ public class GiveItemCommand implements ICommand {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsFromIterableMatchingLastWord(typedValue, Item.itemRegistry.getKeys());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, Item.REGISTRY.getKeys());
         if (typedValue.length == 4)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -152,7 +154,7 @@ public class GiveItemCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

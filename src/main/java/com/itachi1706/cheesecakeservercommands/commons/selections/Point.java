@@ -1,17 +1,18 @@
 package com.itachi1706.cheesecakeservercommands.commons.selections;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
 
 /**
  * Created by Kenneth on 2/5/2016.
  * for com.itachi1706.cheesecakeservercommands.commons.selections in CheesecakeServerCommands
  */
 public class Point {
+
     protected int x;
 
     protected int y;
@@ -41,12 +42,12 @@ public class Point {
         z = (int) Math.floor(entity.posZ);
     }
 
-    public Point(ChunkCoordinates location)
+    public Point(RayTraceResult location)
     {
-        this(location.posX, location.posY, location.posZ);
+        this(location.getBlockPos().getX(), location.getBlockPos().getY(), location.getBlockPos().getZ());
     }
 
-    public Point(Vec3 vector)
+    public Point(Vec3d vector)
     {
         this((int) vector.xCoord, (int) vector.yCoord, (int) vector.zCoord);
     }
@@ -153,9 +154,9 @@ public class Point {
             y = 0;
     }
 
-    public Vec3 toVec3()
+    public Vec3d toVec3()
     {
-        return Vec3.createVectorHelper(x, y, z);
+        return new Vec3d(x, y, z);
     }
 
     // ------------------------------------------------------------
@@ -194,4 +195,5 @@ public class Point {
         h = h * 31 + z;
         return h;
     }
+
 }

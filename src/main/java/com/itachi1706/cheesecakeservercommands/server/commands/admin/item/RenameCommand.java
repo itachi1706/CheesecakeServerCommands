@@ -2,16 +2,18 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -43,13 +45,13 @@ public class RenameCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Usage: /renameitem <newname>");
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0) {
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /renameitem <newname>");
             return;
         }
 
-        String newname = astring[0];
+        String newname = args[0];
 
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "Cannot rename item for CONSOLE");
@@ -58,18 +60,18 @@ public class RenameCommand implements ICommand {
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, "Cannot rename item " + iCommandSender.getCommandSenderName());
+            ChatHelper.sendMessage(iCommandSender, "Cannot rename item " + iCommandSender.getName());
             return;
         }
 
-        ItemStack item = player.getCurrentEquippedItem();
+        ItemStack item = player.getHeldItemMainhand();
         if (item == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "You are not holding an item");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You are not holding an item");
             return;
         }
 
         StringBuilder builder = new StringBuilder();
-        for (String s : astring) {
+        for (String s : args) {
             builder.append(s + " ");
         }
 
@@ -77,17 +79,17 @@ public class RenameCommand implements ICommand {
         String finalnewname = builder.toString().trim();
         item.setStackDisplayName(finalnewname);
 
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Renamed " + oldname + " to " + finalnewname);
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Renamed " + oldname + " to " + finalnewname);
         ChatHelper.sendAdminMessage(iCommandSender, "Renamed " + oldname + " to " + finalnewname);
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -98,7 +100,7 @@ public class RenameCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

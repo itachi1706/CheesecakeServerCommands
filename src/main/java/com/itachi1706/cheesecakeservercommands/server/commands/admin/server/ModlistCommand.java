@@ -2,19 +2,19 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -46,24 +46,24 @@ public class ModlistCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         int size = Loader.instance().getModList().size();
         int perPage = 7;
         int pages = (int) Math.ceil(size / (float) perPage);
 
         int page = 0;
-        if (astring.length > 0) {
-            page = CommandBase.parseInt(iCommandSender, astring[0]);
+        if (args.length > 0) {
+            page = CommandBase.parseInt(args[0]);
             page -= 1;
         }
         int min = Math.min(page * perPage, size);
 
         if (page >= pages) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Page. There are only " + pages + " pages");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Page. There are only " + pages + " pages");
             return;
         }
 
-        ChatHelper.sendMessage(iCommandSender, String.format(EnumChatFormatting.GOLD + "--- Showing modlist page %1$d of %2$d ---", page + 1, pages));
+        ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "--- Showing modlist page %1$d of %2$d ---", page + 1, pages));
         for (int i = page * perPage; i < min + perPage; i++)
         {
             if (i >= size)
@@ -71,18 +71,18 @@ public class ModlistCommand implements ICommand {
                 break;
             }
             ModContainer mod = Loader.instance().getModList().get(i);
-            ChatHelper.sendMessage(iCommandSender, mod.getName() + " - " + EnumChatFormatting.AQUA + mod.getVersion());
+            ChatHelper.sendMessage(iCommandSender, mod.getName() + " - " + ChatFormatting.AQUA + mod.getVersion());
         }
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "-------------------------------");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "-------------------------------");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -93,7 +93,7 @@ public class ModlistCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

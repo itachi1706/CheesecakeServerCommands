@@ -1,22 +1,24 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
-import com.itachi1706.cheesecakeservercommands.server.commands.util.ContainerCheatyWorkbench;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.InventoryEnderChest;
-import net.minecraft.network.play.server.S2DPacketOpenWindow;
+import net.minecraft.network.play.server.SPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -48,8 +50,8 @@ public class EnderChestCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0)
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot open the ender chest of CONSOLE");
@@ -57,7 +59,7 @@ public class EnderChestCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot open the ender chest " + iCommandSender.getCommandSenderName());
+                    ChatHelper.sendMessage(iCommandSender, "Cannot open the ender chest " + iCommandSender.getName());
                     return;
                 }
 
@@ -68,21 +70,21 @@ public class EnderChestCommand implements ICommand {
                 player.getNextWindowId();
 
                 InventoryEnderChest chest = player.getInventoryEnderChest();
-                player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
-                player.openContainer = new ContainerChest(player.inventory, chest);
+                player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:ender_chest", new TextComponentString("Ender Chest"), chest.getSizeInventory(), player.getEntityId()));
+                player.openContainer = new ContainerChest(player.inventory, chest, player);
                 player.openContainer.windowId = player.currentWindowId;
-                player.openContainer.addCraftingToCrafters(player);
+                player.openContainer.addListener(player);
 
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Opened Ender Chest");
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Ender Chest");
                 ChatHelper.sendAdminMessage(iCommandSender, "Opened Ender Chest");
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
@@ -93,25 +95,25 @@ public class EnderChestCommand implements ICommand {
         player.getNextWindowId();
 
         InventoryEnderChest chest = player.getInventoryEnderChest();
-        player.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(player.currentWindowId, 0, "Ender Chest", chest.getSizeInventory(), true));
-        player.openContainer = new ContainerChest(player.inventory, chest);
+        player.connection.sendPacket(new SPacketOpenWindow(player.currentWindowId, "minecraft:ender_chest", new TextComponentString("Ender Chest"), chest.getSizeInventory(), player.getEntityId()));
+        player.openContainer = new ContainerChest(player.inventory, chest, player);
         player.openContainer.windowId = player.currentWindowId;
-        player.openContainer.addCraftingToCrafters(player);
+        player.openContainer.addListener(player);
 
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Opened Ender Chest for " + player.getCommandSenderName());
-        ChatHelper.sendAdminMessage(iCommandSender, "Opened ender chest for " + player.getCommandSenderName());
-        ChatHelper.sendMessage(player, EnumChatFormatting.GOLD + "Opened Ender Chest");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Ender Chest for " + player.getName());
+        ChatHelper.sendAdminMessage(iCommandSender, "Opened ender chest for " + player.getName());
+        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Opened Ender Chest");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -122,7 +124,7 @@ public class EnderChestCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

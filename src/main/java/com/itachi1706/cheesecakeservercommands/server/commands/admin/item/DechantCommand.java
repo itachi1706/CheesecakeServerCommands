@@ -2,22 +2,24 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-// TODO: Add to Main Command
 /**
  * Created by Kenneth on 9/11/2015.
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
@@ -48,13 +50,13 @@ public class DechantCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Usage: /dechant <enchantmentname>");
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0) {
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /dechant <enchantmentname>");
             return;
         }
 
-        String enchantstring = astring[0];
+        String enchantstring = args[0];
 
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "Cannot dechant an item for CONSOLE");
@@ -62,24 +64,24 @@ public class DechantCommand implements ICommand {
         } else {
             EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
             if (player == null) {
-                ChatHelper.sendMessage(iCommandSender, "Cannot dechant an item for " + iCommandSender.getCommandSenderName());
+                ChatHelper.sendMessage(iCommandSender, "Cannot dechant an item for " + iCommandSender.getName());
                 return;
             }
 
-            ItemStack stack = player.getCurrentEquippedItem();
+            ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Item held");
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Item held");
                 return;
             }
 
             // Get Enchantment List
             @SuppressWarnings("unchecked")
-            Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+            Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
             List<String> validEnchantmentNames = new ArrayList<String>();
             Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
-            for (Enchantment enchantment : Enchantment.enchantmentsList) {
-                if (enchantment != null && enchantments.containsKey(enchantment.effectId)) {
-                    String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
+                if (enchantment != null && enchantments.containsKey(enchantment)) {
+                    String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                     validEnchantmentNames.add(name);
                     validEnchantments.put(name.toLowerCase(), enchantment);
                 }
@@ -89,28 +91,28 @@ public class DechantCommand implements ICommand {
                 enchantments.clear();
                 EnchantmentHelper.setEnchantments(enchantments, stack);
 
-                ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Removed all enchantments from " + stack.getDisplayName());
+                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Removed all enchantments from " + stack.getDisplayName());
                 ChatHelper.sendAdminMessage(iCommandSender, "Removed all enchantments from " + stack.getDisplayName());
                 return;
             } else {
                 Enchantment enchantment = validEnchantments.get(enchantstring.toLowerCase());
                 if (enchantment == null) {
-                    ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid enchantment: " + enchantstring);
+                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid enchantment: " + enchantstring);
                     return;
                 }
-                enchantments.remove(enchantment.effectId);
+                enchantments.remove(enchantment);
             }
 
             EnchantmentHelper.setEnchantments(enchantments, stack);
 
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Removed " + EnumChatFormatting.AQUA + enchantstring
-                    + EnumChatFormatting.GOLD + " from " + stack.getDisplayName());
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Removed " + ChatFormatting.AQUA + enchantstring
+                    + ChatFormatting.GOLD + " from " + stack.getDisplayName());
             ChatHelper.sendAdminMessage(iCommandSender, "Dechanted " + enchantstring + " from " + stack.getDisplayName());
         }
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             return null;
         }
@@ -121,18 +123,18 @@ public class DechantCommand implements ICommand {
                 return null;
             }
 
-            ItemStack stack = player.getCurrentEquippedItem();
+            ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
                 return null;
             }
 
             // Get Enchantment List
             @SuppressWarnings("unchecked")
-            Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+            Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
             List<String> validEnchantmentNames = new ArrayList<String>();
-            for (Enchantment enchantment : Enchantment.enchantmentsList) {
-                if (enchantment != null && enchantments.containsKey(enchantment.effectId)) {
-                    String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
+                if (enchantment != null && enchantments.containsKey(enchantment)) {
+                    String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                     validEnchantmentNames.add(name);
                 }
             }
@@ -147,7 +149,7 @@ public class DechantCommand implements ICommand {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -158,7 +160,7 @@ public class DechantCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

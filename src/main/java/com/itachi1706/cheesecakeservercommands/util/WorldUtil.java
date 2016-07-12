@@ -2,7 +2,9 @@ package com.itachi1706.cheesecakeservercommands.util;
 
 import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -24,8 +26,9 @@ public class WorldUtil {
     {
         for (int i = 0; i < h; i++)
         {
-            Block block = world.getBlock(x, y + i, z);
-            if (block.getMaterial().isSolid() || block.getMaterial().isLiquid())
+            Block block = world.getBlockState(new BlockPos(x, y + i, z)).getBlock();
+            IBlockState state = world.getBlockState(new BlockPos(x, y+i, z));
+            if (block.getMaterial(state).isSolid() || block.getMaterial(state).isLiquid())
                 return false;
         }
         return true;

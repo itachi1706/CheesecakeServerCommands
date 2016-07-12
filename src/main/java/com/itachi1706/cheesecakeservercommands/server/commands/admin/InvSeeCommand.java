@@ -1,17 +1,21 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
-import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.server.commands.util.PlayerInvChest;
+import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerChest;
-import net.minecraft.network.play.server.S2DPacketOpenWindow;
+import net.minecraft.network.play.server.SPacketOpenWindow;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +49,7 @@ public class InvSeeCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "CONSOLE cannot use invsee. Sorry :(");
             return;
@@ -53,10 +57,10 @@ public class InvSeeCommand implements ICommand {
         // See your inventory
         EntityPlayerMP commandSender = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (commandSender == null) {
-            ChatHelper.sendMessage(iCommandSender, "Cannot see inventory of" + iCommandSender.getCommandSenderName());
+            ChatHelper.sendMessage(iCommandSender, "Cannot see inventory of" + iCommandSender.getName());
             return;
         }
-        if (astring.length == 0)
+        if (args.length == 0)
         {
             if (commandSender.openContainer != commandSender.inventoryContainer) {
                 commandSender.closeScreen();
@@ -64,20 +68,20 @@ public class InvSeeCommand implements ICommand {
             commandSender.getNextWindowId();
 
             PlayerInvChest chest = new PlayerInvChest(commandSender, commandSender);
-            commandSender.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
-            commandSender.openContainer = new ContainerChest(commandSender.inventory, chest);
+            commandSender.connection.sendPacket(new SPacketOpenWindow(commandSender.currentWindowId, "minecraft:chest", chest.getDisplayName(), chest.getSizeInventory(), commandSender.getEntityId()));
+            commandSender.openContainer = new ContainerChest(commandSender.inventory, chest, commandSender);
             commandSender.openContainer.windowId = commandSender.currentWindowId;
-            commandSender.openContainer.addCraftingToCrafters(commandSender);
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Opened your inventory");
+            commandSender.openContainer.addListener(commandSender);
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened your inventory");
             ChatHelper.sendAdminMessage(iCommandSender, "Seen own inventory");
             return;
         }
 
         // See other people's inventory
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
@@ -87,23 +91,23 @@ public class InvSeeCommand implements ICommand {
         commandSender.getNextWindowId();
 
         PlayerInvChest chest = new PlayerInvChest(player, commandSender);
-        commandSender.playerNetServerHandler.sendPacket(new S2DPacketOpenWindow(commandSender.currentWindowId, 0, chest.getInventoryName(), chest.getSizeInventory(), true));
-        commandSender.openContainer = new ContainerChest(commandSender.inventory, chest);
+        commandSender.connection.sendPacket(new SPacketOpenWindow(commandSender.currentWindowId, "minecraft:chest", chest.getDisplayName(), chest.getSizeInventory(), commandSender.getEntityId()));
+        commandSender.openContainer = new ContainerChest(commandSender.inventory, chest, commandSender);
         commandSender.openContainer.windowId = commandSender.currentWindowId;
-        commandSender.openContainer.addCraftingToCrafters(commandSender);
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Opened " + player.getCommandSenderName() + "'s inventory");
-        ChatHelper.sendAdminMessage(iCommandSender, "Seen " + player.getCommandSenderName() + "'s inventory");
+        commandSender.openContainer.addListener(commandSender);
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened " + player.getName() + "'s inventory");
+        ChatHelper.sendAdminMessage(iCommandSender, "Seen " + player.getName() + "'s inventory");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -114,7 +118,7 @@ public class InvSeeCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

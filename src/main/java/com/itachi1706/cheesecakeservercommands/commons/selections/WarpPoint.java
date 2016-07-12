@@ -1,12 +1,11 @@
 package com.itachi1706.cheesecakeservercommands.commons.selections;
 
+import com.google.gson.annotations.Expose;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-
-import com.google.gson.annotations.Expose;
 
 /**
  * Created by Kenneth on 2/5/2016.
@@ -43,7 +42,7 @@ public class WarpPoint {
     public WarpPoint(WorldServer world, double x, double y, double z, float playerPitch, float playerYaw)
     {
         this.world = world;
-        this.dim = world.provider.dimensionId;
+        this.dim = world.provider.getDimension();
         this.xd = x;
         this.yd = y;
         this.zd = z;
@@ -51,9 +50,9 @@ public class WarpPoint {
         this.yaw = playerYaw;
     }
 
-    public WarpPoint(int dimension, ChunkCoordinates location, float pitch, float yaw)
+    public WarpPoint(int dimension, RayTraceResult location, float pitch, float yaw)
     {
-        this(dimension, location.posX + 0.5, location.posY, location.posZ + 0.5, pitch, yaw);
+        this(dimension, location.getBlockPos().getX() + 0.5, location.getBlockPos().getY(), location.getBlockPos().getZ() + 0.5, pitch, yaw);
     }
 
     public WarpPoint(Point point, int dimension, float pitch, float yaw)
@@ -136,7 +135,7 @@ public class WarpPoint {
 
     public WorldServer getWorld()
     {
-        if (world == null || world.provider.dimensionId != dim)
+        if (world == null || world.provider.getDimension() != dim)
             world = DimensionManager.getWorld(dim);
         return world;
     }
@@ -198,9 +197,9 @@ public class WarpPoint {
             yd = 0;
     }
 
-    public Vec3 toVec3()
+    public Vec3d toVec3()
     {
-        return Vec3.createVectorHelper(xd, yd, zd);
+        return new Vec3d(xd, yd, zd);
     }
 
     public WorldPoint toWorldPoint()

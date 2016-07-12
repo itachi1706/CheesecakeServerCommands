@@ -1,7 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
 import com.itachi1706.cheesecakeservercommands.reference.References;
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
 /**

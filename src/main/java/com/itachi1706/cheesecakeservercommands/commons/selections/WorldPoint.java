@@ -1,20 +1,17 @@
 package com.itachi1706.cheesecakeservercommands.commons.selections;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.gson.annotations.Expose;
 import net.minecraft.block.Block;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.world.BlockEvent;
 
-import com.google.gson.annotations.Expose;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Kenneth on 2/5/2016.
@@ -34,27 +31,29 @@ public class WorldPoint extends Point {
         dim = dimension;
     }
 
-    public WorldPoint(int dimension, ChunkCoordinates location)
+    public WorldPoint(int dimension, RayTraceResult location)
     {
-        this(dimension, location.posX, location.posY, location.posZ);
+        this(dimension, location.getBlockPos().getX(), location.getBlockPos().getY(), location.getBlockPos().getZ());
     }
 
     public WorldPoint(World world, int x, int y, int z)
     {
         super(x, y, z);
-        this.dim = world.provider.dimensionId;
+        this.dim = world.provider.getDimension();
         this.world = world;
     }
 
-    public WorldPoint(World world, ChunkCoordinates location)
+    public WorldPoint(World world, RayTraceResult location)
     {
-        this(world, location.posX, location.posY, location.posZ);
+        this(world, location.getBlockPos().getX(), location.getBlockPos().getY(), location.getBlockPos().getZ());
     }
 
-    public WorldPoint(World world, ChunkPosition location)
+    // TODO: Figure out how to convert this
+    /*public WorldPoint(World world, ChunkPosition location)
     {
+        ChunkPos locate;
         this(world, location.chunkPosX, location.chunkPosY, location.chunkPosZ);
-    }
+    }*/
 
     public WorldPoint(Entity entity)
     {
@@ -63,7 +62,7 @@ public class WorldPoint extends Point {
         this.world = entity.worldObj;
     }
 
-    public WorldPoint(int dim, Vec3 vector)
+    public WorldPoint(int dim, Vec3d vector)
     {
         super(vector);
         this.dim = dim;
@@ -86,13 +85,14 @@ public class WorldPoint extends Point {
 
     public WorldPoint(BlockEvent event)
     {
-        this(event.world, event.x, event.y, event.z);
+        this(event.getWorld(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
     }
 
-    public static WorldPoint create(ICommandSender sender)
+    // TODO: Figure out how to convert this
+    /*public static WorldPoint create(ICommandSender sender)
     {
         return new WorldPoint(sender.getEntityWorld(), sender.getPlayerCoordinates());
-    }
+    }*/
 
     // ------------------------------------------------------------
 
@@ -129,7 +129,7 @@ public class WorldPoint extends Point {
 
     public World getWorld()
     {
-        if (world != null && world.provider.dimensionId != dim)
+        if (world != null && world.provider.getDimension() != dim)
             return world;
         world = DimensionManager.getWorld(dim);
         return world;
@@ -142,18 +142,20 @@ public class WorldPoint extends Point {
 
     public Block getBlock()
     {
-        return getWorld().getBlock(x, y, z);
+        return getWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
     }
 
-    public int getBlockMeta()
+    // TODO: Figure out how to convert this
+    /*public int getBlockMeta()
     {
         return getWorld().getBlockMetadata(x, y, z);
-    }
+    }*/
 
-    public TileEntity getTileEntity()
+    // TODO: Figure out how to convert this
+    /*public TileEntity getTileEntity()
     {
         return getWorld().getTileEntity(x, y, z);
-    }
+    }*/
 
     // ------------------------------------------------------------
 

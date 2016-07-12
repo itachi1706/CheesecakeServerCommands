@@ -1,28 +1,29 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
-
 import com.itachi1706.cheesecakeservercommands.commons.selections.WarpPoint;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.SPacketEntityEffect;
+import net.minecraft.network.play.server.SPacketRespawn;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Kenneth on 3/5/2016.
@@ -39,9 +40,9 @@ public class TeleportHelper {
         }
 
         @Override
-        public boolean placeInExistingPortal(Entity entity, double x, double y, double z, float rotationYaw)
+        public boolean placeInExistingPortal(Entity entity, float rotationYaw)
         {
-            entity.setLocationAndAngles(x, y, z, rotationYaw, entity.rotationPitch);
+            entity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, rotationYaw, entity.rotationPitch);
             return true;
         }
 
@@ -52,9 +53,8 @@ public class TeleportHelper {
         }
 
         @Override
-        public void placeInPortal(Entity entity, double x, double y, double z, float rotationYaw)
-        {
-            placeInExistingPortal(entity, x, y, z, rotationYaw);
+        public void placeInPortal(Entity entityIn, float rotationYaw) {
+            placeInExistingPortal(entityIn, rotationYaw);
         }
 
     }
@@ -85,7 +85,7 @@ public class TeleportHelper {
         {
             if (playerPos.distance(new WarpPoint(player)) > 0.2)
             {
-                ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Teleport cancelled");
+                ChatHelper.sendMessage(player, ChatFormatting.RED + "Teleport cancelled");
                 return true;
             }
             if (System.currentTimeMillis() - start < timeout)
@@ -93,7 +93,7 @@ public class TeleportHelper {
                 return false;
             }
             checkedTeleport(player, point);
-            ChatHelper.sendMessage(player, EnumChatFormatting.GREEN + "Teleported");
+            ChatHelper.sendMessage(player, ChatFormatting.GREEN + "Teleported");
             return true;
         }
 
@@ -114,7 +114,7 @@ public class TeleportHelper {
             DimensionManager.initDimension(point.getDimension());
             if (point.getWorld() == null)
             {
-                ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Unable to teleport! Target dimension does not exist");
+                ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target dimension does not exist");
                 return;
             }
         }
@@ -122,31 +122,36 @@ public class TeleportHelper {
 
         if (!canTeleportTo(point))
         {
-            ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Unable to teleport! Target location obstructed.");
+            ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target location obstructed.");
             return;
         }
 
         // Setup timed teleport
         tpInfos.put(player.getPersistentID(), new TeleportInfo(player, point, 0));
-        //ChatHelper.sendMessage(player, EnumChatFormatting.YELLOW + "Teleporting...");
+        //ChatHelper.sendMessage(player, ChatFormatting.YELLOW + "Teleporting...");
     }
 
     public static boolean canTeleportTo(WarpPoint point)
     {
         if (point.getY() < 0)
             return false;
-        Block block1 = point.getWorld().getBlock(point.getBlockX(), point.getBlockY(), point.getBlockZ());
-        Block block2 = point.getWorld().getBlock(point.getBlockX(), point.getBlockY() + 1, point.getBlockZ());
-        boolean block1Free = !block1.getMaterial().isSolid() || block1.getBlockBoundsMaxX() < 1 || block1.getBlockBoundsMaxY() > 0;
-        boolean block2Free = !block2.getMaterial().isSolid() || block2.getBlockBoundsMaxX() < 1 || block2.getBlockBoundsMaxY() > 0;
-        return block1Free && block2Free;
+        IBlockState blockS1 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY(), point.getBlockZ()));
+        IBlockState blockS2 = point.getWorld().getBlockState(new BlockPos(point.getBlockX(), point.getBlockY() + 1, point.getBlockZ()));
+
+        Block block1 = blockS1.getBlock();
+        Block block2 = blockS2.getBlock();
+        // TODO: Figure out how to do this, returning true for now
+        //boolean block1Free = !block1.getMaterial(blockS1).isSolid() || block1.getBlockBoundsMaxX() < 1 || block1.getBlockBoundsMaxY() > 0;
+        //boolean block2Free = !block2.getMaterial(blockS2).isSolid() || block2.getBlockBoundsMaxX() < 1 || block2.getBlockBoundsMaxY() > 0;
+        //return block1Free && block2Free;
+        return true;
     }
 
     public static void checkedTeleport(EntityPlayerMP player, WarpPoint point)
     {
         if (!canTeleportTo(point))
         {
-            ChatHelper.sendMessage(player, EnumChatFormatting.RED + "Unable to teleport! Target location obstructed.");
+            ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target location obstructed.");
             return;
         }
 
@@ -161,14 +166,14 @@ public class TeleportHelper {
             return;
         }
         // TODO: Handle teleportation of mounted entity
-        player.mountEntity(null);
+        player.mountEntityAndWakeUp();
 
         if (player.dimension != point.getDimension())
         {
             SimpleTeleporter teleporter = new SimpleTeleporter(point.getWorld());
             transferPlayerToDimension(player, point.getDimension(), teleporter);
         }
-        player.playerNetServerHandler.setPlayerLocation(point.getX(), point.getY(), point.getZ(), point.getYaw(), point.getPitch());
+        player.connection.setPlayerLocation(point.getX(), point.getY(), point.getZ(), point.getYaw(), point.getPitch());
     }
 
     public static void doTeleportEntity(Entity entity, WarpPoint point)
@@ -179,7 +184,7 @@ public class TeleportHelper {
             return;
         }
         if (entity.dimension != point.getDimension())
-            entity.travelToDimension(point.getDimension());
+            entity.changeDimension(point.getDimension());
         entity.setLocationAndAngles(point.getX(), point.getY(), point.getZ(), point.getYaw(), point.getPitch());
     }
 
@@ -202,29 +207,29 @@ public class TeleportHelper {
     public static void transferPlayerToDimension(EntityPlayerMP player, int dimension, Teleporter teleporter)
     {
         int oldDim = player.dimension;
-        MinecraftServer mcServer = MinecraftServer.getServer();
+        MinecraftServer mcServer = ServerUtil.getServerInstance();
 
         WorldServer oldWorld = mcServer.worldServerForDimension(player.dimension);
         player.dimension = dimension;
         WorldServer newWorld = mcServer.worldServerForDimension(player.dimension);
-        player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, newWorld.difficultySetting,
-                newWorld.getWorldInfo().getTerrainType(), player.theItemInWorldManager.getGameType())); // Forge: Use new dimensions information
-        oldWorld.removePlayerEntityDangerously(player);
+        player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(),
+                newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType())); // Forge: Use new dimensions information
+        oldWorld.removeEntityDangerously(player);
         player.isDead = false;
 
         transferEntityToWorld(player, oldDim, oldWorld, newWorld, teleporter);
 
-        mcServer.getConfigurationManager().func_72375_a(player, oldWorld);
-        player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw,
+        mcServer.getPlayerList().preparePlayer(player, oldWorld);
+        player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw,
                 player.rotationPitch);
-        player.theItemInWorldManager.setWorld(newWorld);
-        mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(player, newWorld);
-        mcServer.getConfigurationManager().syncPlayerInventory(player);
+        player.interactionManager.setWorld(newWorld);
+        mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, newWorld);
+        mcServer.getPlayerList().syncPlayerInventory(player);
         Iterator<?> iterator = player.getActivePotionEffects().iterator();
         while (iterator.hasNext())
         {
             PotionEffect potioneffect = (PotionEffect) iterator.next();
-            player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potioneffect));
+            player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
         }
         FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
     }
@@ -245,7 +250,7 @@ public class TeleportHelper {
         if (entity.isEntityAlive())
         {
             entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
-            teleporter.placeInPortal(entity, d3, d4, d5, f);
+            teleporter.placeInPortal(entity, f);
             newWorld.spawnEntityInWorld(entity);
             newWorld.updateEntityWithOptionalForce(entity, false);
         }

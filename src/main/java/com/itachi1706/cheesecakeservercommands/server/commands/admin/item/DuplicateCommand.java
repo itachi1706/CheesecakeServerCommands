@@ -2,17 +2,19 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO: Add to Main Command
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -44,7 +46,7 @@ public class DuplicateCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "Cannot duplicate for CONSOLE");
             return;
@@ -52,19 +54,19 @@ public class DuplicateCommand implements ICommand {
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate for " + iCommandSender.getCommandSenderName());
+            ChatHelper.sendMessage(iCommandSender, "Cannot duplicate for " + iCommandSender.getName());
             return;
         }
 
-        ItemStack stack = player.getCurrentEquippedItem();
+        ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "No items selected");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "No items selected");
             return;
         }
 
         int stackSize = 0;
-        if (astring.length > 0) {
-            stackSize = CommandBase.parseInt(iCommandSender, astring[0]);
+        if (args.length > 0) {
+            stackSize = CommandBase.parseInt(args[0]);
         }
 
         ItemStack newItem = stack.copy();
@@ -73,8 +75,8 @@ public class DuplicateCommand implements ICommand {
         }
 
         boolean overflow = false;
-        if (astring.length > 1) {
-            overflow = CommandBase.parseBoolean(iCommandSender, astring[1]);
+        if (args.length > 1) {
+            overflow = CommandBase.parseBoolean(args[1]);
         }
 
         if (overflow)
@@ -82,10 +84,10 @@ public class DuplicateCommand implements ICommand {
         else
             PlayerMPUtil.giveNormal(player, newItem);
 
-        String message = EnumChatFormatting.GOLD + "Duplicated " + stack.getDisplayName();
+        String message = ChatFormatting.GOLD + "Duplicated " + stack.getDisplayName();
         String adminmessage = "Duplicated " + stack.getDisplayName();
         if (stackSize > 0) {
-            message += " with " + EnumChatFormatting.AQUA + stackSize + EnumChatFormatting.GOLD + " items in the stack";
+            message += " with " + ChatFormatting.AQUA + stackSize + ChatFormatting.GOLD + " items in the stack";
             adminmessage += " with " + stackSize + " items in the stack";
         }
         ChatHelper.sendMessage(iCommandSender, message);
@@ -93,12 +95,12 @@ public class DuplicateCommand implements ICommand {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -109,7 +111,7 @@ public class DuplicateCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

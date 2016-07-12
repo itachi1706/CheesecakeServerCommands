@@ -2,22 +2,24 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-// TODO: Add to Main Command
 /**
  * Created by Kenneth on 9/11/2015.
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
@@ -49,9 +51,9 @@ public class EnchantForceCommand implements ICommand {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
-        if (astring.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Usage: /enchantforce <enchantmentname> [level]");
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+        if (args.length == 0) {
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /enchantforce <enchantmentname> [level]");
             return;
         }
 
@@ -60,17 +62,17 @@ public class EnchantForceCommand implements ICommand {
             return;
         }
 
-        String enchantstring = astring[0];
+        String enchantstring = args[0];
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, "Cannot enchant an item for " + iCommandSender.getCommandSenderName());
+            ChatHelper.sendMessage(iCommandSender, "Cannot enchant an item for " + iCommandSender.getName());
             return;
         }
 
-        ItemStack stack = player.getCurrentEquippedItem();
+        ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid Item held");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Item held");
             return;
         }
 
@@ -78,39 +80,39 @@ public class EnchantForceCommand implements ICommand {
         @SuppressWarnings("unchecked")
         List<String> validEnchantmentNames = new ArrayList<String>();
         Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
-        for (Enchantment enchantment : Enchantment.enchantmentsList) {
+        for (Enchantment enchantment : Enchantment.REGISTRY) {
             if (enchantment != null) {
-                String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+                String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                 validEnchantmentNames.add(name);
                 validEnchantments.put(name.toLowerCase(), enchantment);
             }
         }
 
         @SuppressWarnings("unchecked")
-        Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
         Enchantment enchantment = validEnchantments.get(enchantstring.toLowerCase());
         if (enchantment == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Invalid enchantment: " + enchantstring);
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid enchantment: " + enchantstring);
             return;
         }
 
         int enchantlevel = enchantment.getMaxLevel();
-         if (astring.length == 2) {
-             enchantlevel = CommandBase.parseInt(iCommandSender, astring[1]);
+         if (args.length == 2) {
+             enchantlevel = CommandBase.parseInt(args[1]);
          }
 
-        enchantments.put(enchantment.effectId, enchantlevel);
+        enchantments.put(enchantment, enchantlevel);
 
 
         EnchantmentHelper.setEnchantments(enchantments, stack);
 
-        ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.GOLD + "Enchanted " + stack.getDisplayName() + " with " + EnumChatFormatting.AQUA + enchantstring
-                + EnumChatFormatting.GOLD + " (" + EnumChatFormatting.LIGHT_PURPLE + enchantlevel + EnumChatFormatting.GOLD + ")");
+        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Enchanted " + stack.getDisplayName() + " with " + ChatFormatting.AQUA + enchantstring
+                + ChatFormatting.GOLD + " (" + ChatFormatting.LIGHT_PURPLE + enchantlevel + ChatFormatting.GOLD + ")");
         ChatHelper.sendAdminMessage(iCommandSender, "Enchanted " + stack.getDisplayName() + " with " + enchantstring + " (" + enchantlevel + ")");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             return null;
         }
@@ -121,7 +123,7 @@ public class EnchantForceCommand implements ICommand {
                 return null;
             }
 
-            ItemStack stack = player.getCurrentEquippedItem();
+            ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
                 return null;
             }
@@ -130,9 +132,9 @@ public class EnchantForceCommand implements ICommand {
             @SuppressWarnings("unchecked")
             List<String> validEnchantmentNames = new ArrayList<String>();
             Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
-            for (Enchantment enchantment : Enchantment.enchantmentsList) {
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
                 if (enchantment != null) {
-                    String name = StatCollector.translateToLocal(enchantment.getName()).replaceAll(" ", "");
+                    String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
                     validEnchantmentNames.add(name);
                 }
             }
@@ -146,7 +148,7 @@ public class EnchantForceCommand implements ICommand {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -157,7 +159,7 @@ public class EnchantForceCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

@@ -1,10 +1,8 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
-import com.itachi1706.cheesecakeservercommands.commons.selections.WarpPoint;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -13,33 +11,34 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kenneth on 9/11/2015.
+ * Created by Kenneth on 11/7/2016.
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
  */
 @SuppressWarnings("unused")
-public class TpHereCommand implements ICommand {
+public class GMSPCommand implements ICommand {
 
     private List<String> aliases;
 
-    public TpHereCommand(){
+    public GMSPCommand(){
         this.aliases = new ArrayList<String>();
-        this.aliases.add("tphere");
+        this.aliases.add("gmsp");
     }
 
     @Override
     public String getCommandName() {
-        return "tphere";
+        return "gmsp";
     }
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "tphere <player>";
+        return "gmsp [player]";
     }
 
     @Override
@@ -49,15 +48,23 @@ public class TpHereCommand implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
-        if (!PlayerMPUtil.isPlayer(iCommandSender)) {
-            ChatHelper.sendMessage(iCommandSender, "CONSOLE cannot teleport");
-            return;
-        }
 
         if(args.length == 0)
         {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /tphere <player>");
-            return;
+            if (!PlayerMPUtil.isPlayer(iCommandSender)) {
+                ChatHelper.sendMessage(iCommandSender, "Cannot set CONSOLE as Spectator Mode");
+                return;
+            } else {
+                EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
+                if (player == null) {
+                    ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getName() + " as Spectator Mode");
+                    return;
+                }
+                player.setGameType(GameType.SPECTATOR);
+                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + ChatFormatting.GOLD + "Spectator Mode");
+                ChatHelper.sendAdminMessage(iCommandSender, "Set own gamemode to Spectator Mode");
+                return;
+            }
         }
 
         String subname = args[0];
@@ -67,16 +74,9 @@ public class TpHereCommand implements ICommand {
             return;
         }
 
-        EntityPlayerMP sender = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
-        if (sender == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.DARK_RED + "FATAL: Player Object not found");
-            return;
-        }
-
-        TeleportHelper.teleport(player, new WarpPoint(sender));
-
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Teleported " + player.getName() + " to you");
-        ChatHelper.sendAdminMessage(iCommandSender, "Teleported " + player.getName() + " to him/her");
+        player.setGameType(GameType.SPECTATOR);
+        ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " gamemode to " + ChatFormatting.GOLD + "Spectator Mode");
+        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " gamemode to Spectator Mode");
     }
 
     @Override

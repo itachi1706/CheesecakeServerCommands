@@ -2,14 +2,18 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameType;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +47,9 @@ public class GMCCommand implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender iCommandSender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
-        if(astring.length == 0)
+        if(args.length == 0)
         {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot set CONSOLE as Creative Mode");
@@ -53,37 +57,37 @@ public class GMCCommand implements ICommand {
             } else {
                 EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
                 if (player == null) {
-                    ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getCommandSenderName() + " as Creative Mode");
+                    ChatHelper.sendMessage(iCommandSender, "Cannot set " + iCommandSender.getName() + " as Creative Mode");
                     return;
                 }
-                player.setGameType(WorldSettings.GameType.CREATIVE);
-                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + EnumChatFormatting.GOLD + "Creative Mode");
+                player.setGameType(GameType.CREATIVE);
+                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + ChatFormatting.GOLD + "Creative Mode");
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own gamemode to Creative Mode");
                 return;
             }
         }
 
-        String subname = astring[0];
+        String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, EnumChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
             return;
         }
 
-        player.setGameType(WorldSettings.GameType.CREATIVE);
-        ChatHelper.sendMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to " + EnumChatFormatting.GOLD + "Creative Mode");
-        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getCommandSenderName() + " gamemode to Creative Mode");
+        player.setGameType(GameType.CREATIVE);
+        ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " gamemode to " + ChatFormatting.GOLD + "Creative Mode");
+        ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " gamemode to Creative Mode");
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender iCommandSender, String[] typedValue) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
         if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
         return null;
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender iCommandSender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
@@ -94,7 +98,7 @@ public class GMCCommand implements ICommand {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(ICommand o) {
         return 0;
     }
 }

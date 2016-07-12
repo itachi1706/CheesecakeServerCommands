@@ -6,9 +6,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
@@ -23,11 +22,11 @@ public class PlayerMPUtil {
     }
 
     public static boolean isOperator(EntityPlayer player){
-        if (MinecraftServer.getServer().isSinglePlayer())
+        if (ServerUtil.getServerInstance().isSinglePlayer())
             return true;
 
         GameProfile profile = player.getGameProfile();
-        return MinecraftServer.getServer().getConfigurationManager().func_152596_g(profile);
+        return ServerUtil.getServerInstance().getPlayerList().canSendCommands(profile);
     }
 
     public static boolean isPlayer(ICommandSender sender){
@@ -42,13 +41,13 @@ public class PlayerMPUtil {
 
     @SuppressWarnings("unchecked")
     public static List<EntityPlayerMP> getOnlinePlayers(){
-        return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+        return ServerUtil.getServerInstance().getPlayerList().getPlayerList();
     }
 
     public static EntityPlayerMP getPlayer(String username) {
         List<EntityPlayerMP> players = getOnlinePlayers();
         for (EntityPlayerMP playerMP : players) {
-            if (playerMP.getCommandSenderName().equals(username)) {
+            if (playerMP.getName().equals(username)) {
                 return playerMP;
             }
         }
@@ -59,12 +58,12 @@ public class PlayerMPUtil {
      * Get player's looking-at spot.
      *
      * @param player
-     * @return The position as a MovingObjectPosition Null if not existent.
+     * @return The position as a RayTraceResult Null if not existent.
      */
-    public static MovingObjectPosition getPlayerLookingSpot(EntityPlayer player)
+    public static RayTraceResult getPlayerLookingSpot(EntityPlayer player)
     {
         if (player instanceof EntityPlayerMP)
-            return getPlayerLookingSpot(player, ((EntityPlayerMP) player).theItemInWorldManager.getBlockReachDistance());
+            return getPlayerLookingSpot(player, ((EntityPlayerMP) player).interactionManager.getBlockReachDistance());
         else
             return getPlayerLookingSpot(player, 5);
     }
@@ -75,14 +74,14 @@ public class PlayerMPUtil {
      * @param player
      * @param maxDistance
      *            Keep max distance to 5.
-     * @return The position as a MovingObjectPosition Null if not existent.
+     * @return The position as a RayTraceResult Null if not existent.
      */
-    public static MovingObjectPosition getPlayerLookingSpot(EntityPlayer player, double maxDistance)
+    public static RayTraceResult getPlayerLookingSpot(EntityPlayer player, double maxDistance)
     {
-        Vec3 lookAt = player.getLook(1);
-        Vec3 playerPos = Vec3.createVectorHelper(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
-        Vec3 pos1 = playerPos.addVector(0, player.getEyeHeight(), 0);
-        Vec3 pos2 = pos1.addVector(lookAt.xCoord * maxDistance, lookAt.yCoord * maxDistance, lookAt.zCoord * maxDistance);
+        Vec3d lookAt = player.getLook(1);
+        Vec3d playerPos = new Vec3d(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
+        Vec3d pos1 = playerPos.addVector(0, player.getEyeHeight(), 0);
+        Vec3d pos2 = pos1.addVector(lookAt.xCoord * maxDistance, lookAt.yCoord * maxDistance, lookAt.zCoord * maxDistance);
         return player.worldObj.rayTraceBlocks(pos1, pos2);
     }
 
@@ -99,15 +98,17 @@ public class PlayerMPUtil {
         while (itemstack > 64) {
             ItemStack senditem = item.copy();
             senditem.stackSize = 64;
-            EntityItem entityitem = player.dropPlayerItemWithRandomChoice(senditem, false);
-            entityitem.delayBeforeCanPickup = 0;
-            entityitem.func_145797_a(player.getCommandSenderName());
+            EntityItem entityitem = player.dropItem(senditem, false);
+            if (entityitem == null) continue;
+            entityitem.setNoPickupDelay();
+            entityitem.setOwner(player.getName());
             itemstack -= 64;
         }
         item.stackSize = itemstack;
-        EntityItem entityitem = player.dropPlayerItemWithRandomChoice(item, false);
-        entityitem.delayBeforeCanPickup = 0;
-        entityitem.func_145797_a(player.getCommandSenderName());
+        EntityItem entityitem = player.dropItem(item, false);
+        if (entityitem == null) return;
+        entityitem.setNoPickupDelay();
+        entityitem.setOwner(player.getName());
     }
 
     /**
@@ -119,8 +120,9 @@ public class PlayerMPUtil {
      */
     public static void giveNormal(EntityPlayer player, ItemStack item)
     {
-        EntityItem entityitem = player.dropPlayerItemWithRandomChoice(item, false);
-        entityitem.delayBeforeCanPickup = 0;
-        entityitem.func_145797_a(player.getCommandSenderName());
+        EntityItem entityitem = player.dropItem(item, false);
+        if (entityitem == null) return;
+        entityitem.setNoPickupDelay();
+        entityitem.setOwner(player.getName());
     }
 }
