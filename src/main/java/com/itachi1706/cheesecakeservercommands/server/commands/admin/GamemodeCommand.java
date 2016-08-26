@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -51,7 +51,7 @@ public class GamemodeCommand implements ICommand {
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
         if (args.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /gm <creative/adventure/survival> [player]");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /gm <creative/adventure/survival> [player]");
             return;
         }
 
@@ -71,12 +71,12 @@ public class GamemodeCommand implements ICommand {
                 }
                 GameType gamemode = getGameMode(togm);
                 if (gamemode.equals(GameType.NOT_SET)) {
-                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Unknown Game Mode.");
-                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Available modes: creative, adventure, survival");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Unknown Game Mode.");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Available modes: creative, adventure, survival");
                     return;
                 }
                 player.setGameType(gamemode);
-                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + ChatFormatting.GOLD + WordUtils.capitalize(gamemode.getName()));
+                ChatHelper.sendMessage(iCommandSender, "Set own gamemode to " + TextFormatting.GOLD + WordUtils.capitalize(gamemode.getName()));
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own gamemode to " + WordUtils.capitalize(gamemode.getName()));
                 return;
             }
@@ -86,18 +86,18 @@ public class GamemodeCommand implements ICommand {
         String subname = args[1];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
         GameType gamemode = getGameMode(togm);
         if (gamemode.equals(GameType.NOT_SET)) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Unknown Game Mode.");
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Available modes: creative, adventure, survival");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Unknown Game Mode.");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Available modes: creative, adventure, survival");
             return;
         }
         player.setGameType(GameType.SURVIVAL);
-        ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " gamemode to " + ChatFormatting.GOLD + WordUtils.capitalize(gamemode.getName()));
+        ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " gamemode to " + TextFormatting.GOLD + WordUtils.capitalize(gamemode.getName()));
         ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " gamemode to " + WordUtils.capitalize(gamemode.getName()));
     }
 

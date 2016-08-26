@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -59,15 +59,15 @@ public class MoreItemsCommand implements ICommand {
 
         ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "No items selected");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "No items selected");
             return;
         }
 
         int stackSize = stack.getMaxStackSize() - stack.stackSize;
 
         if (stackSize == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You already have the max stack size of the item");
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Use /duplicate to create a new stack");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You already have the max stack size of the item");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Use /duplicate to create a new stack");
             return;
         }
 
@@ -76,7 +76,7 @@ public class MoreItemsCommand implements ICommand {
 
         PlayerMPUtil.giveNormal(player, newItem);
 
-        String message = ChatFormatting.GOLD + "Gave you more of " + stack.getDisplayName();
+        String message = TextFormatting.GOLD + "Gave you more of " + stack.getDisplayName();
         String adminmessage = "Given more of " + stack.getDisplayName() + " to self";
         ChatHelper.sendMessage(iCommandSender, message);
         ChatHelper.sendAdminMessage(iCommandSender, adminmessage);

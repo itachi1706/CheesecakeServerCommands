@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -70,13 +70,13 @@ public class ServerSettingsCommand implements ICommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (!ServerUtil.getServerInstance().isDedicatedServer()) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You can only use this command on dedicated servers");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You can only use this command on dedicated servers");
             return;
         }
 
         if (args.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /serversettings <option> [value]");
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Options: " + ChatFormatting.RESET + StringUtils.join(options, ", "));
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /serversettings <option> [value]");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Options: " + TextFormatting.RESET + StringUtils.join(options, ", "));
             return;
         }
 
@@ -147,7 +147,7 @@ public class ServerSettingsCommand implements ICommand {
             }
 
         } else {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage. Usage: /serversettings <option> [value]");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage. Usage: /serversettings <option> [value]");
         }
     }
 

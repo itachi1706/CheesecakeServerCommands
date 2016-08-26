@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -58,13 +58,13 @@ public class SpeedCommand implements ICommand {
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
 
         if (args.length < 2) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /speed <fly/walk/all> <speed/reset> [player]");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /speed <fly/walk/all> <speed/reset> [player]");
             return;
         }
         String stat = args[0];
         String speedStr = args[1];
         if (!(stat.equalsIgnoreCase("fly") || stat.equalsIgnoreCase("walk") || stat.equalsIgnoreCase("all"))) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid speed modification. Available modification: fly,walk,all");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid speed modification. Available modification: fly,walk,all");
             return;
         }
 
@@ -108,12 +108,12 @@ public class SpeedCommand implements ICommand {
                     player.capabilities.writeCapabilitiesToNBT(tagCompound);
                     if (modifyFly) {
                         tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_FLY_SPEED, new NBTTagFloat(DEFAULT_FLY_SPEED));
-                        ChatHelper.sendMessage(iCommandSender, "Fly Speed:" + ChatFormatting.AQUA + " Reset");
+                        ChatHelper.sendMessage(iCommandSender, "Fly Speed:" + TextFormatting.AQUA + " Reset");
                         ChatHelper.sendAdminMessage(iCommandSender, "Reset own Fly Speed");
                     }
                     if (modifyWalk) {
                         tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_WALK_SPEED, new NBTTagFloat(DEFAULT_WALK_SPEED));
-                        ChatHelper.sendMessage(iCommandSender, "Walk Speed:" + ChatFormatting.AQUA + " Reset");
+                        ChatHelper.sendMessage(iCommandSender, "Walk Speed:" + TextFormatting.AQUA + " Reset");
                         ChatHelper.sendAdminMessage(iCommandSender, "Reset own Walk Speed");
                     }
                     player.capabilities.readCapabilitiesFromNBT(tagCompound);
@@ -125,12 +125,12 @@ public class SpeedCommand implements ICommand {
                 player.capabilities.writeCapabilitiesToNBT(tagCompound);
                 if (modifyFly) {
                     tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_FLY_SPEED, new NBTTagFloat(speed));
-                    ChatHelper.sendMessage(iCommandSender, "Fly Speed: " + ChatFormatting.AQUA + multiplier);
+                    ChatHelper.sendMessage(iCommandSender, "Fly Speed: " + TextFormatting.AQUA + multiplier);
                     ChatHelper.sendAdminMessage(iCommandSender, "Set own Fly Speed to " + multiplier);
                 }
                 if (modifyWalk) {
                     tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_WALK_SPEED, new NBTTagFloat(speed));
-                    ChatHelper.sendMessage(iCommandSender, "Walk Speed: " + ChatFormatting.AQUA + multiplier);
+                    ChatHelper.sendMessage(iCommandSender, "Walk Speed: " + TextFormatting.AQUA + multiplier);
                     ChatHelper.sendAdminMessage(iCommandSender, "Set own Walk Speed to " + multiplier);
                 }
                 player.capabilities.readCapabilitiesFromNBT(tagCompound);
@@ -142,7 +142,7 @@ public class SpeedCommand implements ICommand {
         String subname = args[2];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -153,13 +153,13 @@ public class SpeedCommand implements ICommand {
             if (modifyFly) {
                 tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_FLY_SPEED, new NBTTagFloat(DEFAULT_FLY_SPEED));
                 ChatHelper.sendMessage(iCommandSender, "Reset " + player.getName() + " Fly Speed");
-                ChatHelper.sendMessage(player, "Fly Speed:" + ChatFormatting.AQUA + " Reset");
+                ChatHelper.sendMessage(player, "Fly Speed:" + TextFormatting.AQUA + " Reset");
                 ChatHelper.sendAdminMessage(iCommandSender, "Reset " + player.getName() + " Fly Speed");
             }
             if (modifyWalk) {
                 tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_WALK_SPEED, new NBTTagFloat(DEFAULT_WALK_SPEED));
                 ChatHelper.sendMessage(iCommandSender, "Reset " + player.getName() + " Walk Speed");
-                ChatHelper.sendMessage(player, "Walk Speed:" + ChatFormatting.AQUA + " Reset");
+                ChatHelper.sendMessage(player, "Walk Speed:" + TextFormatting.AQUA + " Reset");
                 ChatHelper.sendAdminMessage(iCommandSender, "Reset " + player.getName() + " Walk Speed");
             }
             player.capabilities.readCapabilitiesFromNBT(tagCompound);
@@ -171,14 +171,14 @@ public class SpeedCommand implements ICommand {
         player.capabilities.writeCapabilitiesToNBT(tagCompound);
         if (modifyFly) {
             tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_FLY_SPEED, new NBTTagFloat(speed));
-            ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " Fly Speed to " + ChatFormatting.AQUA + multiplier);
-            ChatHelper.sendMessage(player, "Fly Speed: " + ChatFormatting.AQUA + multiplier);
+            ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " Fly Speed to " + TextFormatting.AQUA + multiplier);
+            ChatHelper.sendMessage(player, "Fly Speed: " + TextFormatting.AQUA + multiplier);
             ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " Fly Speed to " + multiplier);
         }
         if (modifyWalk) {
             tagCompound.getCompoundTag(CAPABILITY_ABILITY).setTag(CAPABILITY_WALK_SPEED, new NBTTagFloat(speed));
-            ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " Walk Speed to " + ChatFormatting.AQUA + multiplier);
-            ChatHelper.sendMessage(player, "Walk Speed: " + ChatFormatting.AQUA + multiplier);
+            ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " Walk Speed to " + TextFormatting.AQUA + multiplier);
+            ChatHelper.sendMessage(player, "Walk Speed: " + TextFormatting.AQUA + multiplier);
             ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " Walk Speed to " + multiplier);
         }
         player.capabilities.readCapabilitiesFromNBT(tagCompound);

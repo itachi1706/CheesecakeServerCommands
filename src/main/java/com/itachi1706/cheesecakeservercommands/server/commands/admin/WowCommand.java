@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -51,7 +51,7 @@ public class WowCommand implements ICommand {
         if (args.length == 0)
         {
             // Doge yourself
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GREEN + "Such command, Very Nothing");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Such command, Very Nothing");
             ChatHelper.sendAdminMessage(iCommandSender, "Doged Own Self");
             sendToEveryone(iCommandSender, null);
             return;
@@ -60,19 +60,19 @@ public class WowCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
         if (!PlayerMPUtil.isOperatorOrConsole(iCommandSender)) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You do not have permission to do this to other players");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You do not have permission to do this to other players");
             ChatHelper.sendAdminMessage(iCommandSender, "Tried to Doge " + player.getName() + " while he is not an OP");
             return;
         }
 
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Doged " + player.getName());
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Doged " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Doged " + player.getName());
-        ChatHelper.sendMessage(player, ChatFormatting.GREEN + "Such randomness, Very Nothing");
+        ChatHelper.sendMessage(player, TextFormatting.GREEN + "Such randomness, Very Nothing");
         sendToEveryone(iCommandSender, player);
     }
 
@@ -81,9 +81,9 @@ public class WowCommand implements ICommand {
         for (EntityPlayerMP player : players) {
             if (!(player.getName().equals(starter.getName()))) {
                 if (recepient != null && !player.getName().equals(recepient.getName())) {
-                    ChatHelper.sendMessage(player, ChatFormatting.GOLD + recepient.getName() + ChatFormatting.GRAY + " just got doged :D");
+                    ChatHelper.sendMessage(player, TextFormatting.GOLD + recepient.getName() + TextFormatting.GRAY + " just got doged :D");
                 } else if (recepient == null) {
-                    ChatHelper.sendMessage(player, ChatFormatting.GOLD + starter.getName() + ChatFormatting.GRAY + " just got doged :D");
+                    ChatHelper.sendMessage(player, TextFormatting.GOLD + starter.getName() + TextFormatting.GRAY + " just got doged :D");
                 }
             }
         }

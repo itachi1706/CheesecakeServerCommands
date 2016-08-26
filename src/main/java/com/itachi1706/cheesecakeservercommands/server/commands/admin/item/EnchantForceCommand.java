@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -53,7 +53,7 @@ public class EnchantForceCommand implements ICommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (args.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /enchantforce <enchantmentname> [level]");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /enchantforce <enchantmentname> [level]");
             return;
         }
 
@@ -72,7 +72,7 @@ public class EnchantForceCommand implements ICommand {
 
         ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Item held");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Item held");
             return;
         }
 
@@ -92,7 +92,7 @@ public class EnchantForceCommand implements ICommand {
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
         Enchantment enchantment = validEnchantments.get(enchantstring.toLowerCase());
         if (enchantment == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid enchantment: " + enchantstring);
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid enchantment: " + enchantstring);
             return;
         }
 
@@ -106,8 +106,8 @@ public class EnchantForceCommand implements ICommand {
 
         EnchantmentHelper.setEnchantments(enchantments, stack);
 
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Enchanted " + stack.getDisplayName() + " with " + ChatFormatting.AQUA + enchantstring
-                + ChatFormatting.GOLD + " (" + ChatFormatting.LIGHT_PURPLE + enchantlevel + ChatFormatting.GOLD + ")");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Enchanted " + stack.getDisplayName() + " with " + TextFormatting.AQUA + enchantstring
+                + TextFormatting.GOLD + " (" + TextFormatting.LIGHT_PURPLE + enchantlevel + TextFormatting.GOLD + ")");
         ChatHelper.sendAdminMessage(iCommandSender, "Enchanted " + stack.getDisplayName() + " with " + enchantstring + " (" + enchantlevel + ")");
     }
 

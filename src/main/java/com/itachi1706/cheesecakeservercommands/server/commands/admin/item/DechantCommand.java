@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -52,7 +52,7 @@ public class DechantCommand implements ICommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (args.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /dechant <enchantmentname>");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /dechant <enchantmentname>");
             return;
         }
 
@@ -70,7 +70,7 @@ public class DechantCommand implements ICommand {
 
             ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Item held");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Item held");
                 return;
             }
 
@@ -91,13 +91,13 @@ public class DechantCommand implements ICommand {
                 enchantments.clear();
                 EnchantmentHelper.setEnchantments(enchantments, stack);
 
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Removed all enchantments from " + stack.getDisplayName());
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Removed all enchantments from " + stack.getDisplayName());
                 ChatHelper.sendAdminMessage(iCommandSender, "Removed all enchantments from " + stack.getDisplayName());
                 return;
             } else {
                 Enchantment enchantment = validEnchantments.get(enchantstring.toLowerCase());
                 if (enchantment == null) {
-                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid enchantment: " + enchantstring);
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid enchantment: " + enchantstring);
                     return;
                 }
                 enchantments.remove(enchantment);
@@ -105,8 +105,8 @@ public class DechantCommand implements ICommand {
 
             EnchantmentHelper.setEnchantments(enchantments, stack);
 
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Removed " + ChatFormatting.AQUA + enchantstring
-                    + ChatFormatting.GOLD + " from " + stack.getDisplayName());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Removed " + TextFormatting.AQUA + enchantstring
+                    + TextFormatting.GOLD + " from " + stack.getDisplayName());
             ChatHelper.sendAdminMessage(iCommandSender, "Dechanted " + enchantstring + " from " + stack.getDisplayName());
         }
     }

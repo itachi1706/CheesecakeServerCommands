@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -52,7 +52,7 @@ public class SampleCommand implements ICommand {
             return;
         }
 
-        ChatHelper.sendMessage(iCommandSender, "Sample: " + ChatFormatting.AQUA + "[" + args[0] + "]");
+        ChatHelper.sendMessage(iCommandSender, "Sample: " + TextFormatting.AQUA + "[" + args[0] + "]");
 
     }
 

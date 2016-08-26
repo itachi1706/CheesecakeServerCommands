@@ -1,7 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
 import com.itachi1706.cheesecakeservercommands.commons.selections.WarpPoint;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -85,7 +85,7 @@ public class TeleportHelper {
         {
             if (playerPos.distance(new WarpPoint(player)) > 0.2)
             {
-                ChatHelper.sendMessage(player, ChatFormatting.RED + "Teleport cancelled");
+                ChatHelper.sendMessage(player, TextFormatting.RED + "Teleport cancelled");
                 return true;
             }
             if (System.currentTimeMillis() - start < timeout)
@@ -93,7 +93,7 @@ public class TeleportHelper {
                 return false;
             }
             checkedTeleport(player, point);
-            ChatHelper.sendMessage(player, ChatFormatting.GREEN + "Teleported");
+            ChatHelper.sendMessage(player, TextFormatting.GREEN + "Teleported");
             return true;
         }
 
@@ -114,7 +114,7 @@ public class TeleportHelper {
             DimensionManager.initDimension(point.getDimension());
             if (point.getWorld() == null)
             {
-                ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target dimension does not exist");
+                ChatHelper.sendMessage(player, TextFormatting.RED + "Unable to teleport! Target dimension does not exist");
                 return;
             }
         }
@@ -122,13 +122,13 @@ public class TeleportHelper {
 
         if (!canTeleportTo(point))
         {
-            ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target location obstructed.");
+            ChatHelper.sendMessage(player, TextFormatting.RED + "Unable to teleport! Target location obstructed.");
             return;
         }
 
         // Setup timed teleport
         tpInfos.put(player.getPersistentID(), new TeleportInfo(player, point, 0));
-        //ChatHelper.sendMessage(player, ChatFormatting.YELLOW + "Teleporting...");
+        //ChatHelper.sendMessage(player, TextFormatting.YELLOW + "Teleporting...");
     }
 
     public static boolean canTeleportTo(WarpPoint point)
@@ -151,7 +151,7 @@ public class TeleportHelper {
     {
         if (!canTeleportTo(point))
         {
-            ChatHelper.sendMessage(player, ChatFormatting.RED + "Unable to teleport! Target location obstructed.");
+            ChatHelper.sendMessage(player, TextFormatting.RED + "Unable to teleport! Target location obstructed.");
             return;
         }
 

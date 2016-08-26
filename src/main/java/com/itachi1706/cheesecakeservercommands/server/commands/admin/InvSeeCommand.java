@@ -4,7 +4,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.util.PlayerInvChe
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -72,7 +72,7 @@ public class InvSeeCommand implements ICommand {
             commandSender.openContainer = new ContainerChest(commandSender.inventory, chest, commandSender);
             commandSender.openContainer.windowId = commandSender.currentWindowId;
             commandSender.openContainer.addListener(commandSender);
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened your inventory");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Opened your inventory");
             ChatHelper.sendAdminMessage(iCommandSender, "Seen own inventory");
             return;
         }
@@ -81,7 +81,7 @@ public class InvSeeCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -95,7 +95,7 @@ public class InvSeeCommand implements ICommand {
         commandSender.openContainer = new ContainerChest(commandSender.inventory, chest, commandSender);
         commandSender.openContainer.windowId = commandSender.currentWindowId;
         commandSender.openContainer.addListener(commandSender);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened " + player.getName() + "'s inventory");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Opened " + player.getName() + "'s inventory");
         ChatHelper.sendAdminMessage(iCommandSender, "Seen " + player.getName() + "'s inventory");
     }
 

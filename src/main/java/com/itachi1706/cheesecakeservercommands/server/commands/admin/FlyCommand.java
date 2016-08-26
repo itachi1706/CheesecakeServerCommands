@@ -4,7 +4,7 @@ import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.itachi1706.cheesecakeservercommands.util.WorldUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -66,7 +66,7 @@ public class FlyCommand implements ICommand {
                 if (!player.capabilities.allowFlying)
                     WorldUtil.placeInWorld(player);
                 player.sendPlayerAbilities();
-                ChatHelper.sendMessage(iCommandSender, "Flight Mode " + (player.capabilities.allowFlying ? ChatFormatting.GREEN + "Enabled" : ChatFormatting.RED + "Disabled"));
+                ChatHelper.sendMessage(iCommandSender, "Flight Mode " + (player.capabilities.allowFlying ? TextFormatting.GREEN + "Enabled" : TextFormatting.RED + "Disabled"));
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
                 return;
             }
@@ -75,7 +75,7 @@ public class FlyCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -85,8 +85,8 @@ public class FlyCommand implements ICommand {
         if (!player.capabilities.allowFlying)
             WorldUtil.placeInWorld(player);
         player.sendPlayerAbilities();
-        ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " flight mode to " + (player.capabilities.allowFlying ? ChatFormatting.GREEN + "Enabled" : ChatFormatting.RED + "Disabled"));
-        ChatHelper.sendMessage(player, "Flight Mode has been set to " + (player.capabilities.allowFlying ? ChatFormatting.GREEN + "Enabled" : ChatFormatting.RED + "Disabled"));
+        ChatHelper.sendMessage(iCommandSender, "Set " + player.getName() + " flight mode to " + (player.capabilities.allowFlying ? TextFormatting.GREEN + "Enabled" : TextFormatting.RED + "Disabled"));
+        ChatHelper.sendMessage(player, "Flight Mode has been set to " + (player.capabilities.allowFlying ? TextFormatting.GREEN + "Enabled" : TextFormatting.RED + "Disabled"));
         ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " flight mode to " + (player.capabilities.allowFlying ? "Enabled" : "Disabled"));
     }
 

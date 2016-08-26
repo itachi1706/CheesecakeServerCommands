@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -50,14 +50,14 @@ public class SudoCommand implements ICommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] astring) throws CommandException {
         if (astring.length <= 1) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /sudo <player> <command>");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /sudo <player> <command>");
             return;
         }
 
         String subname = astring[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 

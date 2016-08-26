@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -61,7 +61,7 @@ public class KillCommand implements ICommand {
                 }
 
                 player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "You were slain");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "You were slain");
                 ChatHelper.sendAdminMessage(iCommandSender, "Took their own life");
                 return;
             }
@@ -70,14 +70,14 @@ public class KillCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
         player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Killed " + player.getName());
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Killed " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getName());
-        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were slain");
+        ChatHelper.sendMessage(player, TextFormatting.GOLD + "You were slain");
     }
 
     @Override

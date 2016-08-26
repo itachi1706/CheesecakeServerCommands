@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -82,26 +82,26 @@ public class ServerPropertiesCommand implements ICommand {
 
     private void getServerStats(ICommandSender sender){
         MinecraftServer tmp = ServerUtil.getServerInstance();
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
-        ChatHelper.sendMessage(sender, ChatFormatting.BLUE + "                    Server Status");
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server: " + ChatFormatting.AQUA + tmp.getServerModName());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Version: " + ChatFormatting.AQUA + tmp.getMinecraftVersion());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Online Mode: " + ChatFormatting.AQUA + tmp.isServerInOnlineMode());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Owner: " + ChatFormatting.AQUA + tmp.getServerOwner());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server MOTD: " + ChatFormatting.AQUA + tmp.getMOTD());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server IP: " + ChatFormatting.AQUA + tmp.getServerHostname() + ":" + tmp.getServerPort());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Max Allowed Players: " + ChatFormatting.AQUA + tmp.getMaxPlayers());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Spawn Protection Size: " + ChatFormatting.AQUA + tmp.getSpawnProtectionSize());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server View Distance: " + ChatFormatting.AQUA + tmp.getPlayerList().getViewDistance());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server World: " + ChatFormatting.AQUA + tmp.getEntityWorld().getWorldInfo().getWorldName());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Allow Nether: " + ChatFormatting.AQUA + tmp.getAllowNether());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Allow Flight: " + ChatFormatting.AQUA + tmp.isFlightAllowed());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Default Gamemode: " + ChatFormatting.AQUA + tmp.getGameType().getName());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Generate Structure: " + ChatFormatting.AQUA + tmp.canStructuresSpawn());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Server Whitelist: " + ChatFormatting.AQUA + tmp.getPlayerList().isWhiteListEnabled());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "Hardcore Mode: " + ChatFormatting.AQUA + tmp.isHardcore());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.BLUE + "                    Server Status");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server: " + TextFormatting.AQUA + tmp.getServerModName());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Version: " + TextFormatting.AQUA + tmp.getMinecraftVersion());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Online Mode: " + TextFormatting.AQUA + tmp.isServerInOnlineMode());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Owner: " + TextFormatting.AQUA + tmp.getServerOwner());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server MOTD: " + TextFormatting.AQUA + tmp.getMOTD());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server IP: " + TextFormatting.AQUA + tmp.getServerHostname() + ":" + tmp.getServerPort());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Max Allowed Players: " + TextFormatting.AQUA + tmp.getMaxPlayers());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Spawn Protection Size: " + TextFormatting.AQUA + tmp.getSpawnProtectionSize());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server View Distance: " + TextFormatting.AQUA + tmp.getPlayerList().getViewDistance());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server World: " + TextFormatting.AQUA + tmp.getEntityWorld().getWorldInfo().getWorldName());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Allow Nether: " + TextFormatting.AQUA + tmp.getAllowNether());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Allow Flight: " + TextFormatting.AQUA + tmp.isFlightAllowed());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Default Gamemode: " + TextFormatting.AQUA + tmp.getGameType().getName());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Generate Structure: " + TextFormatting.AQUA + tmp.canStructuresSpawn());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Whitelist: " + TextFormatting.AQUA + tmp.getPlayerList().isWhiteListEnabled());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Hardcore Mode: " + TextFormatting.AQUA + tmp.isHardcore());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
     }
 
 }

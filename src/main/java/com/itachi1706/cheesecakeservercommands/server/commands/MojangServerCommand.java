@@ -4,7 +4,7 @@ import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangPremiumPlayer;
 import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangStatusChecker;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -43,7 +43,7 @@ public class MojangServerCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "View Command Help: " + ChatFormatting.GOLD + "/mojang help";
+        return "View Command Help: " + TextFormatting.GOLD + "/mojang help";
     }
 
     @Override
@@ -53,10 +53,10 @@ public class MojangServerCommand implements ICommand {
 
     private void sendHelp(ICommandSender iCommandSender){
         ChatHelper.sendMessage(iCommandSender, "Commands List:");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/mojang status"
-                + ChatFormatting.AQUA + " View Mojang Server Status");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/mojang premium"
-                + ChatFormatting.AQUA + " Check if name is purchased" + ChatFormatting.RED + " (BROKEN)");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/mojang status"
+                + TextFormatting.AQUA + " View Mojang Server Status");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/mojang premium"
+                + TextFormatting.AQUA + " Check if name is purchased" + TextFormatting.RED + " (BROKEN)");
     }
 
     @Override
@@ -81,7 +81,7 @@ public class MojangServerCommand implements ICommand {
         }
 
         if (subCommand.equalsIgnoreCase("premium")){
-            iCommandSender.addChatMessage(new TextComponentString(ChatFormatting.RED + "Command has been broken by Mojang"));
+            iCommandSender.addChatMessage(new TextComponentString(TextFormatting.RED + "Command has been broken by Mojang"));
             // TODO: Broken by Mojang
             /*if (args.length != 2){
                 sendHelp(iCommandSender);
@@ -122,26 +122,26 @@ public class MojangServerCommand implements ICommand {
     }
 
     private void printMojangStatus(ICommandSender sender){
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
-        ChatHelper.sendMessage(sender, ChatFormatting.BLUE + "              Mojang Server Checker Status");
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.BLUE + "              Mojang Server Checker Status");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
         for (MojangStatusChecker statusChecker : MojangStatusChecker.values()) {
             String service = statusChecker.getName();
             MojangStatusChecker.Status status = statusChecker.getStatus(true);
 
             ChatHelper.sendMessage(sender, service + ": " + status.getColor() + status.getStatus() + " - " + status.getDescription());
         }
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
     }
 
     public void getPremium(ICommandSender sender, String name){
         int returnCode = MojangPremiumPlayer.isPremium(name);
         if (returnCode == 1){
-            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + name + ChatFormatting.DARK_PURPLE + " is a " + ChatFormatting.GREEN + "premium" + ChatFormatting.DARK_PURPLE + " status player!");
+            ChatHelper.sendMessage(sender, TextFormatting.GOLD + name + TextFormatting.DARK_PURPLE + " is a " + TextFormatting.GREEN + "premium" + TextFormatting.DARK_PURPLE + " status player!");
         } else if (returnCode == 0){
-            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + name + ChatFormatting.DARK_PURPLE + " is a " + ChatFormatting.RED + "non-premium" + ChatFormatting.DARK_PURPLE + " status player!");
+            ChatHelper.sendMessage(sender, TextFormatting.GOLD + name + TextFormatting.DARK_PURPLE + " is a " + TextFormatting.RED + "non-premium" + TextFormatting.DARK_PURPLE + " status player!");
         } else if (returnCode == 2){
-            ChatHelper.sendMessage(sender, ChatFormatting.RED + "An error had occured. Check the console for details!");
+            ChatHelper.sendMessage(sender, TextFormatting.RED + "An error had occured. Check the console for details!");
         }
     }
 

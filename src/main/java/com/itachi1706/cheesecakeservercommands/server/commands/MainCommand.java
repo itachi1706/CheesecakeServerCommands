@@ -5,7 +5,7 @@ import com.itachi1706.cheesecakeservercommands.server.objects.HelpMain;
 import com.itachi1706.cheesecakeservercommands.server.objects.HelpSub;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -64,7 +64,7 @@ public class MainCommand implements ICommand {
             listModules(iCommandSender);
         } else if (subCommand.equalsIgnoreCase("modulehelp")) {
             if (args.length < 2)
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Please select a module. View modules with /csc list");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Please select a module. View modules with /csc list");
             else
                 listCommands(args[1], iCommandSender);
         }
@@ -78,7 +78,7 @@ public class MainCommand implements ICommand {
             // Try to find
             if (main.getKey().equalsIgnoreCase(modules)) {
                 if (main.isAdminOnly() && !isOp) {
-                    ChatHelper.sendMessage(sender, ChatFormatting.RED + "You do not have permission to view help for this module!");
+                    ChatHelper.sendMessage(sender, TextFormatting.RED + "You do not have permission to view help for this module!");
                     return;
                 }
                 found = main;
@@ -86,13 +86,13 @@ public class MainCommand implements ICommand {
             }
         }
         if (found == null) {
-            ChatHelper.sendMessage(sender, ChatFormatting.RED + "Invalid Module. View modules with /csc list");
+            ChatHelper.sendMessage(sender, TextFormatting.RED + "Invalid Module. View modules with /csc list");
             return;
         }
         HelpSub[] subHelps = found.getCommands();
-        ChatHelper.sendMessage(sender, ChatFormatting.AQUA + found.getName());
+        ChatHelper.sendMessage(sender, TextFormatting.AQUA + found.getName());
         for (HelpSub sub : subHelps) {
-            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + sub.getCommand() + ChatFormatting.WHITE + " " + sub.getUsage());
+            ChatHelper.sendMessage(sender, TextFormatting.GOLD + sub.getCommand() + TextFormatting.WHITE + " " + sub.getUsage());
         }
     }
 
@@ -102,7 +102,7 @@ public class MainCommand implements ICommand {
         // Retrieve Help
         for (HelpMain main : mainHelp) {
             if (main.isAdminOnly() && !isOp) continue;
-            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + main.getKey());
+            ChatHelper.sendMessage(sender, TextFormatting.GOLD + main.getKey());
         }
     }
 

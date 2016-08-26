@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.world;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -62,12 +62,12 @@ public class BiomeInfoCommand implements ICommand {
             int x = (int) Math.floor(player.posX);
             int z = (int) Math.floor(player.posZ);
             Biome biome = player.worldObj.getBiomeGenForCoords(new BlockPos(x, 0, z));
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Current Biome: " + ChatFormatting.AQUA + biome.getBiomeName());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Current Biome: " + TextFormatting.AQUA + biome.getBiomeName());
             return;
         }
 
         if (args[0].equalsIgnoreCase("list")) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Registered Biome: ");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Registered Biome: ");
             boolean skip = false;
             int i = 0;
             for (Biome biome : Biome.REGISTRY) {
@@ -77,13 +77,13 @@ public class BiomeInfoCommand implements ICommand {
                 }
                 if (skip) {
                     skip = false;
-                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "----");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "----");
                 }
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "#" + i + ": " + ChatFormatting.AQUA + biome.getBiomeName());
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "#" + i + ": " + TextFormatting.AQUA + biome.getBiomeName());
                 i++;
             }
         } else {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Command. Usage: /biomeinfo [list]");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Command. Usage: /biomeinfo [list]");
         }
     }
 

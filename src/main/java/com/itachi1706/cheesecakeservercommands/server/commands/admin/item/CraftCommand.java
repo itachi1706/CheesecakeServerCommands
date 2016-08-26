@@ -4,7 +4,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.util.ContainerChe
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -66,7 +66,7 @@ public class CraftCommand implements ICommand {
                 player.openContainer.windowId = player.currentWindowId;
                 player.openContainer.addListener(player);
 
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Crafting Window");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Opened Crafting Window");
                 ChatHelper.sendAdminMessage(iCommandSender, "Opened crafting window");
                 return;
             }
@@ -75,7 +75,7 @@ public class CraftCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -85,9 +85,9 @@ public class CraftCommand implements ICommand {
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addListener(player);
 
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Crafting Window for " + player.getName());
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Opened Crafting Window for " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Opened crafting window for " + player.getName());
-        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Opened Crafting Window");
+        ChatHelper.sendMessage(player, TextFormatting.GOLD + "Opened Crafting Window");
     }
 
     @Override

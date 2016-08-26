@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -63,7 +63,7 @@ public class HealCommand implements ICommand {
                 player.heal(toHeal);
                 player.extinguish();
                 player.getFoodStats().addStats(20, 1.0F);
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "You were healed");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "You were healed");
                 ChatHelper.sendAdminMessage(iCommandSender, "Restored Own Health");
                 return;
             }
@@ -72,7 +72,7 @@ public class HealCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -80,9 +80,9 @@ public class HealCommand implements ICommand {
         player.heal(toHeal);
         player.extinguish();
         player.getFoodStats().addStats(20, 1.0F);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Healed " + player.getName());
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Healed " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Restored " + player.getName() + "'s Health");
-        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were healed");
+        ChatHelper.sendMessage(player, TextFormatting.GOLD + "You were healed");
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -52,8 +52,8 @@ public class GiveItemCommand implements ICommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (args.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /giveitem <item> [amount] [data] [player] [spillover]");
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Spillover will spew items on the ground after inventory is filled");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /giveitem <item> [amount] [data] [player] [spillover]");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Spillover will spew items on the ground after inventory is filled");
             return;
         }
 
@@ -90,7 +90,7 @@ public class GiveItemCommand implements ICommand {
             String subname = args[3];
             player = PlayerMPUtil.getPlayer(subname);
             if (player == null) {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
                 return;
             }
             toOthers = true;
@@ -116,16 +116,16 @@ public class GiveItemCommand implements ICommand {
         String messageToSender;
         String adminMessage;
         if (toOthers) {
-            messageToSender = ChatFormatting.GOLD + "Gave " + ChatFormatting.AQUA + stacksize + ChatFormatting.GOLD
-                    + " of " + ChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName() + ChatFormatting.GOLD + " to " + player.getName();
+            messageToSender = TextFormatting.GOLD + "Gave " + TextFormatting.AQUA + stacksize + TextFormatting.GOLD
+                    + " of " + TextFormatting.LIGHT_PURPLE + itemStack.getDisplayName() + TextFormatting.GOLD + " to " + player.getName();
             adminMessage = "Gave " + stacksize + " of " + itemStack.getDisplayName() + " to " + player.getName();
-            String messageToRecepient = ChatFormatting.GOLD +  "Received " + ChatFormatting.AQUA + stacksize + ChatFormatting.GOLD
-                    + " of " + ChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName();
+            String messageToRecepient = TextFormatting.GOLD +  "Received " + TextFormatting.AQUA + stacksize + TextFormatting.GOLD
+                    + " of " + TextFormatting.LIGHT_PURPLE + itemStack.getDisplayName();
 
             ChatHelper.sendMessage(player, messageToRecepient);
         } else {
-            messageToSender = ChatFormatting.GOLD +  "Received " + ChatFormatting.AQUA + stacksize + ChatFormatting.GOLD
-                    + " of " + ChatFormatting.LIGHT_PURPLE + itemStack.getDisplayName();;
+            messageToSender = TextFormatting.GOLD +  "Received " + TextFormatting.AQUA + stacksize + TextFormatting.GOLD
+                    + " of " + TextFormatting.LIGHT_PURPLE + itemStack.getDisplayName();;
             adminMessage = "Gave " + stacksize + " of " + itemStack.getDisplayName() + " to self";
         }
 

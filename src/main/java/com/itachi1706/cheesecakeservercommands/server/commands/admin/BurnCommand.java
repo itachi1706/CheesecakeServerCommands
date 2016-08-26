@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -60,7 +60,7 @@ public class BurnCommand implements ICommand {
                 }
 
                 player.setFire(15);
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "You were burned");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "You were burned");
                 ChatHelper.sendAdminMessage(iCommandSender, "Set own self on fire");
                 return;
             }
@@ -69,24 +69,24 @@ public class BurnCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
         if (args.length == 1) {
             player.setFire(15);
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Burned " + player.getName());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Burned " + player.getName());
             ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " on fire");
-            ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were burned");
+            ChatHelper.sendMessage(player, TextFormatting.GOLD + "You were burned");
             return;
         }
 
         // Burn for specified duration
         int duration = CommandBase.parseInt(args[1], 0);
         player.setFire(duration);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Burned " + player.getName() + " for " + duration + " seconds");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Burned " + player.getName() + " for " + duration + " seconds");
         ChatHelper.sendAdminMessage(iCommandSender, "Set " + player.getName() + " on fire for " + duration + " seconds");
-        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were burned");
+        ChatHelper.sendMessage(player, TextFormatting.GOLD + "You were burned");
     }
 
     @Override

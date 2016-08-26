@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.mojangcmd;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-
+import net.minecraft.util.text.TextFormatting;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -79,10 +78,10 @@ public enum MojangStatusChecker {
     }
 
     public enum Status {
-        ONLINE("Online", ChatFormatting.GREEN.toString(), "No problems detected! :)"),
-        UNSTABLE("Unstable", ChatFormatting.YELLOW.toString(), "Intermittent Connection :("),
-        OFFLINE("Offline", ChatFormatting.DARK_RED.toString(), "Currently Offline! D:"),
-        UNKNOWN("Unknown", ChatFormatting.WHITE.toString(), "Unable to connect to Mojang Server!");
+        ONLINE("Online", TextFormatting.GREEN.toString(), "No problems detected! :)"),
+        UNSTABLE("Unstable", TextFormatting.YELLOW.toString(), "Intermittent Connection :("),
+        OFFLINE("Offline", TextFormatting.DARK_RED.toString(), "Currently Offline! D:"),
+        UNKNOWN("Unknown", TextFormatting.WHITE.toString(), "Unable to connect to Mojang Server!");
 
         private String status, color, description;
 

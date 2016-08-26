@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -76,7 +76,7 @@ public class InvSeeEnderChestCommand implements ICommand {
             player.openContainer.windowId = player.currentWindowId;
             player.openContainer.addListener(player);
 
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Viewing your own Ender Chest");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Viewing your own Ender Chest");
             ChatHelper.sendAdminMessage(iCommandSender, "Viewing own Ender Chest");
             return;
         }
@@ -84,7 +84,7 @@ public class InvSeeEnderChestCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP victim = PlayerMPUtil.getPlayer(subname);
         if (victim == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -94,7 +94,7 @@ public class InvSeeEnderChestCommand implements ICommand {
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addListener(player);
 
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Viewing " + victim.getName() + "'s Ender Chest");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Viewing " + victim.getName() + "'s Ender Chest");
         ChatHelper.sendAdminMessage(iCommandSender, "Viewing ender chest of " + victim.getName());
     }
 

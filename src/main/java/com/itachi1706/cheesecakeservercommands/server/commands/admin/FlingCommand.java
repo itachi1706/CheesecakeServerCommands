@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -73,7 +73,7 @@ public class FlingCommand implements ICommand {
                 worldServer.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0, new int[0]);
                 Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0, true, true);
                 explosion.doExplosionB(true);
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.DARK_PURPLE + "You were flung into the air");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.DARK_PURPLE + "You were flung into the air");
                 ChatHelper.sendAdminMessage(iCommandSender, "Flung own self into the air!");
                 return;
             }
@@ -82,7 +82,7 @@ public class FlingCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -93,9 +93,9 @@ public class FlingCommand implements ICommand {
         worldServer.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0, new int[0]);
         Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0, true, true);
         explosion.doExplosionB(true);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Flung " + player.getName() + " into the air!");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Flung " + player.getName() + " into the air!");
         ChatHelper.sendAdminMessage(iCommandSender, "Flung " + player.getName() + " into the air");
-        ChatHelper.sendMessage(player, ChatFormatting.DARK_PURPLE + "You were flung into the air");
+        ChatHelper.sendMessage(player, TextFormatting.DARK_PURPLE + "You were flung into the air");
     }
 
     @Override

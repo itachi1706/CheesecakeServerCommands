@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -59,11 +59,11 @@ public class ModlistCommand implements ICommand {
         int min = Math.min(page * perPage, size);
 
         if (page >= pages) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Page. There are only " + pages + " pages");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Page. There are only " + pages + " pages");
             return;
         }
 
-        ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "--- Showing modlist page %1$d of %2$d ---", page + 1, pages));
+        ChatHelper.sendMessage(iCommandSender, String.format(TextFormatting.GOLD + "--- Showing modlist page %1$d of %2$d ---", page + 1, pages));
         for (int i = page * perPage; i < min + perPage; i++)
         {
             if (i >= size)
@@ -71,9 +71,9 @@ public class ModlistCommand implements ICommand {
                 break;
             }
             ModContainer mod = Loader.instance().getModList().get(i);
-            ChatHelper.sendMessage(iCommandSender, mod.getName() + " - " + ChatFormatting.AQUA + mod.getVersion());
+            ChatHelper.sendMessage(iCommandSender, mod.getName() + " - " + TextFormatting.AQUA + mod.getVersion());
         }
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "-------------------------------");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "-------------------------------");
     }
 
     @Override

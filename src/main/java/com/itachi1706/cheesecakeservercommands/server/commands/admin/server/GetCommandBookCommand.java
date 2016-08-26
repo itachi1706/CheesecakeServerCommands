@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -71,7 +71,7 @@ public class GetCommandBookCommand implements ICommand {
             String subname = args[0];
             player = PlayerMPUtil.getPlayer(subname);
             if (player == null) {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
                 return;
             }
         }
@@ -103,7 +103,7 @@ public class GetCommandBookCommand implements ICommand {
             }
 
             String commandusage = new TextComponentTranslation(cmd.getCommandUsage(player)).getUnformattedText();
-            String text = ChatFormatting.GOLD + StringUtils.join(commands, ' ') + '\n'  + ChatFormatting.BLACK + commandusage;
+            String text = TextFormatting.GOLD + StringUtils.join(commands, ' ') + '\n'  + TextFormatting.BLACK + commandusage;
             pages.add(text);
         }
 
@@ -122,12 +122,12 @@ public class GetCommandBookCommand implements ICommand {
         player.inventory.addItemStackToInventory(is);
 
         if (args.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Obtained a Command Book");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Obtained a Command Book");
             ChatHelper.sendAdminMessage(iCommandSender, "Obtained a Command Book");
         } else {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Gave a Command Book to " + player.getName());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Gave a Command Book to " + player.getName());
             ChatHelper.sendAdminMessage(iCommandSender, "Gave a Command Book to " + player.getName());
-            ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Received a Command Book");
+            ChatHelper.sendMessage(player, TextFormatting.GOLD + "Received a Command Book");
         }
     }
 

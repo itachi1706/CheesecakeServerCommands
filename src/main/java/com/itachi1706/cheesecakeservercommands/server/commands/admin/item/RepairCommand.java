@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -63,12 +63,12 @@ public class RepairCommand implements ICommand {
 
             ItemStack item = player.getHeldItemMainhand();
             if (item == null) {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You are not holding an item that can be repaired");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You are not holding an item that can be repaired");
                 return;
             }
 
             item.setItemDamage(0);
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayName());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Repaired durability for " + item.getDisplayName());
             ChatHelper.sendAdminMessage(iCommandSender, "Repaired durability for " + item.getDisplayName());
             return;
         }
@@ -77,7 +77,7 @@ public class RepairCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -85,14 +85,14 @@ public class RepairCommand implements ICommand {
 
         ItemStack item = player.getHeldItemMainhand();
         if (item == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + player.getName() + " is not holding an item that can be repaired");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + player.getName() + " is not holding an item that can be repaired");
             return;
         }
 
         item.setItemDamage(0);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Repaired durability for " + item.getDisplayName() + " in " + player.getName() + "'s hand");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Repaired durability for " + item.getDisplayName() + " in " + player.getName() + "'s hand");
         ChatHelper.sendAdminMessage(iCommandSender, "Helped to repair " + player.getName() + "'s durability for " + item.getDisplayName());
-        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Item Durability repaired");
+        ChatHelper.sendMessage(player, TextFormatting.GOLD + "Item Durability repaired");
         return;
     }
 

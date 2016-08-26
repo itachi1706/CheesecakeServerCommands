@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -47,7 +47,7 @@ public class RenameCommand implements ICommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
         if (args.length == 0) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Usage: /renameitem <newname>");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /renameitem <newname>");
             return;
         }
 
@@ -66,7 +66,7 @@ public class RenameCommand implements ICommand {
 
         ItemStack item = player.getHeldItemMainhand();
         if (item == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "You are not holding an item");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You are not holding an item");
             return;
         }
 
@@ -79,7 +79,7 @@ public class RenameCommand implements ICommand {
         String finalnewname = builder.toString().trim();
         item.setStackDisplayName(finalnewname);
 
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Renamed " + oldname + " to " + finalnewname);
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Renamed " + oldname + " to " + finalnewname);
         ChatHelper.sendAdminMessage(iCommandSender, "Renamed " + oldname + " to " + finalnewname);
     }
 

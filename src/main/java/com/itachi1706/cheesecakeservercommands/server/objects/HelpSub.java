@@ -1,6 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.server.objects;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * Created by Kenneth on 11/7/2016.
@@ -11,7 +11,7 @@ public class HelpSub {
 
     public HelpSub(String command) {
         this.command = command;
-        this.usage = ChatFormatting.RED + "No Usage";
+        this.usage = TextFormatting.RED + "No Usage";
     }
 
     public HelpSub(String command, String usage) {

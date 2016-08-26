@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -64,11 +64,11 @@ public class SmiteCommand implements ICommand {
 
                 RayTraceResult pos = PlayerMPUtil.getPlayerLookingSpot(player);
                 if (pos == null) {
-                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Please make sure you are looking at a ground!");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Please make sure you are looking at a ground!");
                     return;
                 }
                 player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, pos.getBlockPos().getX(), pos.getBlockPos().getY(), pos.getBlockPos().getZ(), false));
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Struck the ground with lightning");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Struck the ground with lightning");
                 ChatHelper.sendAdminMessage(iCommandSender, "Struck " + pos.getBlockPos().getX() + ", " + pos.getBlockPos().getY() + ", " + pos.getBlockPos().getZ() + " with lightning");
                 return;
             }
@@ -89,7 +89,7 @@ public class SmiteCommand implements ICommand {
                     }
 
                     player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
-                    ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Struck yourself with lightning");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Struck yourself with lightning");
                     ChatHelper.sendAdminMessage(iCommandSender, "Struck own self with lightning");
                     return;
                 }
@@ -97,18 +97,18 @@ public class SmiteCommand implements ICommand {
 
             EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
             if (player == null) {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
                 return;
             }
 
             player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Smited " + player.getName());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Smited " + player.getName());
             ChatHelper.sendAdminMessage(iCommandSender, "Struck " + player.getName() + " with lightning");
-            ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You were struck by lightning");
+            ChatHelper.sendMessage(player, TextFormatting.GOLD + "You were struck by lightning");
             return;
         } else if (args.length == 2) {
             // Invalid coords
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
             return;
         }
 
@@ -121,7 +121,7 @@ public class SmiteCommand implements ICommand {
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.DARK_RED + "FATAL: Unable to get player object");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.DARK_RED + "FATAL: Unable to get player object");
             return;
         }
 
@@ -138,7 +138,7 @@ public class SmiteCommand implements ICommand {
                     } catch (NumberFormatException ignored) {}
                 }
             } else {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
                 return;
             }
         }
@@ -155,7 +155,7 @@ public class SmiteCommand implements ICommand {
                     } catch (NumberFormatException ignored) {}
                 }
             } else {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
                 return;
             }
         }
@@ -172,12 +172,12 @@ public class SmiteCommand implements ICommand {
                     } catch (NumberFormatException ignored) {}
                 }
             } else {
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Coordinates (requires X, Y, Z)");
                 return;
             }
         }
         player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, x, y, z, false));
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Smited " + x + ", " + y + ", " + z);
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Smited " + x + ", " + y + ", " + z);
         ChatHelper.sendAdminMessage(iCommandSender, "Struck " + x + ", " + y + ", " + z + " with lightning");
     }
 

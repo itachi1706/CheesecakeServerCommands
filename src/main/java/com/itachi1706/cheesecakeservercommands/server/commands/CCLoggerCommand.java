@@ -6,7 +6,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJson
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -56,7 +56,7 @@ public class CCLoggerCommand implements ICommand {
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "View Command Help: " + ChatFormatting.GOLD + "/cheesecakelogger help";
+        return "View Command Help: " + TextFormatting.GOLD + "/cheesecakelogger help";
     }
 
     @Override
@@ -66,18 +66,18 @@ public class CCLoggerCommand implements ICommand {
 
     private void sendHelp(ICommandSender iCommandSender){
         ChatHelper.sendMessage(iCommandSender, "Commands List:");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/cclogger stats"
-                + ChatFormatting.AQUA + " Gets General Statistics Logged.");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/cclogger viewlogins <player> <#>"
-                + ChatFormatting.AQUA + " View Player Login Info");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/cclogger viewplayerstats <player>"
-                + ChatFormatting.AQUA + " View Player Stats");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/cclogger delloginhistory <player>"
-                + ChatFormatting.AQUA + " Delete Player History");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/cclogger lastseen <player>"
-                + ChatFormatting.AQUA + " Gets Last Seen of Player");
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "/cclogger lastknownusername <player/UUID>"
-                + ChatFormatting.AQUA + " Get list of last " + ChatFormatting.AQUA +
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/cclogger stats"
+                + TextFormatting.AQUA + " Gets General Statistics Logged.");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/cclogger viewlogins <player> <#>"
+                + TextFormatting.AQUA + " View Player Login Info");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/cclogger viewplayerstats <player>"
+                + TextFormatting.AQUA + " View Player Stats");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/cclogger delloginhistory <player>"
+                + TextFormatting.AQUA + " Delete Player History");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/cclogger lastseen <player>"
+                + TextFormatting.AQUA + " Gets Last Seen of Player");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/cclogger lastknownusername <player/UUID>"
+                + TextFormatting.AQUA + " Get list of last " + TextFormatting.AQUA +
                 "known names of a player");
     }
 
@@ -108,7 +108,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("lastknownusername")){
             if (args.length != 2){
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage: /cclogger lastknownusername <player/UUID>");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage: /cclogger lastknownusername <player/UUID>");
                 return;
             }
 
@@ -133,7 +133,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("viewlogins")){
             if (args.length < 2 || args.length > 3){
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewlogins <player> <#>");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /cclogger viewlogins <player> <#>");
                 return;
             }
 
@@ -153,7 +153,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("delloginhistory")){
             if (args.length != 2){
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage! Usage: /cclogger delloginhistory <player>");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /cclogger delloginhistory <player>");
                 return;
             }
 
@@ -163,7 +163,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("viewplayerstats")){
             if (args.length != 2){
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage! Usage: /cclogger viewplayerstats <player>");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /cclogger viewplayerstats <player>");
                 return;
             }
 
@@ -186,7 +186,7 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("lastseen")){
             if (args.length != 2){
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage! Usage: /cclogger lastseen <player>");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /cclogger lastseen <player>");
                 return;
             }
 
@@ -204,15 +204,15 @@ public class CCLoggerCommand implements ICommand {
 
         if (subCommand.equalsIgnoreCase("stats")){
             if (args.length != 1){
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Invalid Usage! Usage: /cclogger stats");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /cclogger stats");
                 return;
             }
 
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "=====================================================");
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "                           General Stats");
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "=====================================================");
-            ChatHelper.sendMessage(iCommandSender, "Total Players Logged: " + ChatFormatting.AQUA + CheesecakeServerCommands.lastKnownUsernames.size());
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "=====================================================");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "                           General Stats");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+            ChatHelper.sendMessage(iCommandSender, "Total Players Logged: " + TextFormatting.AQUA + CheesecakeServerCommands.lastKnownUsernames.size());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
             return;
         }
 
@@ -256,7 +256,7 @@ public class CCLoggerCommand implements ICommand {
     }
 
     private void notOnServerError(String playerName, ICommandSender sender){
-        ChatHelper.sendMessage(sender, ChatFormatting.RED + playerName + " has never logged into the server");
+        ChatHelper.sendMessage(sender, TextFormatting.RED + playerName + " has never logged into the server");
     }
 
     private void getLastSeenFromUUID(UUID uuid, ICommandSender sender, String playerName){
@@ -269,12 +269,12 @@ public class CCLoggerCommand implements ICommand {
         List<EntityPlayerMP> onlinePlayers = PlayerMPUtil.getOnlinePlayers();
         for (EntityPlayerMP player : onlinePlayers){
             if (player.getUniqueID().equals(uuid)){
-                ChatHelper.sendMessage(sender, ChatFormatting.GOLD + player.getDisplayNameString() + ChatFormatting.WHITE + " is currently " + ChatFormatting.GREEN + "Online");
+                ChatHelper.sendMessage(sender, TextFormatting.GOLD + player.getDisplayNameString() + TextFormatting.WHITE + " is currently " + TextFormatting.GREEN + "Online");
                 return;
             }
         }
 
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + name.getLastKnownUsername() + ChatFormatting.WHITE + " is last seen on " + ChatFormatting.ITALIC + convertTime(name.getLastSeen()));
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + name.getLastKnownUsername() + TextFormatting.WHITE + " is last seen on " + TextFormatting.ITALIC + convertTime(name.getLastSeen()));
     }
 
     private void getListOfKnownUsernames(UUID uid, ICommandSender sender){
@@ -286,7 +286,7 @@ public class CCLoggerCommand implements ICommand {
             }
         }
 
-        ChatHelper.sendMessage(sender, ChatFormatting.RED + "Unable to find any player with UUID of " + uid.toString());
+        ChatHelper.sendMessage(sender, TextFormatting.RED + "Unable to find any player with UUID of " + uid.toString());
     }
 
     private void getListOfKnownUsernames(String player, ICommandSender sender){
@@ -297,18 +297,18 @@ public class CCLoggerCommand implements ICommand {
             }
         }
 
-        ChatHelper.sendMessage(sender, ChatFormatting.RED + "Unable to find any player named " + player);
+        ChatHelper.sendMessage(sender, TextFormatting.RED + "Unable to find any player named " + player);
     }
 
     private void foundAndTellRequesterAboutKnownUsernames(LastKnownUsernames u, ICommandSender sender){
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "=====================================================");
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + " Usernames for " + ChatFormatting.WHITE + u.getUuid());
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "=====================================================");
-        ChatHelper.sendMessage(sender, ChatFormatting.WHITE + "Size: " + ChatFormatting.AQUA + u.getHistoryOfKnownUsernames().size());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "=====================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + " Usernames for " + TextFormatting.WHITE + u.getUuid());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "=====================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.WHITE + "Size: " + TextFormatting.AQUA + u.getHistoryOfKnownUsernames().size());
         for (String names : u.getHistoryOfKnownUsernames()){
-            ChatHelper.sendMessage(sender, ChatFormatting.GOLD + names);
+            ChatHelper.sendMessage(sender, TextFormatting.GOLD + names);
         }
-        ChatHelper.sendMessage(sender, ChatFormatting.GOLD + "=====================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "=====================================================");
     }
 
     private String convertTime(long time){

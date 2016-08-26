@@ -4,7 +4,7 @@ import com.itachi1706.cheesecakeservercommands.damagesource.ZeusDamage;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -65,7 +65,7 @@ public class ZeusCommand implements ICommand {
 
             player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
             player.attackEntityFrom(getDamageSource(), Float.MAX_VALUE);
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "You angered Zeus and hence suffered the Wrath of Zeus!");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "You angered Zeus and hence suffered the Wrath of Zeus!");
             ChatHelper.sendAdminMessage(iCommandSender, "Made own self suffer the wrath of Zeus");
             return;
 
@@ -76,15 +76,15 @@ public class ZeusCommand implements ICommand {
 
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
         player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
         player.attackEntityFrom(getDamageSource(), Float.MAX_VALUE);
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Made " + player.getName() + " suffer the Wrath of Zeus");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Made " + player.getName() + " suffer the Wrath of Zeus");
         ChatHelper.sendAdminMessage(iCommandSender, "Made " + player.getName() + " suffer the Wrath of Zeus");
-        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "You angered Zeus and hence suffered the Wrath of Zeus!");
+        ChatHelper.sendMessage(player, TextFormatting.GOLD + "You angered Zeus and hence suffered the Wrath of Zeus!");
     }
 
     public static DamageSource getDamageSource() {

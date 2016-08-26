@@ -4,7 +4,7 @@ import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -64,7 +64,7 @@ public class LocateCommand implements ICommand {
 
                 float toHeal = player.getMaxHealth() - player.getHealth();
                 WorldPoint point = new WorldPoint(player);
-                ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "You are at %d, %d, %d in dimension %d with a gamemode of %s",
+                ChatHelper.sendMessage(iCommandSender, String.format(TextFormatting.GOLD + "You are at %d, %d, %d in dimension %d with a gamemode of %s",
                         point.getX(), point.getY(), point.getZ(), point.getDimension(), player.interactionManager.getGameType().getName()));
                 ChatHelper.sendAdminMessage(iCommandSender, "Located Own location");
                 return;
@@ -74,12 +74,12 @@ public class LocateCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
         WorldPoint point = new WorldPoint(player);
-        ChatHelper.sendMessage(iCommandSender, String.format(ChatFormatting.GOLD + "%s is at %d, %d, %d in dimension %d with a gamemode of %s",
+        ChatHelper.sendMessage(iCommandSender, String.format(TextFormatting.GOLD + "%s is at %d, %d, %d in dimension %d with a gamemode of %s",
                 player.getName(), point.getX(), point.getY(), point.getZ(), point.getDimension(), player.interactionManager.getGameType().getName()));
         ChatHelper.sendAdminMessage(iCommandSender, "Located " + player.getName() + "'s location");
     }

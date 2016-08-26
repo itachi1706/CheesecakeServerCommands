@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -75,7 +75,7 @@ public class EnderChestCommand implements ICommand {
                 player.openContainer.windowId = player.currentWindowId;
                 player.openContainer.addListener(player);
 
-                ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Ender Chest");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Opened Ender Chest");
                 ChatHelper.sendAdminMessage(iCommandSender, "Opened Ender Chest");
                 return;
             }
@@ -84,7 +84,7 @@ public class EnderChestCommand implements ICommand {
         String subname = args[0];
         EntityPlayerMP player = PlayerMPUtil.getPlayer(subname);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "Player not found");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Player not found");
             return;
         }
 
@@ -100,9 +100,9 @@ public class EnderChestCommand implements ICommand {
         player.openContainer.windowId = player.currentWindowId;
         player.openContainer.addListener(player);
 
-        ChatHelper.sendMessage(iCommandSender, ChatFormatting.GOLD + "Opened Ender Chest for " + player.getName());
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Opened Ender Chest for " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Opened ender chest for " + player.getName());
-        ChatHelper.sendMessage(player, ChatFormatting.GOLD + "Opened Ender Chest");
+        ChatHelper.sendMessage(player, TextFormatting.GOLD + "Opened Ender Chest");
     }
 
     @Override

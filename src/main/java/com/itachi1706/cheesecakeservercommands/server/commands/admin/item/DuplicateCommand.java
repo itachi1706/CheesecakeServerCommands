@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -60,7 +60,7 @@ public class DuplicateCommand implements ICommand {
 
         ItemStack stack = player.getHeldItemMainhand();
         if (stack == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + "No items selected");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "No items selected");
             return;
         }
 
@@ -84,10 +84,10 @@ public class DuplicateCommand implements ICommand {
         else
             PlayerMPUtil.giveNormal(player, newItem);
 
-        String message = ChatFormatting.GOLD + "Duplicated " + stack.getDisplayName();
+        String message = TextFormatting.GOLD + "Duplicated " + stack.getDisplayName();
         String adminmessage = "Duplicated " + stack.getDisplayName();
         if (stackSize > 0) {
-            message += " with " + ChatFormatting.AQUA + stackSize + ChatFormatting.GOLD + " items in the stack";
+            message += " with " + TextFormatting.AQUA + stackSize + TextFormatting.GOLD + " items in the stack";
             adminmessage += " with " + stackSize + " items in the stack";
         }
         ChatHelper.sendMessage(iCommandSender, message);

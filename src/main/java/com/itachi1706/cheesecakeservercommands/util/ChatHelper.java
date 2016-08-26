@@ -1,6 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -51,7 +51,7 @@ public class ChatHelper {
         String texts = text.getUnformattedText();
 
         texts = "[" + sender.getName() + ": " + texts + "]";
-        TextComponentString newtext = new TextComponentString(ChatFormatting.GRAY + "" + ChatFormatting.ITALIC + texts);
+        TextComponentString newtext = new TextComponentString(TextFormatting.GRAY + "" + TextFormatting.ITALIC + texts);
         List<EntityPlayerMP> players = PlayerMPUtil.getOnlinePlayers();
         LogHelper.info(texts);
         for (EntityPlayerMP playerMP : players) {
