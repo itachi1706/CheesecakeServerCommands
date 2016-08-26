@@ -261,6 +261,7 @@ public class LoginLogoutDB {
                     case CREATIVE: gamemode = TextFormatting.GREEN + "CREATIVE"; break;
                     case SURVIVAL: gamemode = TextFormatting.GREEN + "SURVIVAL"; break;
                     case ADVENTURE: gamemode = TextFormatting.GREEN + "ADVENTURE"; break;
+                    case SPECTATOR: gamemode = TextFormatting.GREEN + "SPECTATOR"; break;
                     case NOT_SET: gamemode = TextFormatting.GRAY + "UNSET"; break;
                 }
 
