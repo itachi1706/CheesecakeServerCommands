@@ -1,37 +1,34 @@
 language: java
 jdk: oraclejdk7
-
 before_install:
-  - chmod +x gradlew
-
-script: ./gradlew build
-
+- chmod +x gradlew
+script: "./gradlew build"
 after_success:
-  - ls ./build/libs
-
+- ls ./build/libs
 deploy:
-    provider: releases
-    api_key: $OAUTH_KEY
-    file_glob: true
-    file: ./build/libs/CheesecakeServerCommands*.jar
-    skip_cleanup: true
-    on:
-        tags: true
-
+  provider: releases
+  api_key: "$OAUTH_KEY"
+  file_glob: true
+  file: "./build/libs/CheesecakeServerCommands*.jar"
+  skip_cleanup: true
+  on:
+    tags: true
 notifications:
   irc:
     channels:
-      - "chat.freenode.net#itachi1706mc"
-      - "irc.esper.net#itachi1706"
+    - chat.freenode.net#itachi1706mc
+    - irc.esper.net#itachi1706
     on_success: always
     on_failure: always
     template:
-      - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{commit_subject}"
-      - "Build Status : %{message}"
-      - "Change view : %{compare_url}"
-      - "Build details : %{build_url}"
+    - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{commit_subject}"
+    - 'Build Status : %{message}'
+    - 'Change view : %{compare_url}'
+    - 'Build details : %{build_url}'
   email:
     recipients:
-      - $PRIVATE_EMAIL
-    on_success: change # default: change
-    on_failure: always # default: always
+    - "$PRIVATE_EMAIL"
+    on_success: change
+    on_failure: always
+  slack:
+    secure: QY79o99kc4kf4md1Omuva352vo5Bs1JZdSk/85b1cVQBE2SlzM50Bjn0M6ssTuiowYdNJ6evPLtmX/z9O7yyeuDkXl79+UHFv+QmT0DW72YxlHwT/WA3CkI0OBU0hdH/dr81KLKP+Cf3KqShLBzh2PAAqPv3nC9patwJY7aavzhtgtviAga2bpqrqLOQZvmicqyrWErM0Pg9q6aXNDQAkiLeLMAI6k5gMlLpCoNqwc5BV5OwZLCQYzVad61FgDEiXoe0nHvxu522desg7Hb4rJ9gO5CzVBomCq5u+5wVXdX7vdydk++0vDneB/0WpA5O/IWCUr0tizlPCGrcoAKnLSi2mjNsE4quHE45UQBV7LFArF1ra/yY5nwqSFEJCp7RjTzqLWWXzLf1RM0tzEoltt7+YUJUMwcgl7QjLDJgLWmBvWYhJPMTe5vRMILyk+iTIPPz0kbU0ZB7rNPgKNAyBn4GzXt5wiIIS8Sf1z1LTFkwHhqmtMAbzBH2EIpTGsjrFgBmjzJMDb4edkBenCt0lCyGA4h/AUlPeP4DLyWWRMZ4bPhyz1P/yowazygFdQcpsjGVde8XqJanZfVlZ+o/UlewAmM6xbVgvMCAiV9HQ29hu8PFRvEpO0F5ZM5BYg9vRJLBH63nyTLUOqgP7AKYkqBB+1noPryUBhQfDbsLAME=
