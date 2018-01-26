@@ -33,17 +33,17 @@ public class ServerPropertiesCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "serverproperties";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "Usage: /serverproperties";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -52,7 +52,7 @@ public class ServerPropertiesCommand implements ICommand {
 
         if(args.length != 0)
         {
-            getCommandUsage(iCommandSender);
+            getUsage(iCommandSender);
             return;
         }
         
@@ -60,7 +60,7 @@ public class ServerPropertiesCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         return null;
     }
 

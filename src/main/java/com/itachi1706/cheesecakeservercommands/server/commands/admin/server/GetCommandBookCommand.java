@@ -37,17 +37,17 @@ public class GetCommandBookCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "getcommandbook";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "getcommandbook [player]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -77,11 +77,11 @@ public class GetCommandBookCommand implements ICommand {
         }
 
         if (player.inventory.hasItemStack(new ItemStack(Items.WRITTEN_BOOK))) {
-            for (int i = 0; i < player.inventory.mainInventory.length; i++)
+            for (int i = 0; i < player.inventory.mainInventory.size(); i++)
             {
-                ItemStack e = player.inventory.mainInventory[i];
+                ItemStack e = player.inventory.mainInventory.get(i);
                 if (e != null && e.hasTagCompound() && e.getTagCompound().hasKey("title") && e.getTagCompound().hasKey("author")
-                        && e.getTagCompound().getString("title").equals("CommandBook") && e.getTagCompound().getString("author").equals("ForgeEssentials"))
+                        && e.getTagCompound().getString("title").equals("CommandBook") && e.getTagCompound().getString("author").equals("Cheesecake Network"))
                 {
                     player.inventory.setInventorySlotContents(i, null);
                 }
@@ -92,17 +92,17 @@ public class GetCommandBookCommand implements ICommand {
         for (ICommand cmd : ServerUtil.getServerInstance().getCommandManager().getCommands().values())
         {
             Set<String> commands = new HashSet<String>();
-            commands.add("/" + cmd.getCommandName());
+            commands.add("/" + cmd.getName());
 
             // Add aliases
-            List<?> aliases = cmd.getCommandAliases();
+            List<?> aliases = cmd.getAliases();
             if (aliases != null && aliases.size() > 0)
             {
                 for (Object alias : aliases)
                     commands.add("/" + alias);
             }
 
-            String commandusage = new TextComponentTranslation(cmd.getCommandUsage(player)).getUnformattedText();
+            String commandusage = new TextComponentTranslation(cmd.getUsage(player)).getUnformattedText();
             String text = TextFormatting.GOLD + StringUtils.join(commands, ' ') + '\n'  + TextFormatting.BLACK + commandusage;
             pages.add(text);
         }
@@ -132,9 +132,9 @@ public class GetCommandBookCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1) {
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) {
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         }
         return null;
     }

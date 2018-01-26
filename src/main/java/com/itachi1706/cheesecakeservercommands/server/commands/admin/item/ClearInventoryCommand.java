@@ -33,17 +33,17 @@ public class ClearInventoryCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "ci";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "ci [player] [item] [damage]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -99,11 +99,11 @@ public class ClearInventoryCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
-        if (typedValue.length == 2)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, Item.REGISTRY.getKeys());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
+        if (args.length == 2)
+            return CommandBase.getListOfStringsMatchingLastWord(args, Item.REGISTRY.getKeys());
         return null;
     }
 

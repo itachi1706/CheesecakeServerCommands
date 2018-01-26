@@ -37,17 +37,17 @@ public class MojangServerCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "mojang";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "View Command Help: " + TextFormatting.GOLD + "/mojang help";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -81,7 +81,7 @@ public class MojangServerCommand implements ICommand {
         }
 
         if (subCommand.equalsIgnoreCase("premium")){
-            iCommandSender.addChatMessage(new TextComponentString(TextFormatting.RED + "Command has been broken by Mojang"));
+            iCommandSender.sendMessage(new TextComponentString(TextFormatting.RED + "Command has been broken by Mojang"));
             // TODO: Broken by Mojang
             /*if (args.length != 2){
                 sendHelp(iCommandSender);
@@ -97,11 +97,11 @@ public class MojangServerCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "status", "premium");
-        if (typedValue.length == 2 && typedValue[0].equalsIgnoreCase("premium"))
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, "status", "premium");
+        if (args.length == 2 && args[0].equalsIgnoreCase("premium"))
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return null;
     }
 

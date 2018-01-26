@@ -40,17 +40,17 @@ public class SpeedCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "speed";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "speed <fly/walk/all> <speed> [player]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -186,14 +186,14 @@ public class SpeedCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "fly", "walk", "all");
-        if (typedValue[0].equals("fly") || typedValue[0].equals("walk") || typedValue[0].equals("all")) {
-            if (typedValue.length == 2)
-                return CommandBase.getListOfStringsMatchingLastWord(typedValue, "reset", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-            if (typedValue.length == 3)
-                return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, "fly", "walk", "all");
+        if (args[0].equals("fly") || args[0].equals("walk") || args[0].equals("all")) {
+            if (args.length == 2)
+                return CommandBase.getListOfStringsMatchingLastWord(args, "reset", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+            if (args.length == 3)
+                return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         }
         return null;
     }

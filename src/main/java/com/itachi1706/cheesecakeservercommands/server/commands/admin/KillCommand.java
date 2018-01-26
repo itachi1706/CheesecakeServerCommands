@@ -32,17 +32,17 @@ public class KillCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "kill";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "kill [player]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -60,7 +60,7 @@ public class KillCommand implements ICommand {
                     return;
                 }
 
-                player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
+                player.attackEntityFrom(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
                 ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "You were slain");
                 ChatHelper.sendAdminMessage(iCommandSender, "Took their own life");
                 return;
@@ -74,16 +74,16 @@ public class KillCommand implements ICommand {
             return;
         }
 
-        player.attackEntityFrom(DamageSource.outOfWorld, Float.MAX_VALUE);
+        player.attackEntityFrom(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Killed " + player.getName());
         ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getName());
         ChatHelper.sendMessage(player, TextFormatting.GOLD + "You were slain");
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return null;
     }
 

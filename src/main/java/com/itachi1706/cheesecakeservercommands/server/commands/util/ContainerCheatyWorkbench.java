@@ -16,12 +16,12 @@ import net.minecraft.world.World;
  */
 public class ContainerCheatyWorkbench extends ContainerWorkbench {
 
-    private World worldObj;
+    private World world;
 
     public ContainerCheatyWorkbench(InventoryPlayer par1InventoryPlayer, World par2World)
     {
         super(par1InventoryPlayer, par2World, new BlockPos(0,0,0));
-        worldObj = par2World;
+        world = par2World;
     }
 
     /**
@@ -30,7 +30,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory)
     {
-        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj));
+        craftResult.setInventorySlotContents(0, CraftingManager.findMatchingResult(craftMatrix, world));
     }
 
     /**
@@ -41,7 +41,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
     {
         super.onContainerClosed(par1EntityPlayer);
 
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             for (int var2 = 0; var2 < 9; ++var2)
             {
@@ -103,7 +103,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
                 return null;
             }
 
-            if (var5.stackSize == 0)
+            if (var5.getCount() == 0)
             {
                 var4.putStack((ItemStack) null);
             }
@@ -112,12 +112,12 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
                 var4.onSlotChanged();
             }
 
-            if (var5.stackSize == var3.stackSize)
+            if (var5.getCount() == var3.getCount())
             {
                 return null;
             }
 
-            var4.onPickupFromSlot(par1EntityPlayer, var5);
+            var4.onTake(par1EntityPlayer, var5);
         }
 
         return var3;

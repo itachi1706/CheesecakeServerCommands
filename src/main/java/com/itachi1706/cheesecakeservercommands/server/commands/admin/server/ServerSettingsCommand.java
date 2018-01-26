@@ -39,17 +39,17 @@ public class ServerSettingsCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "serversettings";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "serversettings <option> [value]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -152,11 +152,11 @@ public class ServerSettingsCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) {
             String[] optionArray = new String[options.size()];
             optionArray = options.toArray(optionArray);
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, optionArray);
+            return CommandBase.getListOfStringsMatchingLastWord(args, optionArray);
         }
         return null;
     }

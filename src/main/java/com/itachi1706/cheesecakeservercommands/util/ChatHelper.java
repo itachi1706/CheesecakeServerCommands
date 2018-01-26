@@ -19,7 +19,7 @@ public class ChatHelper {
     }
 
     public static void sendMessage(ICommandSender sender, TextComponentString text) {
-        sender.addChatMessage(text);
+        sender.sendMessage(text);
     }
 
     public static void sendMessage(ICommandSender sender, String text) {
@@ -27,7 +27,7 @@ public class ChatHelper {
     }
 
     public static void sendMessage(EntityPlayerMP sender, TextComponentString text) {
-        sender.addChatMessage(text);
+        sender.sendMessage(text);
     }
 
     public static void sendMessage(EntityPlayerMP sender, String text) {
@@ -35,7 +35,7 @@ public class ChatHelper {
     }
 
     public static void sendMessage(EntityPlayer sender, TextComponentString text) {
-        sender.addChatMessage(text);
+        sender.sendMessage(text);
     }
 
     public static void sendMessage(EntityPlayer sender, String text) {
@@ -43,7 +43,7 @@ public class ChatHelper {
     }
 
     public static void sendGlobalMessage(TextComponentString text) {
-        ServerUtil.getServerInstance().getPlayerList().sendChatMsg(text);
+        ServerUtil.getServerInstance().getPlayerList().sendMessage(text);
     }
 
     public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {
@@ -56,7 +56,7 @@ public class ChatHelper {
         LogHelper.info(texts);
         for (EntityPlayerMP playerMP : players) {
             if (PlayerMPUtil.isOperator(playerMP) && !playerMP.getName().equals(sender.getName())) {
-                playerMP.addChatMessage(newtext);
+                playerMP.sendMessage(newtext);
             }
         }
     }

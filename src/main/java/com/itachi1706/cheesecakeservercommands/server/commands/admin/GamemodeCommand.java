@@ -33,17 +33,17 @@ public class GamemodeCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "gm";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "gm <creative/adventure/survival> [player]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -116,24 +116,24 @@ public class GamemodeCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1) {
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "creative", "survival", "adventure");
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) {
+            return CommandBase.getListOfStringsMatchingLastWord(args, "creative", "survival", "adventure");
         }
 
         boolean showSecond = false;
-        if (typedValue[0].equalsIgnoreCase("creative")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("survival")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("adventure")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("s")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("c")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("a")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("0")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("1")) showSecond = true;
-        if (typedValue[0].equalsIgnoreCase("2")) showSecond = true;
+        if (args[0].equalsIgnoreCase("creative")) showSecond = true;
+        if (args[0].equalsIgnoreCase("survival")) showSecond = true;
+        if (args[0].equalsIgnoreCase("adventure")) showSecond = true;
+        if (args[0].equalsIgnoreCase("s")) showSecond = true;
+        if (args[0].equalsIgnoreCase("c")) showSecond = true;
+        if (args[0].equalsIgnoreCase("a")) showSecond = true;
+        if (args[0].equalsIgnoreCase("0")) showSecond = true;
+        if (args[0].equalsIgnoreCase("1")) showSecond = true;
+        if (args[0].equalsIgnoreCase("2")) showSecond = true;
 
-        if (typedValue.length == 2 && showSecond)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+        if (args.length == 2 && showSecond)
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return null;
     }
 

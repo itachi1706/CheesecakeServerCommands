@@ -36,17 +36,17 @@ public class FlingCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "fling";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "fling [player]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -64,14 +64,14 @@ public class FlingCommand implements ICommand {
                     return;
                 }
 
-                //player.worldObj.spawnParticle("hugeexplosion", player.posX + 0.5D, player.posY + 1.0D, player.posZ + 0.5D, 1.0D, 0.0D, 0.0D);
+                //player.world.spawnParticle("hugeexplosion", player.posX + 0.5D, player.posY + 1.0D, player.posZ + 0.5D, 1.0D, 0.0D, 0.0D);
                 player.motionY = 10;
                 player.velocityChanged = true;
                 ;
                 player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("resistance"), 300, 100, true, false));
-                WorldServer worldServer = (WorldServer) player.worldObj;
+                WorldServer worldServer = (WorldServer) player.world;
                 worldServer.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0, new int[0]);
-                Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0, true, true);
+                Explosion explosion = new Explosion(player.world, player, player.posX, player.posY, player.posZ, 0, true, true);
                 explosion.doExplosionB(true);
                 ChatHelper.sendMessage(iCommandSender, TextFormatting.DARK_PURPLE + "You were flung into the air");
                 ChatHelper.sendAdminMessage(iCommandSender, "Flung own self into the air!");
@@ -89,9 +89,9 @@ public class FlingCommand implements ICommand {
         player.motionY = 10;
         player.velocityChanged = true;
         player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("resistance"), 300, 100, true, false));
-        WorldServer worldServer = (WorldServer) player.worldObj;
+        WorldServer worldServer = (WorldServer) player.world;
         worldServer.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0, new int[0]);
-        Explosion explosion = new Explosion(player.worldObj, player, player.posX, player.posY, player.posZ, 0, true, true);
+        Explosion explosion = new Explosion(player.world, player, player.posX, player.posY, player.posZ, 0, true, true);
         explosion.doExplosionB(true);
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Flung " + player.getName() + " into the air!");
         ChatHelper.sendAdminMessage(iCommandSender, "Flung " + player.getName() + " into the air");
@@ -99,9 +99,9 @@ public class FlingCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return null;
     }
 

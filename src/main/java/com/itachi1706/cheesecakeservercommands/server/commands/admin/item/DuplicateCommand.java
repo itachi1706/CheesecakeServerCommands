@@ -31,17 +31,17 @@ public class DuplicateCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "duplicate";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "duplicate [amount] [spillover] (Spillover if inventory gets full while duplicating)";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -71,7 +71,7 @@ public class DuplicateCommand implements ICommand {
 
         ItemStack newItem = stack.copy();
         if (stackSize > 0) {
-            newItem.stackSize = stackSize;
+            newItem.setCount(stackSize);
         }
 
         boolean overflow = false;
@@ -95,7 +95,7 @@ public class DuplicateCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         return null;
     }
 

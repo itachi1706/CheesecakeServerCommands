@@ -30,17 +30,17 @@ public class MoreItemsCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "more";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "more";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -63,7 +63,7 @@ public class MoreItemsCommand implements ICommand {
             return;
         }
 
-        int stackSize = stack.getMaxStackSize() - stack.stackSize;
+        int stackSize = stack.getMaxStackSize() - stack.getCount();
 
         if (stackSize == 0) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You already have the max stack size of the item");
@@ -72,7 +72,7 @@ public class MoreItemsCommand implements ICommand {
         }
 
         ItemStack newItem = stack.copy();
-        newItem.stackSize = stackSize;
+        newItem.setCount(stackSize);
 
         PlayerMPUtil.giveNormal(player, newItem);
 
@@ -83,7 +83,7 @@ public class MoreItemsCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         return null;
     }
 

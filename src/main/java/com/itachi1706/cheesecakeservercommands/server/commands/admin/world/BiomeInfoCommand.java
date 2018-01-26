@@ -31,17 +31,17 @@ public class BiomeInfoCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "biomeinfo";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "biomeinfo [list]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -61,7 +61,7 @@ public class BiomeInfoCommand implements ICommand {
 
             int x = (int) Math.floor(player.posX);
             int z = (int) Math.floor(player.posZ);
-            Biome biome = player.worldObj.getBiomeGenForCoords(new BlockPos(x, 0, z));
+            Biome biome = player.world.getBiomeForCoordsBody(new BlockPos(x, 0, z));
             ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Current Biome: " + TextFormatting.AQUA + biome.getBiomeName());
             return;
         }
@@ -88,9 +88,9 @@ public class BiomeInfoCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1) {
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "list");
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) {
+            return CommandBase.getListOfStringsMatchingLastWord(args, "list");
         }
         return null;
     }

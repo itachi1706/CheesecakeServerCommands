@@ -35,17 +35,17 @@ public class MainCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "cheesecakeservercommands";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "cheesecakeservercommands list";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -107,18 +107,18 @@ public class MainCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "list", "modulehelp");
-        if (typedValue.length == 2 && typedValue[0].equalsIgnoreCase("modulehelp")) {
-            boolean isOp = PlayerMPUtil.isOperatorOrConsole(iCommandSender);
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, "list", "modulehelp");
+        if (args.length == 2 && args[0].equalsIgnoreCase("modulehelp")) {
+            boolean isOp = PlayerMPUtil.isOperatorOrConsole(sender);
             List<String> viewable = new ArrayList<String>();
             for (HelpMain main : mainHelp) {
                 if (main.isAdminOnly() && !isOp) continue;
                 viewable.add(main.getKey());
             }
 
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, viewable);
+            return CommandBase.getListOfStringsMatchingLastWord(args, viewable);
         }
         return null;
     }

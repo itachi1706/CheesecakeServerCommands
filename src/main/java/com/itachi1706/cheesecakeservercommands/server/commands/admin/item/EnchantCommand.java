@@ -35,17 +35,17 @@ public class EnchantCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "enchant";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "enchant <enchantmentname> [level]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -112,13 +112,13 @@ public class EnchantCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (!PlayerMPUtil.isPlayer(iCommandSender)) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (!PlayerMPUtil.isPlayer(sender)) {
             return null;
         }
-        if (typedValue.length == 1) {
+        if (args.length == 1) {
 
-            EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
+            EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(sender);
             if (player == null) {
                 return null;
             }
@@ -140,7 +140,7 @@ public class EnchantCommand implements ICommand {
             }
             String[] validEnchantmentArray = new String[validEnchantmentNames.size()];
             validEnchantmentArray = validEnchantmentNames.toArray(validEnchantmentArray);
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, validEnchantmentArray);
+            return CommandBase.getListOfStringsMatchingLastWord(args, validEnchantmentArray);
         }
 
         return null;

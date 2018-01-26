@@ -209,9 +209,9 @@ public class TeleportHelper {
         int oldDim = player.dimension;
         MinecraftServer mcServer = ServerUtil.getServerInstance();
 
-        WorldServer oldWorld = mcServer.worldServerForDimension(player.dimension);
+        WorldServer oldWorld = mcServer.getWorld(player.dimension);
         player.dimension = dimension;
-        WorldServer newWorld = mcServer.worldServerForDimension(player.dimension);
+        WorldServer newWorld = mcServer.getWorld(player.dimension);
         player.connection.sendPacket(new SPacketRespawn(player.dimension, newWorld.getDifficulty(),
                 newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType())); // Forge: Use new dimensions information
         oldWorld.removeEntityDangerously(player);
@@ -245,13 +245,13 @@ public class TeleportHelper {
         double d4 = entity.posY;
         double d5 = entity.posZ;
         float f = entity.rotationYaw;
-        d0 = MathHelper.clamp_int((int) d0, -29999872, 29999872);
-        d1 = MathHelper.clamp_int((int) d1, -29999872, 29999872);
+        d0 = MathHelper.clamp((int) d0, -29999872, 29999872);
+        d1 = MathHelper.clamp((int) d1, -29999872, 29999872);
         if (entity.isEntityAlive())
         {
             entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
             teleporter.placeInPortal(entity, f);
-            newWorld.spawnEntityInWorld(entity);
+            newWorld.spawnEntity(entity);
             newWorld.updateEntityWithOptionalForce(entity, false);
         }
         entity.setWorld(newWorld);

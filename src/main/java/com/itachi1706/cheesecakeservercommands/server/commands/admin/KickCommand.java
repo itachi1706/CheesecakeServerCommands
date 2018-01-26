@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -31,17 +32,17 @@ public class KickCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "kick";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "kick <player> [reason]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -72,15 +73,15 @@ public class KickCommand implements ICommand {
 
         reason = ChatHelper.formatString(reason);
 
-        player.connection.kickPlayerFromServer(reason);
+        player.connection.disconnect(new TextComponentString(reason));
         ChatHelper.sendMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
         ChatHelper.sendAdminMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return null;
     }
 

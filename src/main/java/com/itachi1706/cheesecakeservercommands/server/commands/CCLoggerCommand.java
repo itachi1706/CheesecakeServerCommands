@@ -50,17 +50,17 @@ public class CCLoggerCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "cheesecakelogger";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "View Command Help: " + TextFormatting.GOLD + "/cheesecakelogger help";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -221,19 +221,19 @@ public class CCLoggerCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen", "stats");
-        if (typedValue.length == 2 && (typedValue[0].equalsIgnoreCase("lastknownusername") || typedValue[0].equalsIgnoreCase("lastseen") ||
-                typedValue[0].equalsIgnoreCase("viewplayerstats") || typedValue[0].equalsIgnoreCase("viewlogins") ||
-                typedValue[0].equalsIgnoreCase("delloginhistory"))) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen", "stats");
+        if (args.length == 2 && (args[0].equalsIgnoreCase("lastknownusername") || args[0].equalsIgnoreCase("lastseen") ||
+                args[0].equalsIgnoreCase("viewplayerstats") || args[0].equalsIgnoreCase("viewlogins") ||
+                args[0].equalsIgnoreCase("delloginhistory"))) {
             String[] names = new String[CheesecakeServerCommands.lastKnownUsernames.size()];
             int i = 0;
             for (LastKnownUsernames name : CheesecakeServerCommands.lastKnownUsernames) {
                 names[i] = name.getLastKnownUsername();
                 i++;
             }
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, names);
+            return CommandBase.getListOfStringsMatchingLastWord(args, names);
         }
 
         return null;

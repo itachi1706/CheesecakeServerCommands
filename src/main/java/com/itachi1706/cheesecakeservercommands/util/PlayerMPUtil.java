@@ -41,7 +41,7 @@ public class PlayerMPUtil {
 
     @SuppressWarnings("unchecked")
     public static List<EntityPlayerMP> getOnlinePlayers(){
-        return ServerUtil.getServerInstance().getPlayerList().getPlayerList();
+        return ServerUtil.getServerInstance().getPlayerList().getPlayers();
     }
 
     public static EntityPlayerMP getPlayer(String username) {
@@ -62,10 +62,7 @@ public class PlayerMPUtil {
      */
     public static RayTraceResult getPlayerLookingSpot(EntityPlayer player)
     {
-        if (player instanceof EntityPlayerMP)
-            return getPlayerLookingSpot(player, ((EntityPlayerMP) player).interactionManager.getBlockReachDistance());
-        else
-            return getPlayerLookingSpot(player, 5);
+        return getPlayerLookingSpot(player, player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue());
     }
 
     /**
@@ -81,8 +78,8 @@ public class PlayerMPUtil {
         Vec3d lookAt = player.getLook(1);
         Vec3d playerPos = new Vec3d(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
         Vec3d pos1 = playerPos.addVector(0, player.getEyeHeight(), 0);
-        Vec3d pos2 = pos1.addVector(lookAt.xCoord * maxDistance, lookAt.yCoord * maxDistance, lookAt.zCoord * maxDistance);
-        return player.worldObj.rayTraceBlocks(pos1, pos2);
+        Vec3d pos2 = pos1.addVector(lookAt.x * maxDistance, lookAt.y * maxDistance, lookAt.z * maxDistance);
+        return player.world.rayTraceBlocks(pos1, pos2);
     }
 
     /**
@@ -94,17 +91,17 @@ public class PlayerMPUtil {
      */
     public static void give(EntityPlayer player, ItemStack item)
     {
-        int itemstack = item.stackSize;
+        int itemstack = item.getCount();
         while (itemstack > 64) {
             ItemStack senditem = item.copy();
-            senditem.stackSize = 64;
+            senditem.setCount(64);
             EntityItem entityitem = player.dropItem(senditem, false);
             if (entityitem == null) continue;
             entityitem.setNoPickupDelay();
             entityitem.setOwner(player.getName());
             itemstack -= 64;
         }
-        item.stackSize = itemstack;
+        item.setCount(itemstack);
         EntityItem entityitem = player.dropItem(item, false);
         if (entityitem == null) return;
         entityitem.setNoPickupDelay();

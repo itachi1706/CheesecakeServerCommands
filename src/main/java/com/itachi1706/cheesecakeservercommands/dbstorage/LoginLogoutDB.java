@@ -77,7 +77,7 @@ public class LoginLogoutDB {
         String insertQuery = "INSERT INTO LOGINS (NAME,UUID,IP,X,Y,Z,WORLD,TYPE) " +
                 "VALUES('" + player.getDisplayNameString() + "','" + player.getUniqueID().toString() + "','" + ip + "','"
                 + (Math.round(player.posX * 100.0) / 100.0) + "','" + (Math.round(player.posY * 100.0) / 100.0) + "','"
-                + (Math.round(player.posZ * 100.0) / 100.0) + "','" + player.worldObj.getWorldInfo().getWorldName() + "','"
+                + (Math.round(player.posZ * 100.0) / 100.0) + "','" + player.world.getWorldInfo().getWorldName() + "','"
                 + type + "');";
 
         Connection db = getSQLiteDBConnection();

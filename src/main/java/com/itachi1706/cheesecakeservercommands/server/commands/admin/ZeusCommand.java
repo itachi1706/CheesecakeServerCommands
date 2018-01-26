@@ -34,17 +34,17 @@ public class ZeusCommand implements ICommand {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "zeus";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender p_71518_1_) {
+    public String getUsage(ICommandSender sender) {
         return "zeus [player]";
     }
 
     @Override
-    public List getCommandAliases() {
+    public List getAliases() {
         return this.aliases;
     }
 
@@ -63,7 +63,7 @@ public class ZeusCommand implements ICommand {
                 return;
             }
 
-            player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
+            player.world.addWeatherEffect(new EntityLightningBolt(player.world, player.posX, player.posY, player.posZ, false));
             player.attackEntityFrom(getDamageSource(), Float.MAX_VALUE);
             ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "You angered Zeus and hence suffered the Wrath of Zeus!");
             ChatHelper.sendAdminMessage(iCommandSender, "Made own self suffer the wrath of Zeus");
@@ -80,7 +80,7 @@ public class ZeusCommand implements ICommand {
             return;
         }
 
-        player.worldObj.addWeatherEffect(new EntityLightningBolt(player.worldObj, player.posX, player.posY, player.posZ, false));
+        player.world.addWeatherEffect(new EntityLightningBolt(player.world, player.posX, player.posY, player.posZ, false));
         player.attackEntityFrom(getDamageSource(), Float.MAX_VALUE);
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Made " + player.getName() + " suffer the Wrath of Zeus");
         ChatHelper.sendAdminMessage(iCommandSender, "Made " + player.getName() + " suffer the Wrath of Zeus");
@@ -92,9 +92,9 @@ public class ZeusCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender iCommandSender, String[] typedValue, @Nullable BlockPos pos) {
-        if (typedValue.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(typedValue, ServerUtil.getServerInstance().getAllUsernames());
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1)
+            return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return null;
     }
 
