@@ -4,7 +4,7 @@
   "name": "Cheesecake Server Commands",
   "description": "Internal commands mod for the Cheesecake Network",
   "version": "2.4",
-  "mcversion": "1.10.2",
+  "mcversion": "1.12.2",
   "url": "http://www.itachi1706.com",
   "updateUrl": "",
   "authorList": ["itachi1706"],
