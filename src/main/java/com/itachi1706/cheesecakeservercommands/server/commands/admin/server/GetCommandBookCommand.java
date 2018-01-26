@@ -83,7 +83,7 @@ public class GetCommandBookCommand implements ICommand {
                 if (e != null && e.hasTagCompound() && e.getTagCompound().hasKey("title") && e.getTagCompound().hasKey("author")
                         && e.getTagCompound().getString("title").equals("CommandBook") && e.getTagCompound().getString("author").equals("Cheesecake Network"))
                 {
-                    player.inventory.setInventorySlotContents(i, null);
+                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                 }
             }
         }
