@@ -4,7 +4,6 @@ import com.itachi1706.cheesecakeservercommands.server.commands.util.ContainerChe
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -13,6 +12,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

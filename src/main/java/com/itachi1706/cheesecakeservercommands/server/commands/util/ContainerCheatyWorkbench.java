@@ -6,7 +6,6 @@ import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -30,7 +29,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory)
     {
-        craftResult.setInventorySlotContents(0, CraftingManager.findMatchingResult(craftMatrix, world));
+        super.onCraftMatrixChanged(par1IInventory);
     }
 
     /**
