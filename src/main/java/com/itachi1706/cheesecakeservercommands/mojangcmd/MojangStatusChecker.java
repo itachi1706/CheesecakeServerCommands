@@ -100,14 +100,15 @@ public enum MojangStatusChecker {
         public static Status get(String status) {
             status = status.toLowerCase();
 
-            if (status.equals("green")) {
-                return Status.ONLINE;
-            } else if (status.equals("yellow")) {
-                return Status.UNSTABLE;
-            } else if (status.equals("red")) {
-                return Status.OFFLINE;
-            } else {
-                return Status.UNKNOWN;
+            switch (status) {
+                case "green":
+                    return Status.ONLINE;
+                case "yellow":
+                    return Status.UNSTABLE;
+                case "red":
+                    return Status.OFFLINE;
+                default:
+                    return Status.UNKNOWN;
             }
         }
     }

@@ -280,14 +280,19 @@ public class LoginLogoutDB {
             if (names != null) {
                 if (names.isLoginState()) status = TextFormatting.DARK_RED + "SERVER CRASHED";
                 String s = names.hasLastKnownGamemode() ? names.getLastKnownGamemode() : "";
-                if (s.equals("creative")) {
-                    gamemode = TextFormatting.RED + "CREATIVE";
-                } else if (s.equals("survival")) {
-                    gamemode = TextFormatting.RED + "SURVIVAL";
-                } else if (s.equals("adventure")) {
-                    gamemode = TextFormatting.RED + "ADVENTURE";
-                } else {
-                    gamemode = TextFormatting.GRAY + "UNSET (REQUIRES PLAYER LOGIN TO SET)";
+                switch (s) {
+                    case "creative":
+                        gamemode = TextFormatting.RED + "CREATIVE";
+                        break;
+                    case "survival":
+                        gamemode = TextFormatting.RED + "SURVIVAL";
+                        break;
+                    case "adventure":
+                        gamemode = TextFormatting.RED + "ADVENTURE";
+                        break;
+                    default:
+                        gamemode = TextFormatting.GRAY + "UNSET (REQUIRES PLAYER LOGIN TO SET)";
+                        break;
                 }
             }
         }

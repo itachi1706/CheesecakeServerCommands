@@ -60,7 +60,6 @@ public class DechantCommand implements ICommand {
 
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "Cannot dechant an item for CONSOLE");
-            return;
         } else {
             EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
             if (player == null) {

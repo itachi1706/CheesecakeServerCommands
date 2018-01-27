@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
 import com.itachi1706.cheesecakeservercommands.commons.selections.WarpPoint;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -12,6 +11,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
@@ -21,7 +21,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -193,14 +192,7 @@ public class TeleportHelper {
     {
         if (e.phase == TickEvent.Phase.START)
         {
-            for (Iterator<TeleportInfo> it = tpInfos.values().iterator(); it.hasNext();)
-            {
-                TeleportInfo tpInfo = it.next();
-                if (tpInfo.check())
-                {
-                    it.remove();
-                }
-            }
+            tpInfos.values().removeIf(TeleportInfo::check);
         }
     }
 
