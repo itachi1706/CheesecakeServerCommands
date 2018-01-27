@@ -6,10 +6,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJson
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.References;
-import com.itachi1706.cheesecakeservercommands.server.commands.CCLoggerCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.MainCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.MojangServerCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.ServerPropertiesCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.GetCommandBookCommand;
@@ -124,6 +121,9 @@ public class CheesecakeServerCommands {
 
         // Essentials World
         event.registerServerCommand(new BiomeInfoCommand());
+
+        // General Commands (For all players)
+        event.registerServerCommand(new PingCommand());
     }
 
     @Mod.EventHandler

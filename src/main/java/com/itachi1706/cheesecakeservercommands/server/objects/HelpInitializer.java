@@ -20,6 +20,7 @@ public class HelpInitializer {
         help.add(new HelpMain("admin", "Admin Module Commands", initializeAdmin(), true));
         help.add(new HelpMain("adminitem", "Admin (Items) Module Commands", initializeAdminItem(), true));
         help.add(new HelpMain("adminworld", "Admin (World/Server) Module Commands", initializeAdminWorldServer(), true));
+        help.add(new HelpMain("general", "General Module Commands", initializeGeneral()));
         return help.toArray(new HelpMain[help.size()]);
     }
 
@@ -100,6 +101,14 @@ public class HelpInitializer {
         List<HelpSub> sub = new ArrayList<>();
         sub.add(new HelpSub("/mojang status", "View Mojang Server Status"));
         sub.add(new HelpSub("/mojang premium <name>", "Check if name is purchased"));
+        return sub.toArray(new HelpSub[sub.size()]);
+    }
+
+    private static HelpSub[] initializeGeneral() {
+        List<HelpSub> sub = new ArrayList<>();
+        sub.add(new HelpSub("/ping", "Pings the server"));
+        sub.add(new HelpSub("/csc list", "Lists out all modules in this utility"));
+        sub.add(new HelpSub("/csc modulehelp", "Lists command help for specific module"));
         return sub.toArray(new HelpSub[sub.size()]);
     }
 
