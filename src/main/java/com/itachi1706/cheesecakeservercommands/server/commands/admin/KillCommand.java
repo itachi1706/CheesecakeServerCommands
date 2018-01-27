@@ -1,9 +1,9 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin;
 
+import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -48,8 +49,7 @@ public class KillCommand implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
-        if (args.length == 0)
-        {
+        if (args.length == 0) {
             if (!PlayerMPUtil.isPlayer(iCommandSender)) {
                 ChatHelper.sendMessage(iCommandSender, "Cannot kill CONSOLE");
                 return;
@@ -74,9 +74,17 @@ public class KillCommand implements ICommand {
             return;
         }
 
-        player.attackEntityFrom(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Killed " + player.getName());
-        ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getName());
+        // Make sure its a valid thing
+        if (args.length > 1 && CheesecakeServerCommands.knownDamageSources.containsKey(args[1])) {
+            player.attackEntityFrom(CheesecakeServerCommands.knownDamageSources.get(args[1]), Float.MAX_VALUE);
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Killed " + player.getName() + " with " + args[1]);
+            ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getName() + " with " + args[1]);
+        } else {
+            player.attackEntityFrom(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Killed " + player.getName());
+            ChatHelper.sendAdminMessage(iCommandSender, "Killed " + player.getName());
+        }
+
         ChatHelper.sendMessage(player, TextFormatting.GOLD + "You were slain");
     }
 
@@ -84,6 +92,8 @@ public class KillCommand implements ICommand {
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
+        if (args.length == 2)
+            return CommandBase.getListOfStringsMatchingLastWord(args, new ArrayList<>(CheesecakeServerCommands.knownDamageSources.keySet()));
         return null;
     }
 

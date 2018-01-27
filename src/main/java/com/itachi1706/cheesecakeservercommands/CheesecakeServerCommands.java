@@ -5,6 +5,7 @@ import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
+import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
@@ -15,6 +16,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.Serv
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -25,6 +27,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,6 +39,7 @@ public class CheesecakeServerCommands {
 
     public static List<LastKnownUsernames> lastKnownUsernames;
     public static File configFileDirectory;
+    public static HashMap<String, DamageSource> knownDamageSources;
 
     @Mod.Instance(References.MOD_ID)
     public static CheesecakeServerCommands instance;
@@ -124,6 +128,9 @@ public class CheesecakeServerCommands {
 
         // General Commands (For all players)
         event.registerServerCommand(new PingCommand());
+
+        // Initialize Damage Sources
+        InitDamageSources.initalizeDamages();
     }
 
     @Mod.EventHandler
