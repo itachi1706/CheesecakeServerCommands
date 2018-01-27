@@ -225,10 +225,7 @@ public class TeleportHelper {
         player.interactionManager.setWorld(newWorld);
         mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, newWorld);
         mcServer.getPlayerList().syncPlayerInventory(player);
-        Iterator<?> iterator = player.getActivePotionEffects().iterator();
-        while (iterator.hasNext())
-        {
-            PotionEffect potioneffect = (PotionEffect) iterator.next();
+        for (PotionEffect potioneffect : player.getActivePotionEffects()) {
             player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
         }
         FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
