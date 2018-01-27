@@ -1,5 +1,6 @@
 language: java
-jdk: oraclejdk7
+jdk: oraclejdk8
+dist: trusty # Use Ubuntu 14.04 as its faster
 before_install:
 - chmod +x gradlew
 script: "./gradlew build"
