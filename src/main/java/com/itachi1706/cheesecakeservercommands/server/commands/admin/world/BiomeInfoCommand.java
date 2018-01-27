@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.world;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -10,9 +9,11 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class BiomeInfoCommand implements ICommand {
             int x = (int) Math.floor(player.posX);
             int z = (int) Math.floor(player.posZ);
             Biome biome = player.world.getBiomeForCoordsBody(new BlockPos(x, 0, z));
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Current Biome: " + TextFormatting.AQUA + biome.getBiomeName());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "Current Biome: " + TextFormatting.AQUA + getBiomeName(biome));
             return;
         }
 
@@ -79,11 +80,24 @@ public class BiomeInfoCommand implements ICommand {
                     skip = false;
                     ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "----");
                 }
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "#" + i + ": " + TextFormatting.AQUA + biome.getBiomeName());
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "#" + i + ": " + TextFormatting.AQUA + getBiomeName(biome));
                 i++;
             }
         } else {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Command. Usage: /biomeinfo [list]");
+        }
+    }
+
+    // MC 1.12 made getBiomeName a client only thing, use reflection to get Biome Name
+    private String getBiomeName(Biome biome) {
+        try {
+            Field field = Biome.class.getDeclaredField("biomeName");
+            field.setAccessible(true);
+            Object value = field.get(biome);
+            return value.toString();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return "Unknown";
         }
     }
 
