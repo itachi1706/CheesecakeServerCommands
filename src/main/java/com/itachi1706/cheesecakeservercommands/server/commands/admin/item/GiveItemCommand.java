@@ -125,7 +125,7 @@ public class GiveItemCommand implements ICommand {
             ChatHelper.sendMessage(player, messageToRecepient);
         } else {
             messageToSender = TextFormatting.GOLD +  "Received " + TextFormatting.AQUA + stacksize + TextFormatting.GOLD
-                    + " of " + TextFormatting.LIGHT_PURPLE + itemStack.getDisplayName();;
+                    + " of " + TextFormatting.LIGHT_PURPLE + itemStack.getDisplayName();
             adminMessage = "Gave " + stacksize + " of " + itemStack.getDisplayName() + " to self";
         }
 

@@ -67,7 +67,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
     {
         ItemStack var3 = null;
-        Slot var4 = (Slot) inventorySlots.get(par2);
+        Slot var4 = inventorySlots.get(par2);
 
         if (var4 != null && var4.getHasStack())
         {
@@ -104,7 +104,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
 
             if (var5.getCount() == 0)
             {
-                var4.putStack((ItemStack) null);
+                var4.putStack(null);
             }
             else
             {

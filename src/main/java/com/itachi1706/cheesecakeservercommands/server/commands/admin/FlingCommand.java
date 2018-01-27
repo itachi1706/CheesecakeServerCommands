@@ -67,7 +67,6 @@ public class FlingCommand implements ICommand {
                 //player.world.spawnParticle("hugeexplosion", player.posX + 0.5D, player.posY + 1.0D, player.posZ + 0.5D, 1.0D, 0.0D, 0.0D);
                 player.motionY = 10;
                 player.velocityChanged = true;
-                ;
                 player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("resistance"), 300, 100, true, false));
                 WorldServer worldServer = (WorldServer) player.world;
                 worldServer.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, player.posX, player.posY, player.posZ, 0, 0, 0, 0, 0, new int[0]);
