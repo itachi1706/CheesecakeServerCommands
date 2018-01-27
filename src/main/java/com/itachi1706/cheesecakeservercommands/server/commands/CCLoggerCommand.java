@@ -43,7 +43,7 @@ public class CCLoggerCommand implements ICommand {
      */
 
     public CCLoggerCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("cheesecakelogger");
         this.aliases.add("cclogger");
         this.aliases.add("ccl");

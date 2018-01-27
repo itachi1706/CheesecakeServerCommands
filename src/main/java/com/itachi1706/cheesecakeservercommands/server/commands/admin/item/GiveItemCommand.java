@@ -29,7 +29,7 @@ public class GiveItemCommand implements ICommand {
     private List<String> aliases;
 
     public GiveItemCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("i");
         this.aliases.add("giveitem");
     }

@@ -32,7 +32,7 @@ public class GetCommandBookCommand implements ICommand {
     private List<String> aliases;
 
     public GetCommandBookCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("getcommandbook");
     }
 
@@ -88,10 +88,10 @@ public class GetCommandBookCommand implements ICommand {
             }
         }
 
-        Set<String> pages = new TreeSet<String>();
+        Set<String> pages = new TreeSet<>();
         for (ICommand cmd : ServerUtil.getServerInstance().getCommandManager().getCommands().values())
         {
-            Set<String> commands = new HashSet<String>();
+            Set<String> commands = new HashSet<>();
             commands.add("/" + cmd.getName());
 
             // Add aliases

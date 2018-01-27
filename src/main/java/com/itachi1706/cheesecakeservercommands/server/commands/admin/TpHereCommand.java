@@ -28,7 +28,7 @@ public class TpHereCommand implements ICommand {
     private List<String> aliases;
 
     public TpHereCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("tphere");
     }
 

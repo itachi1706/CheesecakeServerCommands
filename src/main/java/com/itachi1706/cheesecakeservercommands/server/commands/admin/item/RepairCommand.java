@@ -27,7 +27,7 @@ public class RepairCommand implements ICommand {
     private List<String> aliases;
 
     public RepairCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("repairitem");
     }
 

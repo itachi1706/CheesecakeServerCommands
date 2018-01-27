@@ -35,7 +35,7 @@ public class SpeedCommand implements ICommand {
     public static final String CAPABILITY_WALK_SPEED = "walkSpeed";
 
     public SpeedCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("speed");
     }
 

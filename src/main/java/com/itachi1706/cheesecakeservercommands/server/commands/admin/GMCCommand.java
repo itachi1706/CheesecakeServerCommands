@@ -27,7 +27,7 @@ public class GMCCommand implements ICommand {
     private List<String> aliases;
 
     public GMCCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("gmc");
     }
 

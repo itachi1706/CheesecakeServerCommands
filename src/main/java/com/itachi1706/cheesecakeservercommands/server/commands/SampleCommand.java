@@ -23,7 +23,7 @@ public class SampleCommand implements ICommand {
     private List<String> aliases;
 
     public SampleCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("sample");
         this.aliases.add("sam");
     }

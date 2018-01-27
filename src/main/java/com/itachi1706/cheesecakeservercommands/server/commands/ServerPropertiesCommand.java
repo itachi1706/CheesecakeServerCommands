@@ -28,7 +28,7 @@ public class ServerPropertiesCommand implements ICommand {
      */
 
     public ServerPropertiesCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("serverproperties");
     }
 

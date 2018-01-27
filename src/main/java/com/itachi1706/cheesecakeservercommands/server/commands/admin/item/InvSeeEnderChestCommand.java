@@ -30,7 +30,7 @@ public class InvSeeEnderChestCommand implements ICommand {
     private List<String> aliases;
 
     public InvSeeEnderChestCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("invseeender");
     }
 

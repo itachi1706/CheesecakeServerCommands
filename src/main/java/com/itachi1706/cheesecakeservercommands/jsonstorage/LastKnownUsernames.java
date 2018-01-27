@@ -12,7 +12,7 @@ public class LastKnownUsernames {
 
     private UUID uuid;
     private String lastKnownUsername;
-    private List<String> historyOfKnownUsernames = new ArrayList<String>();
+    private List<String> historyOfKnownUsernames = new ArrayList<>();
     private long lastSeen;
     private long firstJoined;
     private boolean loginState;

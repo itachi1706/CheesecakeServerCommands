@@ -27,7 +27,7 @@ public class GMSCommand implements ICommand {
     private List<String> aliases;
 
     public GMSCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("gms");
     }
 

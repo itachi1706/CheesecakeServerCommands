@@ -30,7 +30,7 @@ public class EnderChestCommand implements ICommand {
     private List<String> aliases;
 
     public EnderChestCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("enderchest");
     }
 

@@ -25,7 +25,7 @@ public class RenameCommand implements ICommand {
     private List<String> aliases;
 
     public RenameCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("renameitem");
     }
 

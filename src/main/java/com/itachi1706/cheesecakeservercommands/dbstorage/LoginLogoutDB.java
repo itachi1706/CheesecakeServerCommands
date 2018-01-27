@@ -323,7 +323,7 @@ public class LoginLogoutDB {
             ResultSet rs = statement.executeQuery(querySQL);
             //ChatHelper.sendMessage(p, TextFormatting.GOLD + "--------- Login History For " + target + " ---------");
             int i = 1;
-            ArrayList<String> loginHist = new ArrayList<String>();
+            ArrayList<String> loginHist = new ArrayList<>();
             while (rs.next()){
                 if (rs.getString("TYPE").equalsIgnoreCase("LOGIN")){
                     //A login message

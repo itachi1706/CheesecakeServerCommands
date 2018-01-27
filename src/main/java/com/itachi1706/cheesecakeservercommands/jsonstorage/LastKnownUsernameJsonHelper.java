@@ -41,7 +41,7 @@ public class LastKnownUsernameJsonHelper {
 
             LastKnownUsernames[] loginses = gson.fromJson(br, LastKnownUsernames[].class);
             LogHelper.info("Loaded " + loginses.length + " usernames from file");
-            return new ArrayList<LastKnownUsernames>(Arrays.asList(loginses));
+            return new ArrayList<>(Arrays.asList(loginses));
         } catch (FileNotFoundException e) {
             LogHelper.error("Unable to read file");
             e.printStackTrace();

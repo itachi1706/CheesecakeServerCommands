@@ -28,7 +28,7 @@ public class TpToCommand implements ICommand {
     private List<String> aliases;
 
     public TpToCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("tpto");
     }
 

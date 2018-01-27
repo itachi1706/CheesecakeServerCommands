@@ -29,7 +29,7 @@ public class ZeusCommand implements ICommand {
     private List<String> aliases;
 
     public ZeusCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("zeus");
     }
 

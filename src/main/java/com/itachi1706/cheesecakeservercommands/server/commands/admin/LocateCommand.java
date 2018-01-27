@@ -27,7 +27,7 @@ public class LocateCommand implements ICommand {
     private List<String> aliases;
 
     public LocateCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("locate");
         this.aliases.add("loc");
         this.aliases.add("gps");

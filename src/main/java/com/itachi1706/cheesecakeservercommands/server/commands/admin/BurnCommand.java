@@ -26,7 +26,7 @@ public class BurnCommand implements ICommand {
     private List<String> aliases;
 
     public BurnCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("burn");
     }
 

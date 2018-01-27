@@ -132,7 +132,7 @@ public class CheesecakeServerCommands {
     }
 
     private void registerLoggers(){
-        lastKnownUsernames = new ArrayList<LastKnownUsernames>();
+        lastKnownUsernames = new ArrayList<>();
         if (LastKnownUsernameJsonHelper.fileExists())
             lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
 

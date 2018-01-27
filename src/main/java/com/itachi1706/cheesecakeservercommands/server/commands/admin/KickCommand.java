@@ -27,7 +27,7 @@ public class KickCommand implements ICommand {
     private List<String> aliases;
 
     public KickCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("kick");
     }
 

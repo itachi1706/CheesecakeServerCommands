@@ -26,7 +26,7 @@ public class ModlistCommand implements ICommand {
     private List<String> aliases;
 
     public ModlistCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("modlist");
     }
 

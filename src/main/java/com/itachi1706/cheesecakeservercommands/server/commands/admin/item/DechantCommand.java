@@ -30,7 +30,7 @@ public class DechantCommand implements ICommand {
     private List<String> aliases;
 
     public DechantCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("dechant");
     }
 
@@ -77,8 +77,8 @@ public class DechantCommand implements ICommand {
             // Get Enchantment List
             @SuppressWarnings("unchecked")
             Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-            List<String> validEnchantmentNames = new ArrayList<String>();
-            Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
+            List<String> validEnchantmentNames = new ArrayList<>();
+            Map<String, Enchantment> validEnchantments = new HashMap<>();
             for (Enchantment enchantment : Enchantment.REGISTRY) {
                 if (enchantment != null && enchantments.containsKey(enchantment)) {
                     String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
@@ -131,7 +131,7 @@ public class DechantCommand implements ICommand {
             // Get Enchantment List
             @SuppressWarnings("unchecked")
             Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-            List<String> validEnchantmentNames = new ArrayList<String>();
+            List<String> validEnchantmentNames = new ArrayList<>();
             for (Enchantment enchantment : Enchantment.REGISTRY) {
                 if (enchantment != null && enchantments.containsKey(enchantment)) {
                     String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");

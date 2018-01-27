@@ -26,7 +26,7 @@ public class HealCommand implements ICommand {
     private List<String> aliases;
 
     public HealCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("heal");
     }
 

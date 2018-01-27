@@ -27,7 +27,7 @@ public class CraftCommand implements ICommand {
     private List<String> aliases;
 
     public CraftCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("craft");
     }
 

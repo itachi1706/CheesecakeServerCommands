@@ -32,7 +32,7 @@ public class MojangServerCommand implements ICommand {
      */
 
     public MojangServerCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("mojang");
     }
 

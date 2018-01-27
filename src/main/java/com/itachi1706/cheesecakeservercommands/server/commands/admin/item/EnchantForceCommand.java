@@ -30,7 +30,7 @@ public class EnchantForceCommand implements ICommand {
     private List<String> aliases;
 
     public EnchantForceCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("enchantforce");
     }
 
@@ -78,8 +78,8 @@ public class EnchantForceCommand implements ICommand {
 
         // Get Enchantment List
         @SuppressWarnings("unchecked")
-        List<String> validEnchantmentNames = new ArrayList<String>();
-        Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
+        List<String> validEnchantmentNames = new ArrayList<>();
+        Map<String, Enchantment> validEnchantments = new HashMap<>();
         for (Enchantment enchantment : Enchantment.REGISTRY) {
             if (enchantment != null) {
                 String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");
@@ -130,8 +130,8 @@ public class EnchantForceCommand implements ICommand {
 
             // Get Enchantment List
             @SuppressWarnings("unchecked")
-            List<String> validEnchantmentNames = new ArrayList<String>();
-            Map<String, Enchantment> validEnchantments = new HashMap<String, Enchantment>();
+            List<String> validEnchantmentNames = new ArrayList<>();
+            Map<String, Enchantment> validEnchantments = new HashMap<>();
             for (Enchantment enchantment : Enchantment.REGISTRY) {
                 if (enchantment != null) {
                     String name = I18n.translateToLocal(enchantment.getName()).replaceAll(" ", "");

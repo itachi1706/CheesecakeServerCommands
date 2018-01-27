@@ -34,7 +34,7 @@ public class ServerSettingsCommand implements ICommand {
     private static List<String> options = Arrays.asList("allowFlight", "allowPVP", "buildLimit", "difficulty", "spawnProtection", "gamemode");
 
     public ServerSettingsCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("serversettings");
     }
 

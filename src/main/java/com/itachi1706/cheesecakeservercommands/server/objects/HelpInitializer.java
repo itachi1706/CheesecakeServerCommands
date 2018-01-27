@@ -12,7 +12,7 @@ import java.util.List;
 public class HelpInitializer {
 
     public static HelpMain[] initialize() {
-        List<HelpMain> help = new ArrayList<HelpMain>();
+        List<HelpMain> help = new ArrayList<>();
         help.add(new HelpMain("cheesecakelogger", "Cheesecake Logger Module Commands", initializeLogger(), true));
         help.add(new HelpMain("ccl", "Cheesecake Logger Module Commands", initializeLogger(), true));
         help.add(new HelpMain("mojang", "Mojang Module Commands", initializeMojang()));
@@ -24,7 +24,7 @@ public class HelpInitializer {
     }
 
     private static HelpSub[] initializeAdmin() {
-        List<HelpSub> sub = new ArrayList<HelpSub>();
+        List<HelpSub> sub = new ArrayList<>();
         // Global
         sub.add(new HelpSub("/burn [player] [duration]", "Burns a player"));
         sub.add(new HelpSub("/fling [player]", "Flings yourself or another player into the air"));
@@ -50,7 +50,7 @@ public class HelpInitializer {
     }
 
     private static HelpSub[] initializeAdminItem() {
-        List<HelpSub> sub = new ArrayList<HelpSub>();
+        List<HelpSub> sub = new ArrayList<>();
         // Item Commands
         sub.add(new HelpSub("/ci [player] [item] [damage]", "Clears player inventory of everything or a specific item"));
         sub.add(new HelpSub("/craft [player]", "Shows the crafting GUI to a player"));
@@ -68,7 +68,7 @@ public class HelpInitializer {
     }
 
     private static HelpSub[] initializeAdminWorldServer() {
-        List<HelpSub> sub = new ArrayList<HelpSub>();
+        List<HelpSub> sub = new ArrayList<>();
         // World Commands
         sub.add(new HelpSub("/biomeinfo [list]", "Show current biome info or list of all available biomes"));
 
@@ -80,7 +80,7 @@ public class HelpInitializer {
     }
 
     private static HelpSub[] initializeLogger() {
-        List<HelpSub> sub = new ArrayList<HelpSub>();
+        List<HelpSub> sub = new ArrayList<>();
         sub.add(new HelpSub("/cclogger stats", "Gets General Statistics Logged"));
         sub.add(new HelpSub("/cclogger viewlogins <player> <#>", "View Player Login Info"));
         sub.add(new HelpSub("/cclogger viewplayerstats <player>", "View Player Stats"));
@@ -91,13 +91,13 @@ public class HelpInitializer {
     }
 
     private static HelpSub[] initializeServerProperties() {
-        List<HelpSub> sub = new ArrayList<HelpSub>();
+        List<HelpSub> sub = new ArrayList<>();
         sub.add(new HelpSub("/serverproperties", "View Server Properties"));
         return sub.toArray(new HelpSub[sub.size()]);
     }
 
     private static HelpSub[] initializeMojang() {
-        List<HelpSub> sub = new ArrayList<HelpSub>();
+        List<HelpSub> sub = new ArrayList<>();
         sub.add(new HelpSub("/mojang status", "View Mojang Server Status"));
         sub.add(new HelpSub("/mojang premium <name>", "Check if name is purchased"));
         return sub.toArray(new HelpSub[sub.size()]);
@@ -105,7 +105,7 @@ public class HelpInitializer {
 
     @SuppressWarnings("unused")
     private static HelpSub[] sample() {
-        List<HelpSub> sub = new ArrayList<HelpSub>();
+        List<HelpSub> sub = new ArrayList<>();
         return sub.toArray(new HelpSub[sub.size()]);
     }
 }

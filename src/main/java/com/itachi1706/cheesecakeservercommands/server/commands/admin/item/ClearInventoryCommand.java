@@ -27,7 +27,7 @@ public class ClearInventoryCommand implements ICommand {
     private List<String> aliases;
 
     public ClearInventoryCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("ci");
         this.aliases.add("clearinventory");
     }

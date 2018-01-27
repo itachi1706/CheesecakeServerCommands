@@ -29,7 +29,7 @@ public class InvSeeCommand implements ICommand {
     private List<String> aliases;
 
     public InvSeeCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("invsee");
     }
 

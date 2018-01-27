@@ -26,7 +26,7 @@ public class WowCommand implements ICommand {
     private List<String> aliases;
 
     public WowCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("wow");
         this.aliases.add("doge");
     }

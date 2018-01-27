@@ -27,7 +27,7 @@ public class FlyCommand implements ICommand {
     private List<String> aliases;
 
     public FlyCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("fly");
     }
 

@@ -27,7 +27,7 @@ public class GMACommand implements ICommand {
     private List<String> aliases;
 
     public GMACommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("gma");
     }
 

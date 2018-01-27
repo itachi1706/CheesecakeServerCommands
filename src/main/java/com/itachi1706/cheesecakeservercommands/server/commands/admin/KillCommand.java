@@ -27,7 +27,7 @@ public class KillCommand implements ICommand {
     private List<String> aliases;
 
     public KillCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("kill");
     }
 

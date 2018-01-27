@@ -31,7 +31,7 @@ public class FlingCommand implements ICommand {
     private List<String> aliases;
 
     public FlingCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("fling");
     }
 

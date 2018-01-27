@@ -27,7 +27,7 @@ public class BiomeInfoCommand implements ICommand {
     private List<String> aliases;
 
     public BiomeInfoCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("biomeinfo");
     }
 

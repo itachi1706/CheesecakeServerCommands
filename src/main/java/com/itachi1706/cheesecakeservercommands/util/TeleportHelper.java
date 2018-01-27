@@ -105,7 +105,7 @@ public class TeleportHelper {
     public static final String TELEPORT_FROM = "fe.teleport.from";
     public static final String TELEPORT_TO = "fe.teleport.to";
 
-    private static Map<UUID, TeleportInfo> tpInfos = new HashMap<UUID, TeleportInfo>();
+    private static Map<UUID, TeleportInfo> tpInfos = new HashMap<>();
 
     public static void teleport(EntityPlayerMP player, WarpPoint point)
     {

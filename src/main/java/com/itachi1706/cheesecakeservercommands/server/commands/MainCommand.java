@@ -28,7 +28,7 @@ public class MainCommand implements ICommand {
     private HelpMain[] mainHelp;
 
     public MainCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("cheesecakeservercommands");
         this.aliases.add("csc");
         this.mainHelp = HelpInitializer.initialize();
@@ -112,7 +112,7 @@ public class MainCommand implements ICommand {
             return CommandBase.getListOfStringsMatchingLastWord(args, "list", "modulehelp");
         if (args.length == 2 && args[0].equalsIgnoreCase("modulehelp")) {
             boolean isOp = PlayerMPUtil.isOperatorOrConsole(sender);
-            List<String> viewable = new ArrayList<String>();
+            List<String> viewable = new ArrayList<>();
             for (HelpMain main : mainHelp) {
                 if (main.isAdminOnly() && !isOp) continue;
                 viewable.add(main.getKey());

@@ -28,7 +28,7 @@ public class SmiteCommand implements ICommand {
     private List<String> aliases;
 
     public SmiteCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("smite");
     }
 

@@ -28,7 +28,7 @@ public class SudoCommand implements ICommand {
     private List<String> aliases;
 
     public SudoCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("sudo");
     }
 

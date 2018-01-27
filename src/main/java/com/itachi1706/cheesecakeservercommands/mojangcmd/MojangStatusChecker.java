@@ -62,13 +62,7 @@ public enum MojangStatusChecker {
 
             return Status.get(status);
 
-        } catch (IOException exception) {
-            if (!suppressErrors) {
-                exception.printStackTrace();
-            }
-
-            return Status.UNKNOWN;
-        } catch (ParseException exception) {
+        } catch (IOException | ParseException exception) {
             if (!suppressErrors) {
                 exception.printStackTrace();
             }

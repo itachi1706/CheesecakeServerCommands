@@ -28,7 +28,7 @@ public class GamemodeCommand implements ICommand {
     private List<String> aliases;
 
     public GamemodeCommand(){
-        this.aliases = new ArrayList<String>();
+        this.aliases = new ArrayList<>();
         this.aliases.add("gm");
     }
 
