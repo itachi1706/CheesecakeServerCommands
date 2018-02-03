@@ -99,6 +99,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new FlyCommand());
         event.registerServerCommand(new SpeedCommand());
         event.registerServerCommand(new HealCommand());
+        event.registerServerCommand(new FeedCommand());
         event.registerServerCommand(new SmiteCommand());
         event.registerServerCommand(new KillCommand());
         event.registerServerCommand(new InvSeeCommand());

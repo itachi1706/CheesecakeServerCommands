@@ -30,6 +30,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/burn [player] [duration]", "Burns a player"));
         sub.add(new HelpSub("/fling [player]", "Flings yourself or another player into the air"));
         sub.add(new HelpSub("/fly [player]", "Enable/Disable flight for a player"));
+        sub.add(new HelpSub("/feed [player]", "Feeds a player"));
         sub.add(new HelpSub("/gm <creative/adventure/survival> [player]", "Set Gamemode of Player"));
         sub.add(new HelpSub("/gma [player]", "Set Gamemode to Adventure"));
         sub.add(new HelpSub("/gmc [player]", "Set Gamemode to Creative"));
