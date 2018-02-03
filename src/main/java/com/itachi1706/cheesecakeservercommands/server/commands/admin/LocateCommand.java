@@ -40,7 +40,7 @@ public class LocateCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "locate [player]";
+        return "/locate [player]";
     }
 
     @Override

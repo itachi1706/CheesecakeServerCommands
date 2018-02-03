@@ -37,7 +37,7 @@ public class HealCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "heal [player]";
+        return "/heal [player]";
     }
 
     @Override

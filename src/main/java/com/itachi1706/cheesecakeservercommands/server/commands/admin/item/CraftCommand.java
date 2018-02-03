@@ -38,7 +38,7 @@ public class CraftCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "craft [player]";
+        return "/craft [player]";
     }
 
     @Override

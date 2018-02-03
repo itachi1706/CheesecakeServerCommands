@@ -39,7 +39,7 @@ public class TpToCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "tpto <player>";
+        return "/tpto <player>";
     }
 
     @Override

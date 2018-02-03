@@ -35,7 +35,7 @@ public class SampleCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "sample <text>";
+        return "/sample <text>";
     }
 
     @Override

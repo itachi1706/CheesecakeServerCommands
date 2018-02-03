@@ -42,7 +42,7 @@ public class FlingCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "fling [player]";
+        return "/fling [player]";
     }
 
     @Override

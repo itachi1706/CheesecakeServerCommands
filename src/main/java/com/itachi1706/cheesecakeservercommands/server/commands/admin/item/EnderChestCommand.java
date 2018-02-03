@@ -41,7 +41,7 @@ public class EnderChestCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "enderchest [player]";
+        return "/enderchest [player]";
     }
 
     @Override

@@ -41,7 +41,7 @@ public class DechantCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "dechant <enchantmentname>";
+        return "/dechant <enchantmentname>";
     }
 
     @Override

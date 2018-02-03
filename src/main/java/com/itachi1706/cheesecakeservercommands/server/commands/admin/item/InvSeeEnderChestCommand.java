@@ -41,7 +41,7 @@ public class InvSeeEnderChestCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "invseeender [player]";
+        return "/invseeender [player]";
     }
 
     @Override

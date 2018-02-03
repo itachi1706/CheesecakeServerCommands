@@ -38,7 +38,7 @@ public class GMCCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "gmc [player]";
+        return "/gmc [player]";
     }
 
     @Override

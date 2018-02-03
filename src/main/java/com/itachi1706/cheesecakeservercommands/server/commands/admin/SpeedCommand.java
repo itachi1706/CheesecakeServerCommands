@@ -46,7 +46,7 @@ public class SpeedCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "speed <fly/walk/all> <speed> [player]";
+        return "/speed <fly/walk/all> <speed> [player]";
     }
 
     @Override

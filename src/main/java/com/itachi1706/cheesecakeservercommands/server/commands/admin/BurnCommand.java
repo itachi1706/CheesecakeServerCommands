@@ -37,7 +37,7 @@ public class BurnCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "burn [player] [duration]";
+        return "/burn [player] [duration]";
     }
 
     @Override

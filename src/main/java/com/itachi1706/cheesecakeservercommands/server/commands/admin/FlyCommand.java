@@ -38,7 +38,7 @@ public class FlyCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "fly [player]";
+        return "/fly [player]";
     }
 
     @Override

@@ -38,7 +38,7 @@ public class BiomeInfoCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "biomeinfo [list]";
+        return "/biomeinfo [list]";
     }
 
     @Override

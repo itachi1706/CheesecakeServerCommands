@@ -40,7 +40,7 @@ public class ZeusCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "zeus [player]";
+        return "/zeus [player]";
     }
 
     @Override

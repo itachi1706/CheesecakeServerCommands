@@ -43,7 +43,7 @@ public class MojangServerCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "View Command Help: " + TextFormatting.GOLD + "/mojang help";
+        return "/mojang help";
     }
 
     @Override

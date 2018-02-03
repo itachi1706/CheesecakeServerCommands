@@ -38,7 +38,7 @@ public class GMACommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "gma [player]";
+        return "/gma [player]";
     }
 
     @Override

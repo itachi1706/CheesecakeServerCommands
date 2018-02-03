@@ -39,7 +39,7 @@ public class ClearInventoryCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "ci [player] [item] [damage]";
+        return "/ci [player] [item] [damage]";
     }
 
     @Override

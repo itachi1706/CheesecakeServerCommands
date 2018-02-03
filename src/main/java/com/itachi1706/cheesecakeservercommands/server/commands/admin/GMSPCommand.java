@@ -38,7 +38,7 @@ public class GMSPCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "gmsp [player]";
+        return "/gmsp [player]";
     }
 
     @Override

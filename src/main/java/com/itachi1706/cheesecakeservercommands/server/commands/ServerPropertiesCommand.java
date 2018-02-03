@@ -40,7 +40,7 @@ public class ServerPropertiesCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "Usage: /serverproperties";
+        return "/serverproperties";
     }
 
     @Override

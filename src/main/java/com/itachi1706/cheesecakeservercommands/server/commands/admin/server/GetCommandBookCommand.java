@@ -43,7 +43,7 @@ public class GetCommandBookCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "getcommandbook [player]";
+        return "/getcommandbook [player]";
     }
 
     @Override

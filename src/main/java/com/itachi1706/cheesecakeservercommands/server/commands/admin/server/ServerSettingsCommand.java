@@ -45,7 +45,7 @@ public class ServerSettingsCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "serversettings <option> [value]";
+        return "/serversettings <option> [value]";
     }
 
     @Override

@@ -38,7 +38,7 @@ public class RepairCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "repairitem [player]";
+        return "/repairitem [player]";
     }
 
     @Override

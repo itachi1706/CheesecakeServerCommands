@@ -40,7 +40,7 @@ public class InvSeeCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "invsee [player]";
+        return "/invsee [player]";
     }
 
     @Override

@@ -41,7 +41,7 @@ public class MainCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "cheesecakeservercommands list";
+        return "/cheesecakeservercommands list";
     }
 
     @Override

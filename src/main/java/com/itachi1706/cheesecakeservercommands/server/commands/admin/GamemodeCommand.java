@@ -39,7 +39,7 @@ public class GamemodeCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "gm <creative/adventure/survival> [player]";
+        return "/gm <creative/adventure/survival/spectator> [player]";
     }
 
     @Override

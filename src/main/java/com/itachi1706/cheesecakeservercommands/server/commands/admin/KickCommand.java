@@ -38,7 +38,7 @@ public class KickCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "kick <player> [reason]";
+        return "/kick <player> [reason]";
     }
 
     @Override

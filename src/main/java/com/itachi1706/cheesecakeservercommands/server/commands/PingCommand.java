@@ -35,7 +35,7 @@ public class PingCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "ping";
+        return "/ping";
     }
 
     @Override

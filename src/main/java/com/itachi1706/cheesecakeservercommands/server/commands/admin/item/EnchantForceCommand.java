@@ -41,7 +41,7 @@ public class EnchantForceCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "enchantforce <enchantmentname> [level]";
+        return "/enchantforce <enchantmentname> [level]";
     }
 
     @Override

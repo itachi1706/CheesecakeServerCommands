@@ -56,7 +56,7 @@ public class CCLoggerCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "View Command Help: " + TextFormatting.GOLD + "/cheesecakelogger help";
+        return "/cheesecakelogger help";
     }
 
     @Override

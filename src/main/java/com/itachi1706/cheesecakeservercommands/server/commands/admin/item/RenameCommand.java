@@ -36,7 +36,7 @@ public class RenameCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "renameitem <newname>";
+        return "/renameitem <newname>";
     }
 
     @Override

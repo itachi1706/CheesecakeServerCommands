@@ -39,7 +39,7 @@ public class TpHereCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "tphere <player>";
+        return "/tphere <player>";
     }
 
     @Override

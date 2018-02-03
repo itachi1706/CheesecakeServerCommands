@@ -37,7 +37,7 @@ public class DuplicateCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "duplicate [amount] [spillover] (Spillover if inventory gets full while duplicating)";
+        return "/duplicate [amount] [spillover] (Spillover if inventory gets full while duplicating)";
     }
 
     @Override

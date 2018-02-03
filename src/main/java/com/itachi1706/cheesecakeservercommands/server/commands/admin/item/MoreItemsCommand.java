@@ -36,7 +36,7 @@ public class MoreItemsCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "more";
+        return "/more";
     }
 
     @Override

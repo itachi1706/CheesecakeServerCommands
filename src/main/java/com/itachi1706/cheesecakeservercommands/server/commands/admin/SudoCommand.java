@@ -39,7 +39,7 @@ public class SudoCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "sudo <player> <command>";
+        return "/sudo <player> <command>";
     }
 
     @Override

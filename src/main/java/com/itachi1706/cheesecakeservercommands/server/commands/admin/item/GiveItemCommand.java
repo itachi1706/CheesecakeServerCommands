@@ -41,7 +41,7 @@ public class GiveItemCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "giveitem <item> [amount] [data] [player] [spillover] (Spillover if inventory gets full while duplicating)";
+        return "/giveitem <item> [amount] [data] [player] [spillover] (Spillover if inventory gets full while duplicating)";
     }
 
     @Override

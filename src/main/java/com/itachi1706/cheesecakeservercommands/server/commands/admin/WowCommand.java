@@ -38,7 +38,7 @@ public class WowCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "wow [player]";
+        return "/wow [player]";
     }
 
     @Override

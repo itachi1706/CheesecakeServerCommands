@@ -39,7 +39,7 @@ public class SmiteCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "smite [player/me/x] [y] [z]";
+        return "/smite [player/me/x] [y] [z]";
     }
 
     @Override

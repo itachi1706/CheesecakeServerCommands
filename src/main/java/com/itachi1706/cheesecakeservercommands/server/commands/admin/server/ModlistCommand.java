@@ -37,7 +37,7 @@ public class ModlistCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "modlist [page]";
+        return "/modlist [page]";
     }
 
     @Override

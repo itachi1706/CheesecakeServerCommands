@@ -38,7 +38,7 @@ public class GMSCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "gms [player]";
+        return "/gms [player]";
     }
 
     @Override
