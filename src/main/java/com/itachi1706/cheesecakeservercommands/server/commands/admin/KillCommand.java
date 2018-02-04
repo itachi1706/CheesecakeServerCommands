@@ -39,7 +39,7 @@ public class KillCommand implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/kill [player]";
+        return "/kill [player] [cause]";
     }
 
     @Override
