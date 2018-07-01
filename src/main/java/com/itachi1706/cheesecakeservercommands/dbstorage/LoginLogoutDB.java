@@ -6,6 +6,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
+import javafx.scene.control.TextFormatter;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -84,6 +85,13 @@ public class LoginLogoutDB {
         Statement stmt;
         if (db == null){
             LogHelper.error("Unable to add log due to failed db connection");
+            if (PlayerMPUtil.isOperator((EntityPlayer)player) && type.equalsIgnoreCase("LOGIN")) {
+                try { // Check if ODBC driver is installed if not notify them
+                    Class.forName("org.sqlite.JDBC"); // Success
+                } catch (ClassNotFoundException e) {
+                    ChatHelper.sendMessage(player, TextFormatter.RED + "SQLite ODBC driver not installed. Please inform the server administrator to put it into the mods folder!"); // Fail.
+                }
+            }
             return;
         }
 
