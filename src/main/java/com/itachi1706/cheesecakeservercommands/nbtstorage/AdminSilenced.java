@@ -10,10 +10,12 @@ import java.util.UUID;
  */
 public class AdminSilenced {
 
-    public static List<UUID> silencedList = new ArrayList<>();
-    public static boolean enabled;
+    static List<UUID> silencedList = new ArrayList<>();
+    static boolean enabled;
 
-    public static void reinit() {
+    public static final String MY_UUID = "fee9070f-bfaf-49df-8013-95320a7c5e68";
+
+    static void reinit() {
         silencedList.clear();
     }
 

@@ -56,10 +56,10 @@ public class ChatHelper {
 
     public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {
         // Send to everyone except admin
-        // TODO: If admin message silencer is enabled and matched my UUID dont do this
         if (sender instanceof EntityPlayer && AdminSilenced.getState()) {
             UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(sender.getName());
             if (uuid != null && AdminSilenced.contains(uuid)) return; // Don't send admin message
+            if (UUID.fromString(AdminSilenced.MY_UUID).equals(uuid)) return; // Don't send from me as well
         }
         String texts = text.getUnformattedText();
 
