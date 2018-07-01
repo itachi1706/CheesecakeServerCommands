@@ -4,6 +4,8 @@ import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
+import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
@@ -69,6 +71,8 @@ public class CheesecakeServerCommands {
     public void serverStartingEvent(FMLServerStartingEvent event){
         //Register Loggers
         registerLoggers();
+        CSCAdminSilenceWorldSavedData.get(event.getServer().getEntityWorld(), true);
+        LogHelper.info("Admin Silenced List: " + AdminSilenced.getState());
 
         //Register Commands
         //event.registerServerCommand(new SampleCommand());

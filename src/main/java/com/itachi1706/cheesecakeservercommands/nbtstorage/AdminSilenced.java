@@ -11,7 +11,7 @@ import java.util.UUID;
 public class AdminSilenced {
 
     static List<UUID> silencedList = new ArrayList<>();
-    static boolean enabled;
+    static boolean enabled = false;
 
     public static final String MY_UUID = "fee9070f-bfaf-49df-8013-95320a7c5e68";
 

@@ -1,7 +1,10 @@
 package com.itachi1706.cheesecakeservercommands.nbtstorage;
 
 import com.itachi1706.cheesecakeservercommands.reference.References;
-import net.minecraft.nbt.*;
+import com.itachi1706.cheesecakeservercommands.util.LogHelper;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
@@ -38,6 +41,7 @@ public class CSCAdminSilenceWorldSavedData extends WorldSavedData {
             AdminSilenced.silencedList.add(uuid);
         }
         AdminSilenced.enabled = nbt.getBoolean(SILENCE_ENABLED);
+        LogHelper.info("Read from Admin Silence NBT");
     }
 
 
@@ -50,6 +54,7 @@ public class CSCAdminSilenceWorldSavedData extends WorldSavedData {
         }
         nbt.setTag(SILENCE_LIST, list);
         nbt.setBoolean(SILENCE_ENABLED, AdminSilenced.enabled);
+        LogHelper.info("Wrote to Admin Silence NBT");
         return nbt;
     }
 
