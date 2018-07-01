@@ -104,7 +104,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
 
             if (var5.getCount() == 0)
             {
-                var4.putStack(null);
+                var4.putStack(ItemStack.EMPTY);
             }
             else
             {
