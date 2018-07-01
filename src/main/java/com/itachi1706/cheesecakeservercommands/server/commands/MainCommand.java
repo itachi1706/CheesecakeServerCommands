@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.server.commands;
 
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.AdminSilenceCommand;
 import com.itachi1706.cheesecakeservercommands.server.objects.HelpInitializer;
 import com.itachi1706.cheesecakeservercommands.server.objects.HelpMain;
 import com.itachi1706.cheesecakeservercommands.server.objects.HelpSub;
@@ -67,6 +68,8 @@ public class MainCommand implements ICommand {
                 ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Please select a module. View modules with /csc list");
             else
                 listCommands(args[1], iCommandSender);
+        } else if (subCommand.equalsIgnoreCase("adminsilence")) {
+            AdminSilenceCommand.execute(server, iCommandSender, args);
         }
 
     }
@@ -119,6 +122,9 @@ public class MainCommand implements ICommand {
             }
 
             return CommandBase.getListOfStringsMatchingLastWord(args, viewable);
+        }
+        if (args.length >= 2 && args[0].equalsIgnoreCase("adminsilence")) {
+            return AdminSilenceCommand.getTabCompletions(server, sender, args, targetPos);
         }
         return null;
     }

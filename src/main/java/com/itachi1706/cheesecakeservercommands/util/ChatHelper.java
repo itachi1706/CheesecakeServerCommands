@@ -1,10 +1,10 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
 
@@ -42,12 +42,18 @@ public class ChatHelper {
         sendMessage(sender, getText(text));
     }
 
+    public static void sendMessage(ICommandSender sender, List<String> texts) {
+        for (String text : texts)
+            sendMessage(sender, getText(text));
+    }
+
     public static void sendGlobalMessage(TextComponentString text) {
         ServerUtil.getServerInstance().getPlayerList().sendMessage(text);
     }
 
     public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {
         // Send to everyone except admin
+        // TODO: If admin message silencer is enabled and matched my UUID dont do this
         String texts = text.getUnformattedText();
 
         texts = "[" + sender.getName() + ": " + texts + "]";
