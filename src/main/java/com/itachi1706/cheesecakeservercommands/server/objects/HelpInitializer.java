@@ -36,6 +36,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/gmc [player]", "Set Gamemode to Creative"));
         sub.add(new HelpSub("/gms [player]", "Set Gamemode to Survival"));
         sub.add(new HelpSub("/gmsp [player]", "Set Gamemode to Spectator"));
+        sub.add(new HelpSub("/god [player]", "Enable/Disable invulnerability for a player"));
         sub.add(new HelpSub("/heal [player]", "Heals a player"));
         sub.add(new HelpSub("/invsee [player]", "Views player inventory"));
         sub.add(new HelpSub("/kick <player> [reason]", "Kicks a player from the server with an optional color coded reason"));

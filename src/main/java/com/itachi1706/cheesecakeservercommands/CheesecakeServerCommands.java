@@ -101,6 +101,7 @@ public class CheesecakeServerCommands {
 
         // Essentials Server Commands
         event.registerServerCommand(new FlyCommand());
+        event.registerServerCommand(new GodCommand());
         event.registerServerCommand(new SpeedCommand());
         event.registerServerCommand(new HealCommand());
         event.registerServerCommand(new FeedCommand());
