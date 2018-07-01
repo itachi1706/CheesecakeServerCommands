@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -126,7 +127,7 @@ public class MainCommand implements ICommand {
         if (args.length >= 2 && args[0].equalsIgnoreCase("adminsilence")) {
             return AdminSilenceCommand.getTabCompletions(server, sender, args, targetPos);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -123,13 +124,14 @@ public class AdminSilenceCommand {
     }
 
     public static List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (!checkPermission(server, sender)) return Collections.emptyList();
         if (args.length == 2) {
             return CommandBase.getListOfStringsMatchingLastWord(args, "add", "remove", "on", "off", "list");
         }
         if (args.length == 3 && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public static boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
