@@ -16,6 +16,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -94,7 +95,7 @@ public class KillCommand implements ICommand {
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         if (args.length == 2)
             return CommandBase.getListOfStringsMatchingLastWord(args, new ArrayList<>(CheesecakeServerCommands.knownDamageSources.keySet()));
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

@@ -136,7 +136,7 @@ public class GetCommandBookCommand implements ICommand {
         if (args.length == 1) {
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

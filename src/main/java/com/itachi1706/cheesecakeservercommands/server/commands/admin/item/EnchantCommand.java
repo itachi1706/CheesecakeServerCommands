@@ -2,8 +2,6 @@ package com.itachi1706.cheesecakeservercommands.server.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -14,12 +12,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 /**
  * Created by Kenneth on 9/11/2015.
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
@@ -114,18 +112,18 @@ public class EnchantCommand implements ICommand {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (!PlayerMPUtil.isPlayer(sender)) {
-            return null;
+            return Collections.emptyList();
         }
         if (args.length == 1) {
 
             EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(sender);
             if (player == null) {
-                return null;
+                return Collections.emptyList();
             }
 
             ItemStack stack = player.getHeldItemMainhand();
             if (stack == null) {
-                return null;
+                return Collections.emptyList();
             }
 
             // Get Enchantment List
@@ -143,7 +141,7 @@ public class EnchantCommand implements ICommand {
             return CommandBase.getListOfStringsMatchingLastWord(args, validEnchantmentArray);
         }
 
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

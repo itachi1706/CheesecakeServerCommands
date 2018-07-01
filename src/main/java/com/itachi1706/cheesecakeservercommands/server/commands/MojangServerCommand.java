@@ -4,7 +4,6 @@ import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangPremiumPlayer;
 import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangStatusChecker;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -12,9 +11,11 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -102,7 +103,7 @@ public class MojangServerCommand implements ICommand {
             return CommandBase.getListOfStringsMatchingLastWord(args, "status", "premium");
         if (args.length == 2 && args[0].equalsIgnoreCase("premium"))
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

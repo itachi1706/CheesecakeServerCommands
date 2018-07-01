@@ -15,6 +15,7 @@ import net.minecraft.world.biome.Biome;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -106,7 +107,7 @@ public class BiomeInfoCommand implements ICommand {
         if (args.length == 1) {
             return CommandBase.getListOfStringsMatchingLastWord(args, "list");
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
