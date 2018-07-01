@@ -35,6 +35,10 @@ public class AdminSilenced {
         return silencedList;
     }
 
+    public static boolean contains(UUID uuid) {
+        return silencedList.contains(uuid);
+    }
+
     public static boolean enable(CSCAdminSilenceWorldSavedData nbt) {
         if (enabled) return false;
         enabled = true;
