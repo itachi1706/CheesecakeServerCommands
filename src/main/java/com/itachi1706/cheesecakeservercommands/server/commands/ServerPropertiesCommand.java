@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -54,7 +53,7 @@ public class ServerPropertiesCommand implements ICommand {
 
         if(args.length != 0)
         {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.RED + getUsage(iCommandSender));
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + getUsage(iCommandSender));
             return;
         }
         

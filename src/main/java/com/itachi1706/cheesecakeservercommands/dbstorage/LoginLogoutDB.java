@@ -6,7 +6,6 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -89,7 +88,7 @@ public class LoginLogoutDB {
                 try { // Check if ODBC driver is installed if not notify them
                     Class.forName("org.sqlite.JDBC"); // Success
                 } catch (ClassNotFoundException e) {
-                    ChatHelper.sendMessage(player, ChatFormatting.RED + "SQLite ODBC driver not installed. Please inform the server administrator to put it into the mods folder!"); // Fail.
+                    ChatHelper.sendMessage(player, TextFormatting.RED + "SQLite ODBC driver not installed. Please inform the server administrator to put it into the mods folder!"); // Fail.
                 }
             }
             return;

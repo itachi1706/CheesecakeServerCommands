@@ -2,13 +2,13 @@ package com.itachi1706.cheesecakeservercommands.server.commands;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -54,10 +54,10 @@ public class PingCommand implements ICommand {
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
-            ChatHelper.sendMessage(iCommandSender, ChatFormatting.GREEN + "Pong!");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Pong!");
             return;
         }
-        ChatHelper.sendMessage(player, ChatFormatting.GREEN + "Pong! (" + player.ping + " ms)");
+        ChatHelper.sendMessage(player, TextFormatting.GREEN + "Pong! (" + player.ping + " ms)");
     }
 
     @Override
