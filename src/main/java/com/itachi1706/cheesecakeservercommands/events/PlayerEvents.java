@@ -2,11 +2,13 @@ package com.itachi1706.cheesecakeservercommands.events;
 
 import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
+import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 /**
@@ -39,6 +41,12 @@ public class PlayerEvents {
         if (player instanceof EntityPlayerMP){
             LastKnownUsernameJsonHelper.logGamemodeToLit((EntityPlayerMP)player);
         }
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ServerTickEvent event) {
+        if (NoteblockSongs.playing)
+            NoteblockSongs.player.onTick();
     }
 
     /**

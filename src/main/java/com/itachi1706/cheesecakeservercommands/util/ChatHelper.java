@@ -5,6 +5,9 @@ import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.SPacketChat;
+import net.minecraft.util.text.ChatType;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 
@@ -52,6 +55,14 @@ public class ChatHelper {
 
     public static void sendGlobalMessage(TextComponentString text) {
         ServerUtil.getServerInstance().getPlayerList().sendMessage(text);
+    }
+
+    public static void sendGlobalMessage(ITextComponent text) {
+        ServerUtil.getServerInstance().getPlayerList().sendMessage(text);
+    }
+
+    public static void sendGlobalInfoMessage(ITextComponent text) {
+        ServerUtil.getServerInstance().getPlayerList().sendPacketToAllPlayers(new SPacketChat(text, ChatType.GAME_INFO));
     }
 
     public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {
