@@ -34,17 +34,20 @@ public class NoteblockSongsCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "nbs";
     }
 
     @Override
+    @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
         return "/nbs play/refresh/stop/next";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
@@ -100,19 +103,20 @@ public class NoteblockSongsCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos pos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, "play", "stop", "next", "refresh");
         return Collections.emptyList();
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] p_82358_1_, int p_82358_2_) {
         return false;
     }
 
