@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,22 +35,25 @@ public class SmiteCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "smite";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/smite [player/me/x] [y] [z]";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
         if (args.length == 0)
         {
             // Smite where you are staring at
@@ -118,7 +122,7 @@ public class SmiteCommand implements ICommand {
             ChatHelper.sendMessage(iCommandSender, "CONSOLE can't smite a location. Sorry :(");
             return;
         }
-        int x = 0, y = 0, z = 0;
+        int x, y, z;
 
         EntityPlayerMP player = (EntityPlayerMP) PlayerMPUtil.castToPlayer(iCommandSender);
         if (player == null) {
@@ -166,7 +170,7 @@ public class SmiteCommand implements ICommand {
             if (args[2].startsWith("~")) {
                 z = (int) player.posZ;
                 if (args[2].length() > 1) {
-                    int addval = 0;
+                    int addval;
                     try {
                         addval = Integer.parseInt(args[2].substring(1));
                         z += addval;
@@ -183,19 +187,20 @@ public class SmiteCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return Collections.emptyList();
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,22 +32,25 @@ public class MoreItemsCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "more";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/more";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
         if (!PlayerMPUtil.isPlayer(iCommandSender)) {
             ChatHelper.sendMessage(iCommandSender, "Cannot duplicate max stack items for CONSOLE");
             return;
@@ -84,17 +88,18 @@ public class MoreItemsCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         return Collections.emptyList();
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

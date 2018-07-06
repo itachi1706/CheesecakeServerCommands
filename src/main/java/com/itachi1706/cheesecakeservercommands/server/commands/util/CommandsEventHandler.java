@@ -16,7 +16,7 @@ public class CommandsEventHandler {
         return (int) ((world.getWorldTime() % 24000) / 1000);
     }
 
-    public static int getWorldDays(World world)
+    private static int getWorldDays(World world)
     {
         return (int) (world.getWorldTime() / 24000);
     }
@@ -26,12 +26,12 @@ public class CommandsEventHandler {
         world.setWorldTime((getWorldDays(world) + 1) * 24000 + (target * 1000));
     }
 
-    public static void register(PlayerInvChest inv)
+    static void register(PlayerInvChest inv)
     {
         map.put(inv.owner, inv);
     }
 
-    public static void remove(PlayerInvChest inv)
+    static void remove(PlayerInvChest inv)
     {
         map.remove(inv.owner, inv);
     }

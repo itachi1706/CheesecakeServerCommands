@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,36 +41,39 @@ public class ServerSettingsCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "serversettings";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/serversettings <option> [value]";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @SideOnly(Side.SERVER)
-    public void doSetProperty(String id, Object value)
+    private void doSetProperty(String id, Object value)
     {
         DedicatedServer server = (DedicatedServer) ServerUtil.getServerInstance();
         server.setProperty(id, value);
         server.saveProperties();
     }
 
-    public void setProperty(String id, Object value)
+    private void setProperty(String id, Object value)
     {
         if (FMLCommonHandler.instance().getSide() == Side.SERVER)
             doSetProperty(id, value);
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
         if (!ServerUtil.getServerInstance().isDedicatedServer()) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You can only use this command on dedicated servers");
             return;
@@ -153,7 +157,8 @@ public class ServerSettingsCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
             String[] optionArray = new String[options.size()];
             optionArray = options.toArray(optionArray);
@@ -191,12 +196,12 @@ public class ServerSettingsCommand implements ICommand {
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

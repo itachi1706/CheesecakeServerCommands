@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,22 +35,25 @@ public class SudoCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "sudo";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/sudo <player> <command>";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] astring) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] astring) throws CommandException {
         if (astring.length <= 1) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /sudo <player> <command>");
             return;
@@ -71,19 +75,20 @@ public class SudoCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return Collections.emptyList();
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

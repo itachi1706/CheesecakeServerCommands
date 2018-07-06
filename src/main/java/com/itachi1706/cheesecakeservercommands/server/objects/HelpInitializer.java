@@ -21,7 +21,7 @@ public class HelpInitializer {
         help.add(new HelpMain("adminitem", "Admin (Items) Module Commands", initializeAdminItem(), true));
         help.add(new HelpMain("adminworld", "Admin (World/Server) Module Commands", initializeAdminWorldServer(), true));
         help.add(new HelpMain("general", "General Module Commands", initializeGeneral()));
-        return help.toArray(new HelpMain[help.size()]);
+        return help.toArray(new HelpMain[0]);
     }
 
     private static HelpSub[] initializeAdmin() {
@@ -49,7 +49,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/tpto <player>", "Teleports to a player"));
         sub.add(new HelpSub("/wow [player]", "Trolls yourself or another player"));
         sub.add(new HelpSub("/zeus [player]", "Let a player suffer the Wrath of Zeus"));
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 
     private static HelpSub[] initializeAdminItem() {
@@ -67,7 +67,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/more", "Max Stack your current main held item"));
         sub.add(new HelpSub("/renameitem", "Rename the item current held in your main hand"));
         sub.add(new HelpSub("/repairitem", "Restores Full Durability to the item currently held in your main hand"));
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 
     private static HelpSub[] initializeAdminWorldServer() {
@@ -79,7 +79,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/getcommandbook [player]", "Gives yourself or a player a book containing all commands on the server"));
         sub.add(new HelpSub("/modlist [page]", "List of mods on the server"));
         sub.add(new HelpSub("/serversettings <option> [value]", "Set or Get Server Settings dynamically"));
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 
     private static HelpSub[] initializeLogger() {
@@ -90,20 +90,20 @@ public class HelpInitializer {
         sub.add(new HelpSub("/cclogger delloginhistory <player>", "Delete Player History"));
         sub.add(new HelpSub("/cclogger lastseen <player>", "Gets Last Seen of Player"));
         sub.add(new HelpSub("/cclogger lastknownusername <player/UUID>", "Get list of last known names of a player"));
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 
     private static HelpSub[] initializeServerProperties() {
         List<HelpSub> sub = new ArrayList<>();
         sub.add(new HelpSub("/serverproperties", "View Server Properties"));
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 
     private static HelpSub[] initializeMojang() {
         List<HelpSub> sub = new ArrayList<>();
         sub.add(new HelpSub("/mojang status", "View Mojang Server Status"));
         sub.add(new HelpSub("/mojang premium <name>", "Check if name is purchased"));
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 
     private static HelpSub[] initializeGeneral() {
@@ -111,12 +111,12 @@ public class HelpInitializer {
         sub.add(new HelpSub("/ping", "Pings the server"));
         sub.add(new HelpSub("/csc list", "Lists out all modules in this utility"));
         sub.add(new HelpSub("/csc modulehelp", "Lists command help for specific module"));
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
     private static HelpSub[] sample() {
         List<HelpSub> sub = new ArrayList<>();
-        return sub.toArray(new HelpSub[sub.size()]);
+        return sub.toArray(new HelpSub[0]);
     }
 }

@@ -15,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -47,17 +48,20 @@ public class CCLoggerCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "cheesecakelogger";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/cheesecakelogger help";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
@@ -79,7 +83,7 @@ public class CCLoggerCommand implements ICommand {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
 
         if(args.length == 0)
         {
@@ -218,7 +222,8 @@ public class CCLoggerCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, "help", "viewlogins", "viewplayerstats", "delloginhistory", "lastknownusername", "lastseen", "stats");
         if (args.length == 2 && (args[0].equalsIgnoreCase("lastknownusername") || args[0].equalsIgnoreCase("lastseen") ||
@@ -237,12 +242,12 @@ public class CCLoggerCommand implements ICommand {
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] args, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

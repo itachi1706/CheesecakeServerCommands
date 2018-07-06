@@ -14,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,12 +29,12 @@ public class SpeedCommand implements ICommand {
 
     private List<String> aliases;
 
-    public static final float DEFAULT_FLY_SPEED = 0.05F;
-    public static final float DEFAULT_WALK_SPEED = 0.1F;
+    private static final float DEFAULT_FLY_SPEED = 0.05F;
+    private static final float DEFAULT_WALK_SPEED = 0.1F;
 
-    public static final String CAPABILITY_ABILITY = "abilities";
-    public static final String CAPABILITY_FLY_SPEED = "flySpeed";
-    public static final String CAPABILITY_WALK_SPEED = "walkSpeed";
+    private static final String CAPABILITY_ABILITY = "abilities";
+    private static final String CAPABILITY_FLY_SPEED = "flySpeed";
+    private static final String CAPABILITY_WALK_SPEED = "walkSpeed";
 
     public SpeedCommand(){
         this.aliases = new ArrayList<>();
@@ -41,22 +42,25 @@ public class SpeedCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "speed";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/speed <fly/walk/all> <speed> [player]";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
 
         if (args.length < 2) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /speed <fly/walk/all> <speed/reset> [player]");
@@ -187,7 +191,8 @@ public class SpeedCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, "fly", "walk", "all");
         if (args[0].equals("fly") || args[0].equals("walk") || args[0].equals("all")) {
@@ -200,12 +205,12 @@ public class SpeedCommand implements ICommand {
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

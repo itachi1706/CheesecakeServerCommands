@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -33,23 +34,26 @@ public class EnchantForceCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "enchantforce";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/enchantforce <enchantmentname> [level]";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @SuppressWarnings("Duplicates")
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
         if (args.length == 0) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /enchantforce <enchantmentname> [level]");
             return;
@@ -69,7 +73,7 @@ public class EnchantForceCommand implements ICommand {
         }
 
         ItemStack stack = player.getHeldItemMainhand();
-        if (stack == null) {
+        if (stack.equals(ItemStack.EMPTY)) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Item held");
             return;
         }
@@ -110,7 +114,8 @@ public class EnchantForceCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (!PlayerMPUtil.isPlayer(sender)) {
             return Collections.emptyList();
         }
@@ -122,7 +127,7 @@ public class EnchantForceCommand implements ICommand {
             }
 
             ItemStack stack = player.getHeldItemMainhand();
-            if (stack == null) {
+            if (stack.equals(ItemStack.EMPTY)) {
                 return Collections.emptyList();
             }
 
@@ -146,12 +151,12 @@ public class EnchantForceCommand implements ICommand {
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

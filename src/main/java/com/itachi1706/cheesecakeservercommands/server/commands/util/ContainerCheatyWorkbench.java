@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by Kenneth on 5/5/2016.
  * for com.itachi1706.cheesecakeservercommands.util in CheesecakeServerCommands
@@ -55,7 +57,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+    public boolean canInteractWith(@Nonnull EntityPlayer par1EntityPlayer)
     {
         return true;
     }
@@ -64,9 +66,10 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+    @Nonnull
+    public ItemStack transferStackInSlot(@Nonnull EntityPlayer par1EntityPlayer, int par2)
     {
-        ItemStack var3 = null;
+        ItemStack var3 = ItemStack.EMPTY;
         Slot var4 = inventorySlots.get(par2);
 
         if (var4 != null && var4.getHasStack())
@@ -78,7 +81,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
             {
                 if (!mergeItemStack(var5, 10, 46, true))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
 
                 var4.onSlotChange(var5, var3);
@@ -87,19 +90,19 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
             {
                 if (!mergeItemStack(var5, 37, 46, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else if (par2 >= 37 && par2 < 46)
             {
                 if (!mergeItemStack(var5, 10, 37, false))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else if (!mergeItemStack(var5, 10, 46, false))
             {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (var5.getCount() == 0)
@@ -113,7 +116,7 @@ public class ContainerCheatyWorkbench extends ContainerWorkbench {
 
             if (var5.getCount() == var3.getCount())
             {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             var4.onTake(par1EntityPlayer, var5);

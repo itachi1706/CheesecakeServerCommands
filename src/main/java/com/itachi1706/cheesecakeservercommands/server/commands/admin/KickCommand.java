@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,22 +34,25 @@ public class KickCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "kick";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/kick <player> [reason]";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
 
         if(args.length == 0)
         {
@@ -63,36 +67,37 @@ public class KickCommand implements ICommand {
             return;
         }
 
-        String reason = "Kicked by an operator.";
+        StringBuilder reason = new StringBuilder("Kicked by an operator.");
         if (args.length > 1) {
-            reason = "";
+            reason = new StringBuilder();
             for (int i = 1; i < args.length - 1; i++) {
-                reason += args[i] + " ";
+                reason.append(args[i]).append(" ");
             }
-            reason += args[args.length - 1];
+            reason.append(args[args.length - 1]);
         }
 
-        reason = ChatHelper.formatString(reason);
+        reason = new StringBuilder(ChatHelper.formatString(reason.toString()));
 
-        player.connection.disconnect(new TextComponentString(reason));
+        player.connection.disconnect(new TextComponentString(reason.toString()));
         ChatHelper.sendMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
         ChatHelper.sendAdminMessage(iCommandSender, "Kicked " + player.getName() + " with reason " + reason);
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, ServerUtil.getServerInstance().getOnlinePlayerNames());
         return Collections.emptyList();
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

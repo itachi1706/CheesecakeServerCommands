@@ -6,14 +6,15 @@ import com.itachi1706.cheesecakeservercommands.server.objects.HelpMain;
 import com.itachi1706.cheesecakeservercommands.server.objects.HelpSub;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,22 +38,25 @@ public class MainCommand implements ICommand {
     }
 
     @Override
+    @Nonnull
     public String getName() {
         return "cheesecakeservercommands";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    @Nonnull
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "/cheesecakeservercommands list";
     }
 
     @Override
-    public List getAliases() {
+    @Nonnull
+    public List<String> getAliases() {
         return this.aliases;
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender iCommandSender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
 
         if(args.length == 0)
         {
@@ -75,7 +79,7 @@ public class MainCommand implements ICommand {
 
     }
 
-    public void listCommands(String modules, ICommandSender sender) {
+    private void listCommands(String modules, ICommandSender sender) {
         boolean isOp = PlayerMPUtil.isOperatorOrConsole(sender);
         HelpMain found = null;
         for (HelpMain main : mainHelp) {
@@ -100,7 +104,7 @@ public class MainCommand implements ICommand {
         }
     }
 
-    public void listModules(ICommandSender sender) {
+    private void listModules(ICommandSender sender) {
         boolean isOp = PlayerMPUtil.isOperatorOrConsole(sender);
         ChatHelper.sendMessage(sender, "Modules List");
         // Retrieve Help
@@ -111,7 +115,8 @@ public class MainCommand implements ICommand {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, "list", "modulehelp");
         if (args.length == 2 && args[0].equalsIgnoreCase("modulehelp")) {
@@ -131,12 +136,12 @@ public class MainCommand implements ICommand {
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender iCommandSender) {
+    public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return true;
     }
 
     @Override
-    public boolean isUsernameIndex(String[] p_82358_1_, int p_82358_2_) {
+    public boolean isUsernameIndex(@Nonnull String[] args, int p_82358_2_) {
         return false;
     }
 

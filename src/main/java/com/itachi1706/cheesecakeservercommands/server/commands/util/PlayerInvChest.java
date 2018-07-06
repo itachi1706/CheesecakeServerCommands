@@ -9,15 +9,15 @@ import net.minecraft.inventory.InventoryBasic;
  * for com.itachi1706.cheesecakeservercommands.util in CheesecakeServerCommands
  */
 public class PlayerInvChest extends InventoryBasic {
-    public EntityPlayerMP vieuwer;
+    public EntityPlayerMP viewer;
     public EntityPlayerMP owner;
-    public boolean allowUpdate;
+    private boolean allowUpdate;
 
-    public PlayerInvChest(EntityPlayerMP owner, EntityPlayerMP vieuwer)
+    public PlayerInvChest(EntityPlayerMP owner, EntityPlayerMP viewer)
     {
         super(owner.getName() + "'s inventory", false, owner.inventory.mainInventory.size());
         this.owner = owner;
-        this.vieuwer = vieuwer;
+        this.viewer = viewer;
     }
 
 
