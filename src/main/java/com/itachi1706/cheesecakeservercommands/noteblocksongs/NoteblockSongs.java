@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class NoteblockSongs {
-	public static int currentIndex = 0;
+	private static int currentIndex = 0;
 	public static List<Song> songs = new ArrayList<Song>();
 	public static List<String> names = new ArrayList<String>();
 	private static Iterator<Song> current = songs.iterator();
@@ -31,7 +31,7 @@ public class NoteblockSongs {
 		if (playing) next();
 	}
 	
-	public static void sendMsg() {
+	private static void sendMsg() {
 		try {
             /**
              * What this prints:
@@ -80,7 +80,7 @@ public class NoteblockSongs {
 	 * @param dur The input number of ticks.
 	 * @return The time sring.
 	 */
-	public static String getTimeString(int dur) {
+	private static String getTimeString(int dur) {
 		int duration = dur-1;
 		int secs = duration/40;
 		int hours = secs/3600;
@@ -97,10 +97,17 @@ public class NoteblockSongs {
 	
 	/**
 	 * Plays index-th song.
+	 * @param sender Command Sender
 	 * @param index The numerical order of the song in the list.
 	 */
-	public static void play(int index) {
+	public static void play(ICommandSender sender, int index) {
 		if (playing) player.stop();
+		if (songs.isEmpty()) {
+			ChatHelper.sendMessage(sender, new TextComponentString(
+					TextFormatting.RED + "There are not any songs in songs folder..."
+			));
+			return;
+		}
 		current = songs.iterator();
 		currentIndex = index;
 		if (index > 0) for (int i = 0; i < index; i++) current.next();
@@ -114,13 +121,7 @@ public class NoteblockSongs {
 	 * Plays the first song.
 	 */
 	public static void play(ICommandSender sender) {
-		if (songs.isEmpty()) {
-		    ChatHelper.sendMessage(sender, new TextComponentString(
-                    TextFormatting.RED + "There are not any songs in songs folder..."
-            ));
-			return;
-		}
-		play(0);
+		play(sender,0);
 	}
 	
 	/**
@@ -140,7 +141,7 @@ public class NoteblockSongs {
 	/**
 	 * Pauses playing.
 	 */
-	public static void stop() {
+	private static void stop() {
 		if (playing) player.stop();
 		playing = false;
 	}

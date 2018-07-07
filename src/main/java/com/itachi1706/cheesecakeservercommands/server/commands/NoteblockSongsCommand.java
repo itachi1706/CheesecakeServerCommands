@@ -75,6 +75,10 @@ public class NoteblockSongsCommand implements ICommand {
         switch (subCmd.toLowerCase()) {
             case "help": displayHelp(server); break;
             case "play":
+                if (NoteblockSongs.isPlaying()) {
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Songs are already being played server-wide");
+                    return;
+                }
                 if (args.length > 1) {
                     // see if its chat, info or all
                     switch (args[1].toLowerCase()) {
@@ -98,6 +102,10 @@ public class NoteblockSongsCommand implements ICommand {
                 NoteblockSongs.play(iCommandSender);
                 break;
             case "stop":
+                if (!NoteblockSongs.isPlaying()) {
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Songs are already not being played server-wide");
+                    return;
+                }
                 NoteblockSongs.refreshSongs();
                 ChatHelper.sendMessage(iCommandSender, "Stopped playing songs");
                 break;
