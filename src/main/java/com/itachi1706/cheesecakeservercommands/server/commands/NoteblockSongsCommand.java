@@ -29,19 +29,20 @@ public class NoteblockSongsCommand implements ICommand {
     public NoteblockSongsCommand(){
         this.aliases = new ArrayList<>();
         this.aliases.add("noteblocksongs");
+        this.aliases.add("midi");
         this.aliases.add("nbs");
     }
 
     @Override
     @Nonnull
     public String getName() {
-        return "nbs";
+        return "noteblocksongs";
     }
 
     @Override
     @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "/nbs help/play/refresh/stop/next/randomplay/list/nowplaying";
+        return "/midi help/play/refresh/stop/next/randomplay/list/nowplaying";
     }
 
     @Override
@@ -52,14 +53,15 @@ public class NoteblockSongsCommand implements ICommand {
 
     private void displayHelp(ICommandSender sender) {
         ChatHelper.sendMessage(sender, TextFormatting.DARK_GREEN + "--- Commands for Noteblock Songs ---");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs help" + TextFormatting.WHITE + " Displays this help page");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs nowplaying" + TextFormatting.WHITE + " View currently playing song");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs play [all/chat/info] [index]" + TextFormatting.WHITE + " Starts server-wide song playing");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs refresh" + TextFormatting.WHITE + " Refreshes song list");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs stop" + TextFormatting.WHITE + " Stops server-wide song playing");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs next" + TextFormatting.WHITE + " Skips to the next song");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs list [page]" + TextFormatting.WHITE + " List all songs on the server");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs randomplay [all/chat/info]" + TextFormatting.WHITE + " Starts playing server-wide songs in random order");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi help" + TextFormatting.WHITE + " Displays this help page");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi nowplaying" + TextFormatting.WHITE + " View currently playing song");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi play [all/chat/info] [index]" + TextFormatting.WHITE + " Starts server-wide song playing");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi refresh" + TextFormatting.WHITE + " Refreshes song list");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi stop" + TextFormatting.WHITE + " Stops server-wide song playing");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi next" + TextFormatting.WHITE + " Skips to the next song");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi list [page]" + TextFormatting.WHITE + " List all songs on the server");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/midi randomplay [all/chat/info]" + TextFormatting.WHITE + " Starts playing server-wide songs in random order");
+        ChatHelper.sendMessage(sender, TextFormatting.GREEN + "Tip: You can replace /midi with /nbs or /noteblocksongs if needed (due to mod clash etc.)");
     }
 
     private void displaySongList(ICommandSender sender, int pageIndex) {
@@ -67,7 +69,7 @@ public class NoteblockSongsCommand implements ICommand {
         if (NoteblockSongs.names.size() % 10 != 0) totalPages++;
         if (pageIndex < 1) pageIndex = 1;
         if (pageIndex > totalPages) pageIndex = totalPages;
-        ChatHelper.sendMessage(sender, TextFormatting.DARK_GREEN + "--- Song List Page " + pageIndex + " of " + totalPages + " ---");
+        ChatHelper.sendMessage(sender, TextFormatting.DARK_GREEN + "--- Noteblock Song List Page " + pageIndex + " of " + totalPages + " ---");
         int skipVal = ((pageIndex - 1) * 10) - 1; //0-9, 10-19, 20-29
         int toAdd = skipVal + 2;
         int printed = 0;
@@ -84,7 +86,6 @@ public class NoteblockSongsCommand implements ICommand {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
-
         if(args.length == 0)
         {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: " + getUsage(iCommandSender));
@@ -130,8 +131,7 @@ public class NoteblockSongsCommand implements ICommand {
                             NoteblockSongs.messageState = NoteblockSongs.MESSAGE_STATE_CHAT;
                             break;
                     }
-                } else
-                    ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Started playing songs");
+                } else ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Started playing songs");
                 if (args.length > 2) {
                     try {
                         int index = Integer.parseInt(args[2]);
@@ -157,9 +157,7 @@ public class NoteblockSongsCommand implements ICommand {
                 NoteblockSongs.next();
                 ChatHelper.sendMessage(server, TextFormatting.GREEN + "Skipping to Next Song");
                 break;
-            case "nowplaying":
-                NoteblockSongs.sendMsg(iCommandSender);
-                break;
+            case "nowplaying": NoteblockSongs.sendMsg(iCommandSender); break;
             default: ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: " + getUsage(iCommandSender)); break;
         }
 
