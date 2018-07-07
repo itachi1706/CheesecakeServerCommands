@@ -56,7 +56,7 @@ public class GetCommandBookCommand implements ICommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) {
 
         EntityPlayerMP player;
         if (args.length == 0) {

@@ -8,7 +8,7 @@ import java.util.HashMap;
  *
  */
 public class Layer {
-	private HashMap<Integer, Note> notes = new HashMap<Integer, Note>();
+	private HashMap<Integer, Note> notes = new HashMap<>();
 	private String name;
 	private byte volume;
 	

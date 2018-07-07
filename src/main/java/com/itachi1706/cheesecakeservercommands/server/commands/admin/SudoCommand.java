@@ -53,7 +53,7 @@ public class SudoCommand implements ICommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] astring) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] astring) {
         if (astring.length <= 1) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: /sudo <player> <command>");
             return;

@@ -19,7 +19,7 @@ import java.util.UUID;
 public class LastKnownUsernameJsonHelper {
 
     public static void writeToFile(){
-        LastKnownUsernames[] loginArray = CheesecakeServerCommands.lastKnownUsernames.toArray(new LastKnownUsernames[CheesecakeServerCommands.lastKnownUsernames.size()]);
+        LastKnownUsernames[] loginArray = CheesecakeServerCommands.lastKnownUsernames.toArray(new LastKnownUsernames[0]);
 
         Gson gson = new Gson();
         String jsonString = gson.toJson(loginArray);

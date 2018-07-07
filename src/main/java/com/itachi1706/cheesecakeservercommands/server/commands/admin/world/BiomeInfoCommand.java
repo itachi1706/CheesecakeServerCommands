@@ -52,7 +52,7 @@ public class BiomeInfoCommand implements ICommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) {
         if (!PlayerMPUtil.isPlayer(iCommandSender) && args.length == 0) {
             ChatHelper.sendMessage(iCommandSender, "Cannot view biome for CONSOLE");
             return;

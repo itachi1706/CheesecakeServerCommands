@@ -84,7 +84,7 @@ public class LoginLogoutDB {
         Statement stmt;
         if (db == null){
             LogHelper.error("Unable to add log due to failed db connection");
-            if (PlayerMPUtil.isOperator((EntityPlayer)player) && type.equalsIgnoreCase("LOGIN")) {
+            if (PlayerMPUtil.isOperator(player) && type.equalsIgnoreCase("LOGIN")) {
                 try { // Check if ODBC driver is installed if not notify them
                     Class.forName("org.sqlite.JDBC"); // Success
                 } catch (ClassNotFoundException e) {

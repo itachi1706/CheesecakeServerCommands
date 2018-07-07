@@ -54,7 +54,7 @@ public class ZeusCommand implements ICommand {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) {
         if (args.length == 0)
         {
             // Wrath of Zeus yourself
