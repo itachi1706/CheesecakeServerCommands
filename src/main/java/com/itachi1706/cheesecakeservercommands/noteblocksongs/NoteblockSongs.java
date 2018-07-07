@@ -4,11 +4,14 @@ import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Song;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.objects.NoteblockSong;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
+import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import org.json.simple.JSONObject;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ public class NoteblockSongs {
 		if (playing) next();
 	}
 	
-	private static void sendMsg() {
+	public static void sendMsg(@Nullable ICommandSender sender) {
 		try {
             /**
              * What this prints:
@@ -43,31 +46,39 @@ public class NoteblockSongs {
              * 	{DESC}
              * 	Length: {SONG_LENGTH}
              */
-			String toTell = "[\"\",{\"text\":\"Now playing: \",\"color\":\"gold\"},{\"text\":\"" + names.get(currentIndex)
+			String toTell = "[\"\",{\"text\":\"Now playing: \",\"color\":\"gold\"},{\"text\":\"" + JSONObject.escape(names.get(currentIndex))
 			+ "\",\"color\":\"green\"";
 			StringBuilder chatText = new StringBuilder();
 			chatText.append(toTell).append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"")
-                    .append(player.song.getName().trim().isEmpty() ? names.get(currentIndex) : player.song.getName())
+                    .append(JSONObject.escape(player.song.getName().trim().isEmpty() ? names.get(currentIndex) : player.song.getName()))
                     .append("\\n\",\"color\":\"green\"}");
 			if (!player.song.getAuthor().trim().equals("")) chatText.append(",\"Author: \",{\"text\":\"")
-                    .append(player.song.getAuthor()).append("\\n\",\"color\":\"gold\"}");
+                    .append(JSONObject.escape(player.song.getAuthor())).append("\\n\",\"color\":\"gold\"}");
 			if (!player.song.getOriginalAuthor().trim().equals("")) chatText.append(",\"Original author: \",{\"text\":\"")
-                    .append(player.song.getOriginalAuthor()).append("\\n\",\"color\":\"gold\"}");
+                    .append(JSONObject.escape(player.song.getOriginalAuthor())).append("\\n\",\"color\":\"gold\"}");
 			if (!player.song.getDescription().trim().equals("")) chatText.append(",\"Description: \\n\",{\"text\":\"")
-                    .append(player.song.getDescription()).append("\\n\",\"italic\":true}");
+                    .append(JSONObject.escape(player.song.getDescription())).append("\\n\",\"italic\":true}");
 			chatText.append(",\"Length: \",{\"text\":\"").append(getTimeString(player.length).replaceAll("\"", "\\\\\\\""))
                     .append("\",\"color\":\"gold\"}],\"color\":\"green\"}}]");
 
-			switch (messageState) {
-                case MESSAGE_STATE_CHAT: ChatHelper.sendGlobalMessage(ITextComponent.Serializer.jsonToComponent(chatText.toString())); break;
-                case MESSAGE_STATE_INFO: ChatHelper.sendGlobalInfoMessage(ITextComponent.Serializer.jsonToComponent(toTell + "}]")); break;
-                default:
-                    ChatHelper.sendGlobalMessage(ITextComponent.Serializer.jsonToComponent(chatText.toString()));
-                    ChatHelper.sendGlobalInfoMessage(ITextComponent.Serializer.jsonToComponent(toTell + "}]"));
-                    break;
+            LogHelper.info("NBS: Playing " + names.get(currentIndex));
+            if (sender == null) {
+                switch (messageState) {
+                    case MESSAGE_STATE_CHAT:
+                        ChatHelper.sendGlobalMessage(ITextComponent.Serializer.jsonToComponent(chatText.toString()));
+                        break;
+                    case MESSAGE_STATE_INFO:
+                        ChatHelper.sendGlobalInfoMessage(ITextComponent.Serializer.jsonToComponent(toTell + "}]"));
+                        break;
+                    default:
+                        ChatHelper.sendGlobalMessage(ITextComponent.Serializer.jsonToComponent(chatText.toString()));
+                        ChatHelper.sendGlobalInfoMessage(ITextComponent.Serializer.jsonToComponent(toTell + "}]"));
+                        break;
 
+                }
+            } else {
+                ChatHelper.sendMessage(sender, ITextComponent.Serializer.jsonToComponent(chatText.toString()));
             }
-
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -114,7 +125,7 @@ public class NoteblockSongs {
 		player = new NoteblockSong(current.next());
 		playing = true;
 		player.start();
-		sendMsg();
+		sendMsg(null);
 	}
 	
 	/**
@@ -135,7 +146,7 @@ public class NoteblockSongs {
 		} else currentIndex++;
 		player = new NoteblockSong(current.next());
 		player.start();
-		sendMsg();
+		sendMsg(null);
 	}
 	
 	/**

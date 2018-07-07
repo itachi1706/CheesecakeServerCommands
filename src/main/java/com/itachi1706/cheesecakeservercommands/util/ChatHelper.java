@@ -28,6 +28,10 @@ public class ChatHelper {
         sender.sendMessage(text);
     }
 
+    public static void sendMessage(ICommandSender sender, ITextComponent text) {
+        sender.sendMessage(text);
+    }
+
     public static void sendMessage(ICommandSender sender, String text) {
         sendMessage(sender, getText(text));
     }
@@ -41,6 +45,10 @@ public class ChatHelper {
     }
 
     public static void sendMessage(EntityPlayer sender, TextComponentString text) {
+        sender.sendMessage(text);
+    }
+
+    public static void sendMessage(EntityPlayer sender, ITextComponent text) {
         sender.sendMessage(text);
     }
 

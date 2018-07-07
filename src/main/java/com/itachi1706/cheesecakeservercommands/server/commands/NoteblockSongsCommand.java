@@ -41,7 +41,7 @@ public class NoteblockSongsCommand implements ICommand {
     @Override
     @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "/nbs help/play/refresh/stop/next/randomplay/list";
+        return "/nbs help/play/refresh/stop/next/randomplay/list/nowplaying";
     }
 
     @Override
@@ -53,6 +53,7 @@ public class NoteblockSongsCommand implements ICommand {
     private void displayHelp(ICommandSender sender) {
         ChatHelper.sendMessage(sender, TextFormatting.DARK_GREEN + "--- Commands for Noteblock Songs ---");
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs help" + TextFormatting.WHITE + " Displays this help page");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs nowplaying" + TextFormatting.WHITE + " View currently playing song");
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs play [all/chat/info] [index]" + TextFormatting.WHITE + " Starts server-wide song playing");
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs refresh" + TextFormatting.WHITE + " Refreshes song list");
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs stop" + TextFormatting.WHITE + " Stops server-wide song playing");
@@ -125,6 +126,9 @@ public class NoteblockSongsCommand implements ICommand {
                 NoteblockSongs.next();
                 ChatHelper.sendMessage(server, TextFormatting.GREEN + "Skipping to Next Song");
                 break;
+            case "nowplaying":
+                NoteblockSongs.sendMsg(iCommandSender);
+                break;
             default: ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Usage: " + getUsage(iCommandSender)); break;
         }
 
@@ -134,7 +138,7 @@ public class NoteblockSongsCommand implements ICommand {
     @Nonnull
     public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos pos) {
         if (args.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "list", "next", "play", "randomplay", "refresh", "stop");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "list", "next", "nowplaying", "play", "randomplay", "refresh", "stop");
         if (args.length == 2 && (args[0].equalsIgnoreCase("play") || args[0].equalsIgnoreCase("randomplay")))
             return CommandBase.getListOfStringsMatchingLastWord(args, "all", "chat", "info");
         return Collections.emptyList();
