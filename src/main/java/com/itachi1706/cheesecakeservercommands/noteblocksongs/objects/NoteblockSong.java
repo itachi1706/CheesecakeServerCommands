@@ -16,10 +16,10 @@ import java.util.List;
 
 public class NoteblockSong {
 	public Song song;
-	private static boolean playing = false;
-	private int speed = 4;
-	public int currentTick = 0;
-	public int length = 0;
+	private boolean playing = false;
+	private int speed; // Default 4
+	private int currentTick = 0;
+	public int length;
 	private static final String[] names = {"harp", "bass", "basedrum", "snare", "hat", "guitar", "flute", "bell", "chime", "xylophone"};
 	
 	public void onTick() {
@@ -58,7 +58,7 @@ public class NoteblockSong {
 	}
 	
 	private List<NoteblockNote> getNotesAt(int tick) {
-		List<NoteblockNote> res = new ArrayList<NoteblockNote>();
+		List<NoteblockNote> res = new ArrayList<>();
 		for (Layer l : song.getSongBoard()) {
 			Note n = l.getNoteList().get(tick);
 			if (n != null) res.add(new NoteblockNote(n, l.getVolume()/100f));

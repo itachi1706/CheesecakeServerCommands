@@ -21,8 +21,8 @@ import java.util.Random;
 
 public class NoteblockSongs {
 	private static int currentIndex = 0;
-	public static List<Song> songs = new ArrayList<Song>();
-	public static List<String> names = new ArrayList<String>();
+	public static List<Song> songs = new ArrayList<>();
+	public static List<String> names = new ArrayList<>();
 	private static Iterator<Song> current = songs.iterator();
 	public static boolean playing = false, random = false;
 	public static NoteblockSong player;
@@ -30,6 +30,10 @@ public class NoteblockSongs {
 	public static int messageState = 0; // Defaults to MESSAGE_STATE_CHAT
 
 	public static final int MESSAGE_STATE_CHAT = 0, MESSAGE_STATE_INFO = 1, MESSAGE_STATE_ALL = 2;
+
+	private NoteblockSongs() {
+	    throw new IllegalStateException("This is a utility class");
+    }
 	
 	public static void onSongEnd() {
 		if (playing) next();
@@ -37,15 +41,15 @@ public class NoteblockSongs {
 	
 	public static void sendMsg(@Nullable ICommandSender sender) {
 		try {
-            /**
-             * What this prints:
-             * 	Now playing: {AUTHOR} - {SONG_NAME}
-             * 	Tooltip: {SONG_NAME}
-             * 	Author: {AUTHOR}
-             * 	Original author: {ORIG_AUTHOR}
-             * 	Description:
-             * 	{DESC}
-             * 	Length: {SONG_LENGTH}
+            /*
+              What this prints:
+              	Now playing: {AUTHOR} - {SONG_NAME}
+              	Tooltip: {SONG_NAME}
+              	Author: {AUTHOR}
+              	Original author: {ORIG_AUTHOR}
+              	Description:
+              	{DESC}
+              	Length: {SONG_LENGTH}
              */
 			String toTell = "[\"\",{\"text\":\"Now playing: \",\"color\":\"gold\"},{\"text\":\"" + JSONObject.escape(names.get(currentIndex))
 			+ "\",\"color\":\"green\"";
@@ -97,9 +101,9 @@ public class NoteblockSongs {
 		int secs = duration/40;
 		int hours = secs/3600;
 		int minutes = (secs%3600)/60;
-		String minString = (minutes < 10 && hours > 0) ? "0" + minutes : minutes + "";
+		String minString = (minutes < 10 && hours > 0) ? "0" + minutes : Integer.toString(minutes);
 		int seconds = secs%60;
-		String secString = (seconds < 10 && secs > 59) ? "0" + seconds : seconds + "";
+		String secString = (seconds < 10 && secs > 59) ? "0" + seconds : Integer.toString(seconds);
 		return (hours > 0 ? hours + "h" : "") + ((hours == 0 && minutes > 0) ? minString + ":" : "") + secString + (secs < 60 ? "\"" : "");
 	}
 	
