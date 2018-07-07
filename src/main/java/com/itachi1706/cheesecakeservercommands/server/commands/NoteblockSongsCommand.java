@@ -59,7 +59,7 @@ public class NoteblockSongsCommand implements ICommand {
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs stop" + TextFormatting.WHITE + " Stops server-wide song playing");
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs next" + TextFormatting.WHITE + " Skips to the next song");
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs list [page]" + TextFormatting.WHITE + " List all songs on the server");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs randomplay" + TextFormatting.WHITE + " Starts playing server-wide songs in random order");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs randomplay [all/chat/info]" + TextFormatting.WHITE + " Starts playing server-wide songs in random order");
     }
 
     private void displaySongList(ICommandSender sender, int pageIndex) {
@@ -105,12 +105,13 @@ public class NoteblockSongsCommand implements ICommand {
                 }
                 displaySongList(iCommandSender, 1);
                 break;
-            // TODO: Random play command that is just toggling a random boolean
+            case "randomplay": NoteblockSongs.random = true;
             case "play":
                 if (NoteblockSongs.isPlaying()) {
                     ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Songs are already being played server-wide");
                     return;
                 }
+                NoteblockSongs.messageState = NoteblockSongs.MESSAGE_STATE_CHAT; // Reset default
                 if (args.length > 1) {
                     // see if its chat, info or all
                     switch (args[1].toLowerCase()) {

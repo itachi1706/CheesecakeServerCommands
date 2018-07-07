@@ -17,13 +17,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class NoteblockSongs {
 	private static int currentIndex = 0;
 	public static List<Song> songs = new ArrayList<Song>();
 	public static List<String> names = new ArrayList<String>();
 	private static Iterator<Song> current = songs.iterator();
-	public static boolean playing = false;
+	public static boolean playing = false, random = false;
 	public static NoteblockSong player;
 	public static float volume = 1;
 	public static int messageState = 0; // Defaults to MESSAGE_STATE_CHAT
@@ -120,6 +121,7 @@ public class NoteblockSongs {
 			return;
 		}
 		current = songs.iterator();
+		if (random) index = new Random().nextInt(songs.size());
 		currentIndex = index;
 		if (index > 0) for (int i = 0; i < index; i++) current.next();
 		player = new NoteblockSong(current.next());
@@ -140,10 +142,16 @@ public class NoteblockSongs {
 	 */
 	public static void next() {
 		player.stop();
-		if (!current.hasNext()) {
-			current = songs.iterator();
-			currentIndex = 0;
-		} else currentIndex++;
+		if (random) {
+		    current = songs.iterator();
+		    currentIndex = new Random().nextInt(songs.size());
+		    if (currentIndex > 0) for (int i = 0; i < currentIndex; i++) current.next();
+        } else {
+            if (!current.hasNext()) {
+                current = songs.iterator();
+                currentIndex = 0;
+            } else currentIndex++;
+        }
 		player = new NoteblockSong(current.next());
 		player.start();
 		sendMsg(null);
@@ -155,6 +163,7 @@ public class NoteblockSongs {
 	private static void stop() {
 		if (playing) player.stop();
 		playing = false;
+		random = false;
 	}
 	
 	/**
