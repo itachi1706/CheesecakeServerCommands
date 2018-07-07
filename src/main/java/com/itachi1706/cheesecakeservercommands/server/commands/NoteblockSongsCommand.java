@@ -100,7 +100,13 @@ public class NoteblockSongsCommand implements ICommand {
                     }
                 } else
                     ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Started playing songs");
-                // TODO: Check if index is defined, if so play that specific song instead
+                if (args.length > 2) {
+                    try {
+                        int index = Integer.parseInt(args[2]);
+                        NoteblockSongs.play(iCommandSender, index - 1);
+                        return;
+                    } catch (NumberFormatException ignored) {}
+                }
                 NoteblockSongs.play(iCommandSender);
                 break;
             case "stop":
