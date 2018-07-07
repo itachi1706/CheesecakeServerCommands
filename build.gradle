@@ -7,12 +7,20 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+plugins {
+  id 'com.github.johnrengelman.shadow' version '1.2.4'
+}
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 version = "1.12.2-3.0"
 group= "com.itachi1706.cheesecakeservercommands" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "CheesecakeServerCommands"
+
+configurations {
+    shadow
+    compile.extendsFrom shadow
+}
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -55,8 +63,27 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     compile "org.xerial:sqlite-jdbc:3.8.11.1"
-    compile "com.googlecode.json-simple:json-simple:1.1.1"
+    shadow "com.googlecode.json-simple:json-simple:1.1.1"
 }
+
+shadowJar {
+    archiveName = tasks.jar.archiveName
+    configurations = [project.configurations.shadow]
+	relocate "org.json.simple", "com.itachi1706.cheesecakeservercommands.libs.org.json.simple"
+	relocate "org.sqlite", "com.itachi1706.cheesecakeservercommands.libs.org.sqlite"
+	exclude 'junit', 'junit/**'
+	exclude 'org/hamcrest/**', 'org/junit/**', 'LICENSE.txt'
+}
+
+jar {
+    configurations.shadow.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+jar.dependsOn shadowJar
+jar.enabled = false
 
 processResources {
     // this will ensure that this task is redone when the versions change.
