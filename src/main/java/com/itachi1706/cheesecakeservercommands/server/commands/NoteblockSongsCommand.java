@@ -42,13 +42,24 @@ public class NoteblockSongsCommand implements ICommand {
     @Override
     @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "/nbs play/refresh/stop/next";
+        return "/nbs help/play/refresh/stop/next";
     }
 
     @Override
     @Nonnull
     public List<String> getAliases() {
         return this.aliases;
+    }
+
+    private void displayHelp(ICommandSender sender) {
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Commands for Noteblock Songs");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs help" + TextFormatting.WHITE + " Displays this help page");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs play [all/chat/info] [index]" + TextFormatting.WHITE + " Starts server-wide song playing");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs refresh" + TextFormatting.WHITE + " Refreshes song list");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs stop" + TextFormatting.WHITE + " Stops server-wide song playing");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs next" + TextFormatting.WHITE + " Skips to the next song");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs list [page]" + TextFormatting.WHITE + " List all songs on the server");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs randomplay" + TextFormatting.WHITE + " Starts playing server-wide songs in random order");
     }
 
     @Override
@@ -62,10 +73,11 @@ public class NoteblockSongsCommand implements ICommand {
 
         String subCmd = args[0];
         switch (subCmd.toLowerCase()) {
+            case "help": displayHelp(server); break;
             case "play":
                 if (args.length > 1) {
                     // see if its chat, info or all
-                    switch (args[1]) {
+                    switch (args[1].toLowerCase()) {
                         case "all":
                             ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Started playing songs with song info in both chat and hotbar");
                             NoteblockSongs.messageState = NoteblockSongs.MESSAGE_STATE_ALL;
