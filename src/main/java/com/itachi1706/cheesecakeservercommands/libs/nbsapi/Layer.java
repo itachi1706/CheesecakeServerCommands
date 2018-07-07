@@ -16,9 +16,9 @@ public class Layer {
 	 * Creates an empty layer with name and volume.
 	 * @param name The layer's name.
 	 * @param volume The layer's volume (0-100).
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Something went wrong
 	 */
-	public Layer(String name, byte volume) throws IllegalArgumentException {
+	Layer(String name, byte volume) throws IllegalArgumentException {
 		setName(name);
 		setVolume(volume);
 	}
@@ -35,9 +35,9 @@ public class Layer {
 	 * Sets the note at a tick on the layer.
 	 * @param pos The tick where the note is on.
 	 * @param note The note's properties.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Something went wrong
 	 */
-	public void setNote(int pos, Note note) throws IllegalArgumentException {
+	void setNote(int pos, Note note) throws IllegalArgumentException {
 		if (pos < 0) throw new IllegalArgumentException("Note position must not be negative.");
 		notes.put(pos, note);
 	}
@@ -54,7 +54,7 @@ public class Layer {
 		return volume;
 	}
 
-	public void setVolume(byte volume) throws IllegalArgumentException {
+	void setVolume(byte volume) throws IllegalArgumentException {
 		if (volume < 0 || volume > 100) throw new IllegalArgumentException("Volume must be from 0 to 100.");
 		this.volume = volume;
 	}

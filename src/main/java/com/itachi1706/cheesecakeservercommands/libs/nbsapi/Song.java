@@ -8,6 +8,7 @@ import java.io.*;
  *
  * @author Le Duy Quang
  */
+@SuppressWarnings("unused")
 public class Song {
     private short length;
     private short height;
@@ -27,31 +28,29 @@ public class Song {
     private String MidiSchematicFile;
     private List<Layer> songBoard;
 
-    private FileInputStream instream;
     private DataInputStream in;
-    private FileOutputStream outstream;
     private DataOutputStream out;
 
     /**
      * Builds a new song with the given information.
      *
-     * @param length
-     * @param name
-     * @param author
-     * @param originalAuthor
-     * @param description
-     * @param tempo
-     * @param autoSave
-     * @param autoSaveDuration
-     * @param timeSignature
-     * @param minutesSpent
-     * @param leftClicks
-     * @param rightClicks
-     * @param blocksAdded
-     * @param blocksRemoved
-     * @param MidiSchematicFile
-     * @param songBoard
-     * @throws IllegalArgumentException
+     * @param length Song length
+     * @param name Song Name
+     * @param author Song Author
+     * @param originalAuthor Song Original Author
+     * @param description Song Description
+     * @param tempo Song Tempo
+     * @param autoSave Song Auto Save enabled
+     * @param autoSaveDuration Song duration to auto save
+     * @param timeSignature timeSig
+     * @param minutesSpent minutesSpent
+     * @param leftClicks No of Left clicks on NB
+     * @param rightClicks No of Right clicks on NB
+     * @param blocksAdded No of Blocks added
+     * @param blocksRemoved No of Blocks removed
+     * @param MidiSchematicFile MIDI file
+     * @param songBoard Song board
+     * @throws IllegalArgumentException Something went wrong
      */
     public Song(
             short length,
@@ -91,10 +90,10 @@ public class Song {
      * Reads a song from a file.
      *
      * @param fromFile The file that should be read.
-     * @throws IOException
+     * @throws IOException Something went wrong
      */
     public Song(File fromFile) throws IOException {
-        instream = new FileInputStream(fromFile);
+        FileInputStream instream = new FileInputStream(fromFile);
         in = new DataInputStream(instream);
         setLength(readShort());
         setHeight(readShort());
@@ -113,7 +112,7 @@ public class Song {
         setBlocksRemoved(readInt());
         setMidiSchematicFile(readString());
 
-        songBoard = new ArrayList<Layer>();
+        songBoard = new ArrayList<>();
         for (int i = 0; i < height; i++) songBoard.add(new Layer("", (byte) 100));
         int tick = -1;
         while (true) {
@@ -143,7 +142,7 @@ public class Song {
      * Writes the song to the specific file.
      *
      * @param toFile The file to write to.
-     * @throws IOException
+     * @throws IOException Something went wrong
      */
     public void writeSong(File toFile) throws IOException {
         short maxLength = -1;
@@ -157,7 +156,7 @@ public class Song {
         setLength((short) Math.max(1, maxLength));
         setHeight((short) songBoard.size());
 
-        outstream = new FileOutputStream(toFile);
+        FileOutputStream outstream = new FileOutputStream(toFile);
         out = new DataOutputStream(outstream);
         writeShort(length);
         writeShort(height);
@@ -213,11 +212,11 @@ public class Song {
         this.length = length;
     }
 
-    public short getHeight() {
+    private short getHeight() {
         return height;
     }
 
-    protected void setHeight(short height) throws IllegalArgumentException {
+    private void setHeight(short height) throws IllegalArgumentException {
         if (height < 0) throw new IllegalArgumentException("Song height must not be negative.");
         this.height = height;
     }
@@ -242,7 +241,7 @@ public class Song {
         return originalAuthor;
     }
 
-    public void setOriginalAuthor(String originalAuthor) {
+    private void setOriginalAuthor(String originalAuthor) {
         this.originalAuthor = originalAuthor;
     }
 
@@ -258,7 +257,7 @@ public class Song {
         return tempo;
     }
 
-    public void setTempo(short tempo) throws IllegalArgumentException {
+    private void setTempo(short tempo) throws IllegalArgumentException {
         if (tempo < 25) throw new IllegalArgumentException("Tempo is too small!");
         if (tempo % 25 != 0) throw new IllegalArgumentException("Tempo must be a multiplication of 25.");
         this.tempo = tempo;
@@ -268,7 +267,7 @@ public class Song {
         return autoSave;
     }
 
-    public void setAutoSave(boolean autoSave) {
+    private void setAutoSave(boolean autoSave) {
         this.autoSave = autoSave;
     }
 
@@ -276,7 +275,7 @@ public class Song {
         return autoSaveDuration;
     }
 
-    public void setAutoSaveDuration(byte autoSaveDuration) throws IllegalArgumentException {
+    private void setAutoSaveDuration(byte autoSaveDuration) throws IllegalArgumentException {
         if (autoSaveDuration < 1 || autoSaveDuration > 60)
             throw new IllegalArgumentException("Auto-save duration must be from 1 to 60.");
         this.autoSaveDuration = autoSaveDuration;
@@ -286,7 +285,7 @@ public class Song {
         return timeSignature;
     }
 
-    public void setTimeSignature(byte timeSignature) throws IllegalArgumentException {
+    private void setTimeSignature(byte timeSignature) throws IllegalArgumentException {
         if (timeSignature < 2 || timeSignature > 8)
             throw new IllegalArgumentException("Time signature must be from 2 to 8.");
         this.timeSignature = timeSignature;
@@ -296,7 +295,7 @@ public class Song {
         return minutesSpent;
     }
 
-    public void setMinutesSpent(int minutesSpent) throws IllegalArgumentException {
+    private void setMinutesSpent(int minutesSpent) throws IllegalArgumentException {
         if (minutesSpent < 0) throw new IllegalArgumentException("RMinutes spent must not be negative.");
         this.minutesSpent = minutesSpent;
     }
@@ -305,7 +304,7 @@ public class Song {
         return rightClicks;
     }
 
-    public void setRightClicks(int rightClicks) throws IllegalArgumentException {
+    private void setRightClicks(int rightClicks) throws IllegalArgumentException {
         if (rightClicks < 0) throw new IllegalArgumentException("Right-click count must not be negative.");
         this.rightClicks = rightClicks;
     }
@@ -314,7 +313,7 @@ public class Song {
         return leftClicks;
     }
 
-    public void setLeftClicks(int leftClicks) throws IllegalArgumentException {
+    private void setLeftClicks(int leftClicks) throws IllegalArgumentException {
         if (leftClicks < 0) throw new IllegalArgumentException("Left-click count must not be negative.");
         this.leftClicks = leftClicks;
     }
@@ -323,7 +322,7 @@ public class Song {
         return blocksAdded;
     }
 
-    public void setBlocksAdded(int blocksAdded) throws IllegalArgumentException {
+    private void setBlocksAdded(int blocksAdded) throws IllegalArgumentException {
         if (blocksAdded < 0) throw new IllegalArgumentException("Blocks added must not be negative.");
         this.blocksAdded = blocksAdded;
     }
@@ -332,7 +331,7 @@ public class Song {
         return blocksRemoved;
     }
 
-    public void setBlocksRemoved(int blocksRemoved) throws IllegalArgumentException {
+    private void setBlocksRemoved(int blocksRemoved) throws IllegalArgumentException {
         if (blocksRemoved < 0) throw new IllegalArgumentException("Blocks removed must not be negative.");
         this.blocksRemoved = blocksRemoved;
     }
@@ -341,7 +340,7 @@ public class Song {
         return MidiSchematicFile;
     }
 
-    public void setMidiSchematicFile(String midiSchematicFile) {
+    private void setMidiSchematicFile(String midiSchematicFile) {
         MidiSchematicFile = midiSchematicFile;
     }
 
@@ -349,7 +348,7 @@ public class Song {
         return songBoard;
     }
 
-    public void changeSongBoardTo(List<Layer> songBoard) {
+    private void changeSongBoardTo(List<Layer> songBoard) {
         this.songBoard = songBoard;
     }
 

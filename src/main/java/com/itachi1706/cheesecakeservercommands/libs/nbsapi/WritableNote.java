@@ -17,9 +17,9 @@ public class WritableNote {
 	 * @param pitch The note's pitch.
 	 * @param layer The layer number of the note.
 	 * @param location The song tick where the note is on.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Something went wrong
 	 */
-	public WritableNote(Instrument instrument, byte pitch, int layer, int location) throws IllegalArgumentException {
+	WritableNote(Instrument instrument, byte pitch, int layer, int location) throws IllegalArgumentException {
 		if (pitch < 0 || pitch > 87) throw new IllegalArgumentException("Pitch must be frrom 0 to 87.");
 		setInstrument(instrument);
 		setPitch(pitch);
@@ -27,19 +27,19 @@ public class WritableNote {
 		setLocation(location);
 	}
 
-	public Instrument getInstrument() {
+	Instrument getInstrument() {
 		return instrument;
 	}
 
-	public void setInstrument(Instrument instrument) {
+	private void setInstrument(Instrument instrument) {
 		this.instrument = instrument;
 	}
 
-	public byte getPitch() {
+	byte getPitch() {
 		return pitch;
 	}
 
-	public void setPitch(byte pitch) throws IllegalArgumentException {
+	private void setPitch(byte pitch) throws IllegalArgumentException {
 		if (pitch < 0 || pitch > 87) throw new IllegalArgumentException("Pitch must be from 0 to 87.");
 		this.pitch = pitch;
 	}
@@ -52,11 +52,11 @@ public class WritableNote {
 		this.location = location;
 	}
 
-	public int getLayer() {
+	int getLayer() {
 		return layer;
 	}
 
-	public void setLayer(int layer) {
+	private void setLayer(int layer) {
 		this.layer = layer;
 	}
 }

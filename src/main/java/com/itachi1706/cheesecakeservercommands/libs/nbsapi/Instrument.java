@@ -18,7 +18,7 @@ public enum Instrument {
 	XYLOPHONE (9);
 	
 	private final int ID;
-	private Instrument(int ID) {
+	Instrument(int ID) {
 		this.ID = ID;
 	}
 	
@@ -34,7 +34,7 @@ public enum Instrument {
 	 * Determines the instrument from its NBS file ID.
 	 * @param ID The instrument ID (0-9).
 	 * @return The corresponding instrument.
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Not an instrument
 	 */
 	public static Instrument fromID(int ID) throws IllegalArgumentException {
 		switch (ID) {
