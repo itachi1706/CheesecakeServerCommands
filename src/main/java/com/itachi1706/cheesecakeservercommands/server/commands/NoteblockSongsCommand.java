@@ -62,6 +62,26 @@ public class NoteblockSongsCommand implements ICommand {
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "/nbs randomplay" + TextFormatting.WHITE + " Starts playing server-wide songs in random order");
     }
 
+    private void displaySongList(ICommandSender sender, int pageIndex) {
+        int totalPages = NoteblockSongs.names.size() / 10;
+        if (NoteblockSongs.names.size() % 10 != 0) totalPages++;
+        if (pageIndex < 1) pageIndex = 1;
+        if (pageIndex > totalPages) pageIndex = totalPages;
+        ChatHelper.sendMessage(sender, TextFormatting.DARK_GREEN + "--- Song List Page " + pageIndex + " of " + totalPages + " ---");
+        int skipVal = ((pageIndex - 1) * 10) - 1; //0-9, 10-19, 20-29
+        int toAdd = skipVal + 2;
+        int printed = 0;
+        for (String name : NoteblockSongs.names) {
+            if (skipVal >= 0) {
+                skipVal--;
+                continue;
+            }
+            if (printed >= 10) break;
+            ChatHelper.sendMessage(sender, (toAdd + printed) + ". " + name);
+            printed++;
+        }
+    }
+
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
 
@@ -74,7 +94,17 @@ public class NoteblockSongsCommand implements ICommand {
         String subCmd = args[0];
         switch (subCmd.toLowerCase()) {
             case "help": displayHelp(iCommandSender); break;
-            // TODO: List command that list all songs with an index, paginated by pages of 10 songs
+            case "list":
+                if (args.length > 1) {
+                    int index = 0;
+                    try {
+                        index = Integer.parseInt(args[1]);
+                    } catch (NumberFormatException ignored) {}
+                    displaySongList(iCommandSender, index);
+                    return;
+                }
+                displaySongList(iCommandSender, 1);
+                break;
             // TODO: Random play command that is just toggling a random boolean
             case "play":
                 if (NoteblockSongs.isPlaying()) {
