@@ -6,6 +6,7 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJson
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
+import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
@@ -16,6 +17,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.GetC
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ModlistCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ServerSettingsCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.world.BiomeInfoCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.NoteblockSongsCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
 import net.minecraft.util.DamageSource;
@@ -137,6 +139,10 @@ public class CheesecakeServerCommands {
 
         // Initialize Damage Sources
         InitDamageSources.initalizeDamages();
+
+        // NBS Player
+        event.registerServerCommand(new NoteblockSongsCommand());
+        NoteblockSongs.refreshSongs();
     }
 
     @Mod.EventHandler
