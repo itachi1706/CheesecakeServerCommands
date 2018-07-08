@@ -5,12 +5,14 @@ before_install:
 - chmod +x gradlew
 script: "./gradlew build"
 after_success:
-- ls ./build/libs
+- echo "Downloading SQLite JDBC 3.23.1 dependency to be bundled into the git release"
+- wget -P ./build/libs https://bitbucket.org/xerial/sqlite-jdbc/downloads/sqlite-jdbc-3.23.1.jar
+- ls -lsh ./build/libs
 deploy:
   provider: releases
   api_key: "$OAUTH_KEY"
   file_glob: true
-  file: "./build/libs/CheesecakeServerCommands*.jar"
+  file: "./build/libs/*.jar"
   skip_cleanup: true
   on:
     tags: true
