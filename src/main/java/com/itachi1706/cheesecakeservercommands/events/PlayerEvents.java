@@ -1,15 +1,22 @@
 package com.itachi1706.cheesecakeservercommands.events;
 
+import com.itachi1706.cheesecakeservercommands.dbstorage.CommandsLogDB;
 import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.event.CommandEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+
+import java.util.UUID;
 
 /**
  * Created by Kenneth on 9/12/2015.
@@ -47,6 +54,21 @@ public class PlayerEvents {
     public void onTick(TickEvent.ServerTickEvent event) {
         if (NoteblockSongs.playing)
             NoteblockSongs.player.onTick();
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onCommandUse(CommandEvent event) {
+        ICommandSender sender = event.getSender();
+        ICommand commandBase = event.getCommand();
+        String[] args = event.getParameters();
+        String ip = "localhost";
+        String name = sender.getDisplayName().getFormattedText();
+        UUID uuid = UUID.randomUUID();
+        if (sender instanceof EntityPlayerMP) {
+            ip = ((EntityPlayerMP) sender).getPlayerIP();
+            uuid = ((EntityPlayerMP) sender).getUniqueID();
+        }
+        CommandsLogDB.addLog(name, uuid, commandBase.getName(), args, ip);
     }
 
     /**

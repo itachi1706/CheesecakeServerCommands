@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands;
 
+import com.itachi1706.cheesecakeservercommands.dbstorage.CommandsLogDB;
 import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
@@ -78,6 +79,7 @@ public class CheesecakeServerCommands {
         //Register Commands
         //event.registerServerCommand(new SampleCommand());
         event.registerServerCommand(new CCLoggerCommand());
+        event.registerServerCommand(new CommandUsageCommand());
         event.registerServerCommand(new MojangServerCommand());
         event.registerServerCommand(new ServerPropertiesCommand());
         event.registerServerCommand(new MainCommand());
@@ -155,7 +157,7 @@ public class CheesecakeServerCommands {
             lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
 
         LoginLogoutDB.checkTablesExists();
-
+        CommandsLogDB.checkTablesExists();
     }
 
 }

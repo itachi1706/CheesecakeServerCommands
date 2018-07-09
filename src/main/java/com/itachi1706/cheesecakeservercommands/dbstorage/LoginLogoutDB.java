@@ -52,21 +52,8 @@ public class LoginLogoutDB {
                 "WORLD TEXT NOT NULL, " +
                 "TYPE VARCHAR(10) NOT NULL);";
 
-        Statement statement;
-        if (db == null){
-            LogHelper.error("Unable to create table as database connection failed");
-            return;
-        }
-
-        try {
-            statement = db.createStatement();
-            statement.executeUpdate(createDB);
-            statement.close();
-            db.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            LogHelper.error("Unable to check table exists");
-        }
+        if (!DBUtils.createTable(db, createDB, "Login/Logout"))
+            LogHelper.error("Login/Logout DB fail to ensure that table is created");
     }
 
     private static void addLog(EntityPlayerMP player, String type){
@@ -81,7 +68,6 @@ public class LoginLogoutDB {
                 + type + "');";
 
         Connection db = getSQLiteDBConnection();
-        Statement stmt;
         if (db == null){
             LogHelper.error("Unable to add log due to failed db connection");
             if (PlayerMPUtil.isOperator(player) && type.equalsIgnoreCase("LOGIN")) {
@@ -94,17 +80,7 @@ public class LoginLogoutDB {
             return;
         }
 
-        try {
-            db.setAutoCommit(false);
-            stmt = db.createStatement();
-            stmt.executeUpdate(insertQuery);
-            stmt.close();
-            db.commit();
-            db.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            LogHelper.error("Unable to insert login record");
-        }
+        DBUtils.insertRecord(db, insertQuery, "Unable to insert login record");
     }
 
     public static void addLoginLog(EntityPlayer player){
@@ -132,33 +108,13 @@ public class LoginLogoutDB {
             LogHelper.error("Unable to add log due to failed db connection");
             return -1;
         }
-        Statement statement;
         int loginCount = 0;
 
         try {
-            db.setAutoCommit(false);
-            statement = db.createStatement();
-            ResultSet rs = statement.executeQuery(queryString);
-            while (rs.next()){
-                String tmp = rs.getString(1);
-                if (tmp != null){
-                    loginCount=Integer.parseInt(tmp);
-                }
-            }
-            rs.close();
-            statement.close();
-            db.close();
+            loginCount = DBUtils.getCount(db, queryString);
         } catch (SQLException e) {
             e.printStackTrace();
             LogHelper.error("Unable to get " + type + " count from database");
-        } catch (NumberFormatException e){
-            LogHelper.error(e.toString());
-            e.printStackTrace();
-            return -2;
-        } catch (Exception e) {
-            LogHelper.error(e.toString());
-            e.printStackTrace();
-            return -1;
         }
 
         return loginCount;
@@ -171,15 +127,8 @@ public class LoginLogoutDB {
             LogHelper.error("Unable to delete logs due to failed db connection");
             return;
         }
-        Statement statement;
-
-        try{
-            db.setAutoCommit(false);
-            statement = db.createStatement();
-            statement.executeUpdate(sqlQuery);
-            db.commit();
-            statement.close();
-            db.close();
+        try {
+            DBUtils.deleteRecord(db, sqlQuery);
             ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + target + " logs for login/logout deleted!");
         } catch (Exception e) {
             ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")");
