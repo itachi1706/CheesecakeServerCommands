@@ -5,6 +5,7 @@ import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +23,7 @@ import java.util.UUID;
  * Created by Kenneth on 9/12/2015.
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.events
  */
+@SuppressWarnings("unused")
 public class PlayerEvents {
 
     @SubscribeEvent
@@ -59,10 +61,12 @@ public class PlayerEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onCommandUse(CommandEvent event) {
         ICommandSender sender = event.getSender();
+        if (ServerUtil.checkIfAdminSilenced(sender)) return; // Don't log admin silenced players
+
         ICommand commandBase = event.getCommand();
         String[] args = event.getParameters();
         String ip = "localhost";
-        String name = sender.getDisplayName().getFormattedText();
+        String name = sender.getDisplayName().getUnformattedText();
         UUID uuid = UUID.randomUUID();
         if (sender instanceof EntityPlayerMP) {
             ip = ((EntityPlayerMP) sender).getPlayerIP();

@@ -1,7 +1,5 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
-import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
-import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,7 +10,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Kenneth on 1/5/2016.
@@ -75,11 +72,7 @@ public class ChatHelper {
 
     public static void sendAdminMessage(ICommandSender sender, TextComponentString text) {
         // Send to everyone except admin
-        if (sender instanceof EntityPlayer && AdminSilenced.getState()) {
-            UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(sender.getName());
-            if (uuid != null && AdminSilenced.contains(uuid)) return; // Don't send admin message
-            if (UUID.fromString(AdminSilenced.MY_UUID).equals(uuid)) return; // Don't send from me as well
-        }
+        if (ServerUtil.checkIfAdminSilenced(sender)) return; // Don't send if admin silenced
         String texts = text.getUnformattedText();
 
         texts = "[" + sender.getName() + ": " + texts + "]";

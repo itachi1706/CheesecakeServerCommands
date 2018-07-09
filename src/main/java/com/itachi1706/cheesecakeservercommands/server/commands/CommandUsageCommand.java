@@ -122,6 +122,9 @@ public class CommandUsageCommand implements ICommand {
             }
 
             String playerName = args[1];
+            if (playerName.equalsIgnoreCase("console") || playerName.equalsIgnoreCase("server"))
+                CommandsLogDB.checkCommandStats(iCommandSender, "Server", UUID.randomUUID());
+
             UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
             if (uuid == null){
                 notOnServerError(playerName, iCommandSender);
@@ -158,12 +161,13 @@ public class CommandUsageCommand implements ICommand {
             return CommandBase.getListOfStringsMatchingLastWord(args, "help", "viewlogs", "viewplayerstats", "dellogs", "stats");
         if (args.length == 2 && (args[0].equalsIgnoreCase("viewplayerstats") || args[0].equalsIgnoreCase("viewlogs") ||
                 args[0].equalsIgnoreCase("dellogs"))) {
-            String[] names = new String[CheesecakeServerCommands.lastKnownUsernames.size()];
+            String[] names = new String[CheesecakeServerCommands.lastKnownUsernames.size() + 1];
             int i = 0;
             for (LastKnownUsernames name : CheesecakeServerCommands.lastKnownUsernames) {
                 names[i] = name.getLastKnownUsername();
                 i++;
             }
+            names[names.length - 1] = "CONSOLE";
             return CommandBase.getListOfStringsMatchingLastWord(args, names);
         }
         return Collections.emptyList();

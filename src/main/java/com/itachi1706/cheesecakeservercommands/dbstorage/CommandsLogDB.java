@@ -76,6 +76,8 @@ public class CommandsLogDB {
 
     private static int getCount(@Nonnull String nameOrUuid){
         String queryString = "SELECT COUNT(*) FROM COMMANDS WHERE (NAME='" + nameOrUuid + "' OR UUID='" + nameOrUuid + "');";
+        if (nameOrUuid.equalsIgnoreCase("console") || nameOrUuid.equalsIgnoreCase("server"))
+            queryString = "SELECT COUNT(*) FROM COMMANDS WHERE (IP='localhost');";
         Connection db = getSQLiteDBConnection();
         if (db == null){
             LogHelper.error("Unable to add log due to failed db connection");
@@ -114,6 +116,8 @@ public class CommandsLogDB {
 
     public static void deleteLogs(ICommandSender iCommandSender, String target){
         String sqlQuery = "DELETE FROM COMMANDS WHERE NAME='" + target + "' OR UUID='" + target + "';";
+        if (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"))
+            sqlQuery = "DELETE FROM COMMANDS WHERE IP='localhost';";
         Connection db = getSQLiteDBConnection();
         if (db == null){
             LogHelper.error("Unable to delete logs due to failed db connection");
@@ -147,6 +151,10 @@ public class CommandsLogDB {
         Statement statement;
 
         String querySQL = "SELECT NAME,UUID,FULL_COMMAND,TIME,IP FROM COMMANDS WHERE (NAME='" + target + "' OR UUID='" + target + "') ORDER BY TIME DESC;";
+
+        // Check if CONSOLE
+        if (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"))
+            querySQL = "SELECT NAME,UUID,FULL_COMMAND,TIME,IP FROM COMMANDS WHERE (IP='localhost') ORDER BY TIME DESC;";
 
         try {
             db.setAutoCommit(false);
@@ -199,7 +207,7 @@ public class CommandsLogDB {
                 ChatHelper.sendMessage(iCommandSender, stringList.get(i));
             }
         }
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "-----------------------------------------------------");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "-------------------------------------------");
     }
 
     public static void checkCommandStats(ICommandSender p, String target, UUID uuid){
@@ -217,6 +225,6 @@ public class CommandsLogDB {
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "Name: " + TextFormatting.RESET + target);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "UUID: " + TextFormatting.RESET + uuid);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "Command Usage Counts: " + TextFormatting.RESET + commands);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "--------------------------------");
+        ChatHelper.sendMessage(p, TextFormatting.GOLD + "-----------------------------");
     }
 }
