@@ -11,9 +11,9 @@ import java.sql.Statement;
  * Created by Kenneth on 9/7/2018.
  * for com.itachi1706.cheesecakeservercommands.dbstorage in CheesecakeServerCommands
  */
-public class DBUtils {
+class DBUtils {
 
-    public static boolean createTable(Connection db, String createSql, String tableName) {
+    static boolean createTable(Connection db, String createSql, String tableName) {
         Statement statement;
         if (db == null){
             LogHelper.error("Unable to create table " + tableName + " as database connection failed");
@@ -33,7 +33,7 @@ public class DBUtils {
         return true;
     }
 
-    public static void insertRecord(Connection db, String insertSql, String errorMsg) {
+    static void insertRecord(Connection db, String insertSql, String errorMsg) {
         Statement stmt;
         try {
             db.setAutoCommit(false);
@@ -48,7 +48,7 @@ public class DBUtils {
         }
     }
 
-    public static void deleteRecord(Connection db, String deleteSql) throws Exception {
+    static void deleteRecord(Connection db, String deleteSql) throws Exception {
         Statement statement;
 
         try{
@@ -63,7 +63,7 @@ public class DBUtils {
         }
     }
 
-    public static int getCount(Connection db, String statementString) throws SQLException {
+    static int getCount(Connection db, String statementString) throws SQLException {
         Statement statement;
         int count = 0;
         try {

@@ -21,6 +21,7 @@ public class HelpInitializer {
         help.add(new HelpMain("adminitem", "Admin (Items) Module Commands", initializeAdminItem(), true));
         help.add(new HelpMain("adminworld", "Admin (World/Server) Module Commands", initializeAdminWorldServer(), true));
         help.add(new HelpMain("general", "General Module Commands", initializeGeneral()));
+        help.add(new HelpMain("commanduse", "Command Logger Module Commands", initializeCommandLogger()));
         return help.toArray(new HelpMain[0]);
     }
 
@@ -90,6 +91,15 @@ public class HelpInitializer {
         sub.add(new HelpSub("/cclogger delloginhistory <player>", "Delete Player History"));
         sub.add(new HelpSub("/cclogger lastseen <player>", "Gets Last Seen of Player"));
         sub.add(new HelpSub("/cclogger lastknownusername <player/UUID>", "Get list of last known names of a player"));
+        return sub.toArray(new HelpSub[0]);
+    }
+
+    private static HelpSub[] initializeCommandLogger() {
+        List<HelpSub> sub = new ArrayList<>();
+        sub.add(new HelpSub("/commanduse stats", "Gets General Command Statistics Info"));
+        sub.add(new HelpSub("/commanduse viewlogs <player> <#>", "View Player Command Usage Info"));
+        sub.add(new HelpSub("/commanduse viewplayerstats <player>", "View Player Command Usage Stats"));
+        sub.add(new HelpSub("/commanduse dellogs <player>", "Delete Player Command Usage History"));
         return sub.toArray(new HelpSub[0]);
     }
 

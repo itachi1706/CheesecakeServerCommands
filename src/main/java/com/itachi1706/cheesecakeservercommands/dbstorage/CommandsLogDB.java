@@ -19,8 +19,7 @@ import java.util.UUID;
 @SuppressWarnings("SqlNoDataSourceInspection")
 public class CommandsLogDB {
 
-    public static Connection getSQLiteDBConnection(){
-
+    private static Connection getSQLiteDBConnection(){
         Connection c;
         try {
             Class.forName("org.sqlite.JDBC");
@@ -66,7 +65,7 @@ public class CommandsLogDB {
         DBUtils.insertRecord(db, insertQuery, "Unable to insert command record");
     }
 
-    public static int getCommandUsageByPlayerNameOrUuid(String name){
+    private static int getCommandUsageByPlayerNameOrUuid(String name){
         return getCount(name);
     }
 

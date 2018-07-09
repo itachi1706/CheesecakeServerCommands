@@ -62,13 +62,13 @@ public class CommandUsageCommand implements ICommand {
     private void sendHelp(ICommandSender iCommandSender){
         ChatHelper.sendMessage(iCommandSender, "Commands List:");
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse stats"
-                + TextFormatting.AQUA + " Gets General Statistics Logged.");
+                + TextFormatting.AQUA + " Gets General Command Statistics Info");
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse viewlogs <player> <#>"
-                + TextFormatting.AQUA + " View Player Login Info");
+                + TextFormatting.AQUA + " View Player Command Usage Info");
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse viewplayerstats <player>"
-                + TextFormatting.AQUA + " View Player Stats");
+                + TextFormatting.AQUA + " View Player Command Usage Stats");
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse dellogs <player>"
-                + TextFormatting.AQUA + " Delete Player History");
+                + TextFormatting.AQUA + " Delete Player Command Usage History");
     }
 
     @Override
@@ -94,15 +94,14 @@ public class CommandUsageCommand implements ICommand {
             int value;
             String playerName = args[1];
             if (args.length == 2){
-                // Check login logs for first page
+                // Check command logs for first page
                 CommandsLogDB.checkCommandLogs(iCommandSender, playerName, 1);
             } else {
-                // Check login logs for whatever page is passed
+                // Check command logs for whatever page is passed
                 value = CommandBase.parseInt(args[2], 1);
                 CommandsLogDB.checkCommandLogs(iCommandSender, playerName, value);
             }
             return;
-
         }
 
         if (subCommand.equalsIgnoreCase("dellogs")){
@@ -151,7 +150,6 @@ public class CommandUsageCommand implements ICommand {
         }
 
         sendHelp(iCommandSender);
-
     }
 
     @Override
