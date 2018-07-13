@@ -80,76 +80,64 @@ public class CommandUsageCommand implements ICommand {
         }
 
         String subCommand = args[0];
-        if (subCommand.equalsIgnoreCase("help")){
-            sendHelp(iCommandSender);
-            return;
+        String playerName;
+        switch (subCommand.toLowerCase()) {
+            case "viewlogs":
+                if (args.length < 2 || args.length > 3) {
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse viewlogs <player> <#>");
+                    break;
+                }
+                playerName = args[1];
+                if (args.length == 2)
+                    CommandsLogDB.checkCommandLogs(iCommandSender, playerName, 1); // Check command logs for first page
+                else {
+                    // Check command logs for whatever page is passed
+                    int value = CommandBase.parseInt(args[2], 1);
+                    CommandsLogDB.checkCommandLogs(iCommandSender, playerName, value);
+                }
+                break;
+            case "stats":
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "                           General Stats");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+                ChatHelper.sendMessage(iCommandSender, "Total Commands Logged: " + TextFormatting.AQUA + CommandsLogDB.getTotalCount());
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+                break;
+            case "viewplayerstats":
+                if (args.length != 2) {
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse viewplayerstats <player>");
+                    break;
+                }
+
+                playerName = args[1];
+                if (playerName.equalsIgnoreCase("console") || playerName.equalsIgnoreCase("server"))
+                    CommandsLogDB.checkCommandStats(iCommandSender, "Server", UUID.randomUUID());
+
+                UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
+                if (uuid == null) {
+                    notOnServerError(playerName, iCommandSender);
+                    break;
+                }
+
+                LastKnownUsernames name = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
+                if (name == null) {
+                    notOnServerError(playerName, iCommandSender);
+                    break;
+                }
+
+                CommandsLogDB.checkCommandStats(iCommandSender, args[1], uuid);
+                break;
+            case "dellogs":
+                if (args.length != 2) {
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse dellogs <player>");
+                    break;
+                }
+
+                CommandsLogDB.deleteLogs(iCommandSender, args[1]);
+                break;
+            case "help":
+            default: sendHelp(iCommandSender); break;
         }
-
-        if (subCommand.equalsIgnoreCase("viewlogs")){
-            if (args.length < 2 || args.length > 3){
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse viewlogs <player> <#>");
-                return;
-            }
-
-            int value;
-            String playerName = args[1];
-            if (args.length == 2){
-                // Check command logs for first page
-                CommandsLogDB.checkCommandLogs(iCommandSender, playerName, 1);
-            } else {
-                // Check command logs for whatever page is passed
-                value = CommandBase.parseInt(args[2], 1);
-                CommandsLogDB.checkCommandLogs(iCommandSender, playerName, value);
-            }
-            return;
-        }
-
-        if (subCommand.equalsIgnoreCase("dellogs")){
-            if (args.length != 2){
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse dellogs <player>");
-                return;
-            }
-
-            CommandsLogDB.deleteLogs(iCommandSender, args[1]);
-            return;
-        }
-
-        if (subCommand.equalsIgnoreCase("viewplayerstats")){
-            if (args.length != 2){
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse viewplayerstats <player>");
-                return;
-            }
-
-            String playerName = args[1];
-            if (playerName.equalsIgnoreCase("console") || playerName.equalsIgnoreCase("server"))
-                CommandsLogDB.checkCommandStats(iCommandSender, "Server", UUID.randomUUID());
-
-            UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
-            if (uuid == null){
-                notOnServerError(playerName, iCommandSender);
-                return;
-            }
-
-            LastKnownUsernames name = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
-            if (name == null){
-                notOnServerError(playerName, iCommandSender);
-                return;
-            }
-
-            CommandsLogDB.checkCommandStats(iCommandSender, args[1], uuid);
-            return;
-        }
-
-        if (subCommand.equalsIgnoreCase("stats")){
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "                           General Stats");
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
-            ChatHelper.sendMessage(iCommandSender, "Total Commands Logged: " + TextFormatting.AQUA + CommandsLogDB.getTotalCount());
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
-            return;
-        }
-
-        sendHelp(iCommandSender);
     }
 
     @Override
