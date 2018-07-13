@@ -47,10 +47,6 @@ public class AdminSilenceCommand {
         switch (subCmd) {
             case "list":
                 List<UUID> uuidList = AdminSilenced.list();
-                if (uuidList.size() <= 0) {
-                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "There are no records on the Admin Message Silence list");
-                    break;
-                }
                 List<String> chatString = new ArrayList<>();
                 chatString.add(TextFormatting.GOLD + "-------------------------------");
                 chatString.add("Found " + uuidList.size() + " names");
@@ -62,7 +58,8 @@ public class AdminSilenceCommand {
                     if (tryPName == null) chatString.add(uuid.toString());
                     else chatString.add(tryPName.getLastKnownUsername() + " (" + uuid.toString() + ")");
                 }
-                chatString.add(TextFormatting.GOLD + "-------------------------------");
+                if (uuidList.size() > 0)
+                    chatString.add(TextFormatting.GOLD + "-------------------------------");
                 ChatHelper.sendMessage(iCommandSender, chatString);
                 break;
             case "on":
