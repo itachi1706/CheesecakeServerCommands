@@ -110,8 +110,10 @@ public class CommandUsageCommand implements ICommand {
                 }
 
                 playerName = args[1];
-                if (playerName.equalsIgnoreCase("console") || playerName.equalsIgnoreCase("server"))
+                if (playerName.equalsIgnoreCase("console") || playerName.equalsIgnoreCase("server")) {
                     CommandsLogDB.checkCommandStats(iCommandSender, "Server", UUID.randomUUID());
+                    break;
+                }
 
                 UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
                 if (uuid == null) {
