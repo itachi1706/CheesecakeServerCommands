@@ -10,6 +10,7 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -66,10 +67,16 @@ public class PlayerEvents {
         ICommand commandBase = event.getCommand();
         String[] args = event.getParameters();
         String ip = "localhost";
-        String name = sender.getDisplayName().getUnformattedText();
+        String name = sender.getName();
         UUID uuid = UUID.randomUUID();
         if (sender instanceof EntityPlayerMP) {
-            ip = ((EntityPlayerMP) sender).getPlayerIP();
+            // Check if fake player
+            if (sender instanceof FakePlayer) {
+                FakePlayer fp = (FakePlayer) sender;
+                name = "FP-" + fp.getClass().getSimpleName();
+                ip = "fp-" + fp.getClass().getSimpleName() + "-" + sender.getName();
+            } else
+                ip = ((EntityPlayerMP) sender).getPlayerIP();
             uuid = ((EntityPlayerMP) sender).getUniqueID();
         }
         CommandsLogDB.addLog(name, uuid, commandBase.getName(), args, ip);
