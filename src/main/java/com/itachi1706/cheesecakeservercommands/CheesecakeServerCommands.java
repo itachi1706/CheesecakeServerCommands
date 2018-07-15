@@ -5,6 +5,8 @@ import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.MP3Songs;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.MP3SongsJsonHelper;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
@@ -42,6 +44,7 @@ import java.util.List;
 public class CheesecakeServerCommands {
 
     public static List<LastKnownUsernames> lastKnownUsernames;
+    public static List<MP3Songs> mp3SongsList;
     public static File configFileDirectory;
     public static HashMap<String, DamageSource> knownDamageSources;
 
@@ -155,6 +158,10 @@ public class CheesecakeServerCommands {
         lastKnownUsernames = new ArrayList<>();
         if (LastKnownUsernameJsonHelper.fileExists())
             lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
+
+        mp3SongsList = new ArrayList<>();
+        if (MP3SongsJsonHelper.fileExists())
+            mp3SongsList = MP3SongsJsonHelper.readFromFile();
 
         LoginLogoutDB.checkTablesExists();
         CommandsLogDB.checkTablesExists();
