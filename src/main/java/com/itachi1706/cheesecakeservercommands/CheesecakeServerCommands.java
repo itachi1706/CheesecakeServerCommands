@@ -10,6 +10,10 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.MP3SongsJsonHelper;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
+import com.itachi1706.cheesecakeservercommands.packets.ClientMessage;
+import com.itachi1706.cheesecakeservercommands.packets.ClientMessageHandler;
+import com.itachi1706.cheesecakeservercommands.packets.ServerMessage;
+import com.itachi1706.cheesecakeservercommands.packets.ServerMessageHandler;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
@@ -30,6 +34,9 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +61,9 @@ public class CheesecakeServerCommands {
     @SidedProxy(clientSide = References.CLIENT_PROXY, serverSide = References.SERVER_PROXY)
     public static IProxy proxy;
 
+    public static final SimpleNetworkWrapper PACKET_INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(References.MOD_ID);
+    public static int packet_id = 0;
+
     @Mod.EventHandler
     public void FMLPreInitEvent(FMLPreInitializationEvent event){
         File file = new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "cheesecakeserver");
@@ -70,6 +80,9 @@ public class CheesecakeServerCommands {
     public void FMLInitEvent(FMLInitializationEvent event){
         MinecraftForge.EVENT_BUS.register(new PlayerEvents());
         MinecraftForge.EVENT_BUS.register(new TeleportHelper());
+
+        PACKET_INSTANCE.registerMessage(ServerMessageHandler.class, ServerMessage.class, packet_id++, Side.SERVER);
+        PACKET_INSTANCE.registerMessage(ClientMessageHandler.class, ClientMessage.class, packet_id++, Side.CLIENT);
     }
 
     @Mod.EventHandler
