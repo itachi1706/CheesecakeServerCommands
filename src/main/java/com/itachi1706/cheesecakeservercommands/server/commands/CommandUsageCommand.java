@@ -16,10 +16,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Kenneth on 9/7/2018.
@@ -116,18 +113,21 @@ public class CommandUsageCommand implements ICommand {
                 }
 
                 UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
-                if (uuid == null) {
-                    notOnServerError(playerName, iCommandSender);
+                if (uuid != null) {
+                    LastKnownUsernames name = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
+                    if (name != null) {
+                        CommandsLogDB.checkCommandStats(iCommandSender, args[1], uuid);
+                        break;
+                    }
+                }
+
+                if (CommandsLogDB.getPlayerNames().contains(playerName)) {
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "User is not a real player, use \"/commanduse viewlogs " + playerName
+                            + "\" to see commands executed under this player");
                     break;
                 }
 
-                LastKnownUsernames name = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
-                if (name == null) {
-                    notOnServerError(playerName, iCommandSender);
-                    break;
-                }
-
-                CommandsLogDB.checkCommandStats(iCommandSender, args[1], uuid);
+                notOnServerError(playerName, iCommandSender);
                 break;
             case "dellogs":
                 if (args.length != 2) {
@@ -149,13 +149,13 @@ public class CommandUsageCommand implements ICommand {
             return CommandBase.getListOfStringsMatchingLastWord(args, "help", "viewlogs", "viewplayerstats", "dellogs", "stats");
         if (args.length == 2 && (args[0].equalsIgnoreCase("viewplayerstats") || args[0].equalsIgnoreCase("viewlogs") ||
                 args[0].equalsIgnoreCase("dellogs"))) {
-            String[] names = new String[CheesecakeServerCommands.lastKnownUsernames.size() + 1];
-            int i = 0;
+            HashSet<String> names = new HashSet<>();
             for (LastKnownUsernames name : CheesecakeServerCommands.lastKnownUsernames) {
-                names[i] = name.getLastKnownUsername();
-                i++;
+                names.add(name.getLastKnownUsername());
             }
-            names[names.length - 1] = "CONSOLE";
+            names.add("CONSOLE");
+            names.addAll(CommandsLogDB.getPlayerNames());
+            names.remove("Server"); // Its already in CONSOLE
             return CommandBase.getListOfStringsMatchingLastWord(args, names);
         }
         return Collections.emptyList();

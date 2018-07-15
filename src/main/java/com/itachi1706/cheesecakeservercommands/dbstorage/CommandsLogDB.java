@@ -79,7 +79,7 @@ public class CommandsLogDB {
             queryString = "SELECT COUNT(*) FROM COMMANDS WHERE (IP='localhost');";
         Connection db = getSQLiteDBConnection();
         if (db == null){
-            LogHelper.error("Unable to add log due to failed db connection");
+            LogHelper.error("Unable to get count due to failed db connection");
             return -1;
         }
         int commandUsageCount = 0;
@@ -225,5 +225,35 @@ public class CommandsLogDB {
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "UUID: " + TextFormatting.RESET + uuid);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "Command Usage Counts: " + TextFormatting.RESET + commands);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "-----------------------------");
+    }
+
+    @Nonnull
+    public static ArrayList<String> getPlayerNames() {
+        Connection db = getSQLiteDBConnection();
+        if (db == null) {
+            LogHelper.error("Unable to get list of player names from DB");
+            return new ArrayList<>();
+        }
+
+        Statement statement;
+        String querySQL = "SELECT DISTINCT NAME FROM COMMANDS;";
+
+        try {
+            db.setAutoCommit(false);
+            statement = db.createStatement();
+            ResultSet rs = statement.executeQuery(querySQL);
+            ArrayList<String> playerList = new ArrayList<>();
+            while (rs.next()){
+                playerList.add(rs.getString("NAME"));
+            }
+            rs.close();
+            statement.close();
+            db.close();
+            return playerList;
+        } catch (Exception e) {
+            LogHelper.error("Error Occurred getting player names (" + e.toString() + ")");
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 }
