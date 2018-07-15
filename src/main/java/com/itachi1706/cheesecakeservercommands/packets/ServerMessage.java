@@ -14,6 +14,10 @@ public class ServerMessage implements IMessage {
 
     private int request;
 
+    public ServerMessage(int request) {
+        this.request = request;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         buf.writeInt(request);

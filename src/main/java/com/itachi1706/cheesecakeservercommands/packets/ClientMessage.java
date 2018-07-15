@@ -17,6 +17,15 @@ public class ClientMessage implements IMessage {
     private long totalDuration, currentDuration;
     private String url, fileName, songName;
 
+    public ClientMessage(int state, long totalDuration, long currentDuration, String url, String fileName, String songName) {
+        this.state = state;
+        this.totalDuration = totalDuration;
+        this.currentDuration = currentDuration;
+        this.url = url;
+        this.fileName = fileName;
+        this.songName = songName;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         buf.writeInt(state);
