@@ -29,7 +29,7 @@ compileJava {
 
 minecraft {
     version = "1.12.2-14.23.4.2705"
-    runDir = "eclipse"
+    runDir = "run"
 
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
@@ -94,6 +94,7 @@ processResources {
         include 'mcmod.info'
 
         // replace version and mcversion
+        // ${version} and ${mcversion}
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
 
