@@ -14,7 +14,6 @@ public class HelpInitializer {
     public static HelpMain[] initialize() {
         List<HelpMain> help = new ArrayList<>();
         help.add(new HelpMain("cheesecakelogger", "Cheesecake Logger Module Commands", initializeLogger(), true));
-        help.add(new HelpMain("ccl", "Cheesecake Logger Module Commands", initializeLogger(), true));
         help.add(new HelpMain("mojang", "Mojang Module Commands", initializeMojang()));
         help.add(new HelpMain("serverproperties", "Server Properties Module Command", initializeServerProperties(), true));
         help.add(new HelpMain("admin", "Admin Module Commands", initializeAdmin(), true));
