@@ -1,13 +1,23 @@
 language: java
 jdk: oraclejdk8
 dist: trusty # Use Ubuntu 14.04 as its faster
+env:
+  global:
+    - DISCORD_URL=https://raw.githubusercontent.com/itachi1706/travis-ci-discord-webhook/master/send.sh
 before_install:
-- chmod +x gradlew
+  - chmod +x gradlew
 script: "./gradlew build"
 after_success:
-- echo "Downloading SQLite JDBC 3.23.1 dependency to be bundled into the git release"
-- wget -P ./build/libs https://bitbucket.org/xerial/sqlite-jdbc/downloads/sqlite-jdbc-3.23.1.jar
-- ls -lsh ./build/libs
+  - echo "Downloading SQLite JDBC 3.23.1 dependency to be bundled into the git release"
+  - wget -P ./build/libs https://bitbucket.org/xerial/sqlite-jdbc/downloads/sqlite-jdbc-3.23.1.jar
+  - ls -lsh ./build/libs
+  - wget $DISCORD_URL
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
+after_failure:
+  - wget $DISCORD_URL
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL
 deploy:
   provider: releases
   api_key: "$OAUTH_KEY"
@@ -19,18 +29,18 @@ deploy:
 notifications:
   irc:
     channels:
-    - chat.freenode.net#itachi1706mc
-    - irc.esper.net#itachi1706
+      - chat.freenode.net#itachi1706mc
+      - irc.esper.net#itachi1706
     on_success: always
     on_failure: always
     template:
-    - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{commit_subject}"
-    - 'Build Status : %{message}'
-    - 'Change view : %{compare_url}'
-    - 'Build details : %{build_url}'
+      - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{commit_subject}"
+      - 'Build Status : %{message}'
+      - 'Change view : %{compare_url}'
+      - 'Build details : %{build_url}'
   email:
     recipients:
-    - "$PRIVATE_EMAIL"
+      - "$PRIVATE_EMAIL"
     on_success: change
     on_failure: always
   slack:
