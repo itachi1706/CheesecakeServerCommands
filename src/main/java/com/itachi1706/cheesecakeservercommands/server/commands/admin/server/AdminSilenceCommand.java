@@ -48,18 +48,17 @@ public class AdminSilenceCommand {
             case "list":
                 List<UUID> uuidList = AdminSilenced.list();
                 List<String> chatString = new ArrayList<>();
-                chatString.add(TextFormatting.GOLD + "-------------------------------");
+                chatString.add(TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
                 chatString.add("Found " + uuidList.size() + " names");
-                chatString.add("Enabled: " + ((AdminSilenced.getState()) ? TextFormatting.GREEN : TextFormatting.RED) +
-                        Boolean.toString(AdminSilenced.getState()));
-                chatString.add(TextFormatting.GOLD + "-------------------------------");
+                chatString.add("Enabled: " + ((AdminSilenced.getState()) ? TextFormatting.GREEN : TextFormatting.RED) + AdminSilenced.getState());
+                chatString.add(TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
                 for (UUID uuid : uuidList) {
                     LastKnownUsernames tryPName = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
                     if (tryPName == null) chatString.add(uuid.toString());
                     else chatString.add(tryPName.getLastKnownUsername() + " (" + uuid.toString() + ")");
                 }
                 if (uuidList.size() > 0)
-                    chatString.add(TextFormatting.GOLD + "-------------------------------");
+                    chatString.add(TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
                 ChatHelper.sendMessage(iCommandSender, chatString);
                 break;
             case "on":

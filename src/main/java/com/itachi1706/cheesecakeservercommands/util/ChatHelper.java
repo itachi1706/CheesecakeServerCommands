@@ -10,6 +10,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by Kenneth on 1/5/2016.
@@ -118,5 +119,33 @@ public class ChatHelper {
         unformattedString = unformattedString.replace("&o", "\u00a7o");
         unformattedString = unformattedString.replace("&r", "\u00a7r");
         return unformattedString;
+    }
+
+    private static final int CHAT_LENGTH = 53;
+
+    public static String generateChatBreaks() {
+        return generateChatBreaks('=');
+    }
+
+    public static String generateChatBreaks(char breakWith) {
+        StringBuilder sb = new StringBuilder();
+        Stream.generate(() -> breakWith).limit(CHAT_LENGTH).forEach(sb::append);
+        return sb.toString();
+    }
+
+    public static String centerText(String text) {
+        return centerText(text, ' ');
+    }
+
+    public static String centerText(String text, char breakWith) {
+        StringBuilder sb = new StringBuilder();
+        int noOfBreaks = (text.length() > CHAT_LENGTH) ? 0 : ((CHAT_LENGTH - text.length()) / 2);
+        if (text.length() < CHAT_LENGTH && breakWith == ' ') noOfBreaks *= 1.5;
+        Stream.generate(() -> breakWith).limit(noOfBreaks).forEach(sb::append);
+        sb.append(text);
+        if (breakWith == ' ' || text.length() > CHAT_LENGTH) return sb.toString();
+        int fillLeft = CHAT_LENGTH - noOfBreaks - text.length(); // Fill up the rest of the chat window
+        Stream.generate(() -> breakWith).limit(fillLeft).forEach(sb::append);
+        return sb.toString();
     }
 }

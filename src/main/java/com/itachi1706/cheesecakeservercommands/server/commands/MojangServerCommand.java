@@ -5,7 +5,6 @@ import com.itachi1706.cheesecakeservercommands.mojangcmd.MojangStatusChecker;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -128,16 +127,16 @@ public class MojangServerCommand implements ICommand {
     }
 
     private void printMojangStatus(ICommandSender sender){
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
-        ChatHelper.sendMessage(sender, TextFormatting.BLUE + "              Mojang Server Checker Status");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
+        ChatHelper.sendMessage(sender, TextFormatting.BLUE + ChatHelper.centerText("Mojang Server Checker Status"));
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
         for (MojangStatusChecker statusChecker : MojangStatusChecker.values()) {
             String service = statusChecker.getName();
             MojangStatusChecker.Status status = statusChecker.getStatus(true);
 
             ChatHelper.sendMessage(sender, service + ": " + status.getColor() + status.getStatus() + " - " + status.getDescription());
         }
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
     }
 
     public void getPremium(ICommandSender sender, String name){

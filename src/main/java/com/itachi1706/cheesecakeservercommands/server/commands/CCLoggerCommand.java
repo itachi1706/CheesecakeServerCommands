@@ -209,11 +209,11 @@ public class CCLoggerCommand implements ICommand {
                 return;
             }
 
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "                           General Stats");
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.centerText("General Stats"));
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
             ChatHelper.sendMessage(iCommandSender, "Total Players Logged: " + TextFormatting.AQUA + CheesecakeServerCommands.lastKnownUsernames.size());
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
             return;
         }
 
@@ -303,14 +303,14 @@ public class CCLoggerCommand implements ICommand {
     }
 
     private void foundAndTellRequesterAboutKnownUsernames(LastKnownUsernames u, ICommandSender sender){
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "=====================================================");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + " Usernames for " + TextFormatting.WHITE + u.getUuid());
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "=====================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.centerText("Usernames for " + TextFormatting.WHITE + u.getUuid()));
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
         ChatHelper.sendMessage(sender, TextFormatting.WHITE + "Size: " + TextFormatting.AQUA + u.getHistoryOfKnownUsernames().size());
         for (String names : u.getHistoryOfKnownUsernames()){
             ChatHelper.sendMessage(sender, TextFormatting.GOLD + names);
         }
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "=====================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
     }
 
     private String convertTime(long time){

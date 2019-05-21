@@ -90,9 +90,9 @@ public class ServerPropertiesCommand implements ICommand {
     private void getServerStats(ICommandSender sender){
         boolean serverSide = FMLCommonHandler.instance().getSide().isServer();
         MinecraftServer tmp = ServerUtil.getServerInstance();
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
-        ChatHelper.sendMessage(sender, TextFormatting.BLUE + "                    Server Status");
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
+        ChatHelper.sendMessage(sender, TextFormatting.BLUE + ChatHelper.centerText("Server Status"));
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server: " + TextFormatting.AQUA + tmp.getServerModName());
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Type: " + TextFormatting.AQUA + ((serverSide) ? "Dedicated Server (MP)" : "Single Player World (SP)"));
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Version: " + TextFormatting.AQUA + tmp.getMinecraftVersion());
@@ -110,7 +110,7 @@ public class ServerPropertiesCommand implements ICommand {
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Generate Structure: " + TextFormatting.AQUA + tmp.canStructuresSpawn());
         if (serverSide) ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Server Whitelist: " + TextFormatting.AQUA + tmp.getPlayerList().isWhiteListEnabled());
         ChatHelper.sendMessage(sender, TextFormatting.GOLD + "Hardcore Mode: " + TextFormatting.AQUA + tmp.isHardcore());
-        ChatHelper.sendMessage(sender, TextFormatting.GOLD + "==================================================");
+        ChatHelper.sendMessage(sender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
     }
 
 }

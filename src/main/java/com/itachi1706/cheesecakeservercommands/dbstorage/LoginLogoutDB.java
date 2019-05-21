@@ -168,18 +168,18 @@ public class LoginLogoutDB {
         int minValue = (arg - 1) * 10;
         int maxValue = (arg * 10) - 1;
         if (maxValue > maxPossibleValue) {	//Exceeds
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "------ Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ------");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.centerText(" Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ", '-'));
             for (int i = minValue; i < stringList.size(); i++){
                 ChatHelper.sendMessage(iCommandSender, stringList.get(i));
             }
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "-----------------------------------------------------");
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
             return;
         }
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "------ Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ------");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.centerText(" Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ", '-'));
         for (int i = minValue; i <= maxValue; i++){
             ChatHelper.sendMessage(iCommandSender, stringList.get(i));
         }
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "-----------------------------------------------------");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
     }
 
     public static void checkLoginStats(ICommandSender p, String target, UUID uuid, String firstPlayed, String lastPlayed){
@@ -255,7 +255,7 @@ public class LoginLogoutDB {
 
 
         //Present them all out
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "-------------------- Login Statistics -------------------");
+        ChatHelper.sendMessage(p, TextFormatting.GOLD + ChatHelper.centerText(" Login Statistics ", '-'));
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "Status: " + TextFormatting.RESET + status);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "Name: " + TextFormatting.RESET + nick);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "OP Status: " + TextFormatting.RESET + opStatus);
@@ -265,7 +265,7 @@ public class LoginLogoutDB {
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "First Joined: " + TextFormatting.RESET + firstPlayed);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "Last Played: " + TextFormatting.RESET + lastPlayed);
         ChatHelper.sendMessage(p, TextFormatting.GOLD + "Current Location: " + TextFormatting.RESET + currentlocation);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "-----------------------------------------------------");
+        ChatHelper.sendMessage(p, TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
     }
 
     private static ArrayList<String> getFullEntityPlayerLogs(String target){
@@ -282,7 +282,6 @@ public class LoginLogoutDB {
             db.setAutoCommit(false);
             statement = db.createStatement();
             ResultSet rs = statement.executeQuery(querySQL);
-            //ChatHelper.sendMessage(p, TextFormatting.GOLD + "--------- Login History For " + target + " ---------");
             int i = 1;
             ArrayList<String> loginHist = new ArrayList<>();
             while (rs.next()){

@@ -94,11 +94,11 @@ public class CommandUsageCommand implements ICommand {
                 }
                 break;
             case "stats":
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "                           General Stats");
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.centerText("General Stats"));
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
                 ChatHelper.sendMessage(iCommandSender, "Total Commands Logged: " + TextFormatting.AQUA + CommandsLogDB.getTotalCount());
-                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "=====================================================");
+                ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
                 break;
             case "viewplayerstats":
                 if (args.length != 2) {

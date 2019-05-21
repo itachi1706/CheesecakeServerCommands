@@ -68,7 +68,7 @@ public class ModlistCommand implements ICommand {
             return;
         }
 
-        ChatHelper.sendMessage(iCommandSender, String.format(TextFormatting.GOLD + "--- Showing modlist page %1$d of %2$d ---", page + 1, pages));
+        ChatHelper.sendMessage(iCommandSender, String.format(TextFormatting.GOLD + ChatHelper.centerText(" Showing modlist page %1$d of %2$d ", '-'), page + 1, pages));
         for (int i = page * perPage; i < min + perPage; i++)
         {
             if (i >= size)
@@ -78,7 +78,7 @@ public class ModlistCommand implements ICommand {
             ModContainer mod = Loader.instance().getModList().get(i);
             ChatHelper.sendMessage(iCommandSender, mod.getName() + " - " + TextFormatting.AQUA + mod.getVersion());
         }
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "-------------------------------");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
     }
 
     @Override
