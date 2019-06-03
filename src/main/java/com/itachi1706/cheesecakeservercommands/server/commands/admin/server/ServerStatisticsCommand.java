@@ -8,14 +8,10 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,8 +23,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * Created by Kenneth on 9/11/2015.
- * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands
+ * Created by Kenneth on 3/6/2019.
+ * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.server.commands.admin.server
  */
 @SuppressWarnings("unused")
 public class ServerStatisticsCommand implements ICommand {
@@ -58,30 +54,8 @@ public class ServerStatisticsCommand implements ICommand {
         return this.aliases;
     }
 
-    @SideOnly(Side.SERVER)
-    private void doSetProperty(String id, Object value)
-    {
-        DedicatedServer server = (DedicatedServer) ServerUtil.getServerInstance();
-        server.setProperty(id, value);
-        server.saveProperties();
-    }
-
-    private void setProperty(String id, Object value)
-    {
-        if (FMLCommonHandler.instance().getSide() == Side.SERVER)
-            doSetProperty(id, value);
-    }
-
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
-        /*if (!ServerUtil.getServerInstance().isDedicatedServer()) {
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "You can only use this command on dedicated servers");
-            return;
-        }*/
-/*        runtime.gc();
-        System.gc();*/
-
-        // TODO: View Server Statistics
         // CPU
         int percentageCPU = -1;
         try {
