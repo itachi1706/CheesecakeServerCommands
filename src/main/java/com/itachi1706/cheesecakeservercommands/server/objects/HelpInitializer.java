@@ -80,6 +80,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/modlist [page]", "List of mods on the server"));
         sub.add(new HelpSub("/serversettings <option> [value]", "Set or Get Server Settings dynamically"));
         sub.add(new HelpSub("/serverstats", "View Server Statistics (CPU/RAM)"));
+        sub.add(new HelpSub("/gc", "Manually runs the JVM Garbage Collector"));
         return sub.toArray(new HelpSub[0]);
     }
 
@@ -107,6 +108,7 @@ public class HelpInitializer {
         List<HelpSub> sub = new ArrayList<>();
         sub.add(new HelpSub("/serverproperties", "View Server Properties"));
         sub.add(new HelpSub("/serverstats", "View Server Statistics (CPU/RAM)"));
+        sub.add(new HelpSub("/gc", "Manually runs the JVM Garbage Collector"));
         return sub.toArray(new HelpSub[0]);
     }
 

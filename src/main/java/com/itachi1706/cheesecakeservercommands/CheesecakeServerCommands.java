@@ -14,10 +14,7 @@ import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.itachi1706.cheesecakeservercommands.server.commands.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.*;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.GetCommandBookCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ModlistCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ServerSettingsCommand;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ServerStatisticsCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
@@ -139,6 +136,7 @@ public class CheesecakeServerCommands {
         event.registerServerCommand(new ModlistCommand());
         event.registerServerCommand(new ServerSettingsCommand());
         event.registerServerCommand(new ServerStatisticsCommand());
+        event.registerServerCommand(new GarbageCollectorCommand());
         event.registerServerCommand(new GetCommandBookCommand());
 
         // Essentials World
