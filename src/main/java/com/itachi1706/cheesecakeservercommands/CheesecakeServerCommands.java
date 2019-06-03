@@ -17,6 +17,7 @@ import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.*;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.GetCommandBookCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ModlistCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ServerSettingsCommand;
+import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.ServerStatisticsCommand;
 import com.itachi1706.cheesecakeservercommands.server.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
@@ -29,7 +30,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
+import javax.management.MBeanServer;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,12 +72,17 @@ public class CheesecakeServerCommands {
         MinecraftForge.EVENT_BUS.register(new TeleportHelper());
     }
 
+    public static MBeanServer platformBean;
+
     @Mod.EventHandler
     public void serverStartingEvent(FMLServerStartingEvent event){
         //Register Loggers
         registerLoggers();
         CSCAdminSilenceWorldSavedData.get(event.getServer().getEntityWorld(), true);
         LogHelper.info("Admin Silenced List: " + AdminSilenced.getState());
+
+        // Init OS Bean
+        platformBean = ManagementFactory.getPlatformMBeanServer();
 
         //Register Commands
         //event.registerServerCommand(new SampleCommand());
@@ -130,6 +138,7 @@ public class CheesecakeServerCommands {
         // Essentials Server
         event.registerServerCommand(new ModlistCommand());
         event.registerServerCommand(new ServerSettingsCommand());
+        event.registerServerCommand(new ServerStatisticsCommand());
         event.registerServerCommand(new GetCommandBookCommand());
 
         // Essentials World
