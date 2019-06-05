@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.server.commands.admin.server;
 
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
+import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -49,8 +50,13 @@ public class GarbageCollectorCommand implements ICommand {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender, @Nonnull String[] args) throws CommandException {
+        long oldUsedMemory = ServerStatisticsCommand.getUsedMemory(Runtime.getRuntime());
+        LogHelper.info("Old Memory Usage: " + ServerStatisticsCommand.getReadableMemorySizeString(oldUsedMemory) + ". Performing GC...");
         System.gc();
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Garbage Collector has been successfully called!");
+        long newUsedMemory = ServerStatisticsCommand.getUsedMemory(Runtime.getRuntime());
+        LogHelper.info("GC Completed. New Memory Usage: " + ServerStatisticsCommand.getReadableMemorySizeString(newUsedMemory));
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + "Garbage Collector has been successfully called! Freed " + ServerStatisticsCommand.
+                getReadableMemorySizeString(oldUsedMemory - newUsedMemory) + " from RAM");
         ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Note: Do not call this command often as it may be detrimental to server performance!");
     }
 

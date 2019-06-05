@@ -79,8 +79,8 @@ public class ServerStatisticsCommand implements ICommand {
         long maxMemory = runtime.maxMemory();
         long allocatedMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
-        long usedMemory = allocatedMemory - freeMemory;
         int processors = runtime.availableProcessors();
+        long usedMemory = getUsedMemory(runtime);
         double percentageMemoryUsed = (usedMemory/(double) maxMemory) * 100;
         double percentageMemoryAllocated = (allocatedMemory/(double) maxMemory) * 100;
 
@@ -113,6 +113,10 @@ public class ServerStatisticsCommand implements ICommand {
         }
 
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
+    }
+
+    public static long getUsedMemory(Runtime runtime) {
+        return runtime.totalMemory() - runtime.freeMemory();
     }
 
     private static String getDimensionPrefix(int dimId)
@@ -165,7 +169,7 @@ public class ServerStatisticsCommand implements ICommand {
         return 0;
     }
     
-    private static String getReadableMemorySizeString(long fileSizeInBytes) {
+    public static String getReadableMemorySizeString(long fileSizeInBytes) {
         int i = -1;
         String[] byteUnits = {"KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
         do {
