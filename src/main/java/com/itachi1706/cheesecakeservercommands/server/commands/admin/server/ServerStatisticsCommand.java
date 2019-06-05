@@ -96,7 +96,7 @@ public class ServerStatisticsCommand implements ICommand {
             int playersOnline = ServerUtil.getServerInstance().getCurrentPlayerCount();
             int maxPlayers = ServerUtil.getServerInstance().getMaxPlayers();
             ChatHelper.sendMessage(iCommandSender, String.format("Players: %s " + TextFormatting.GREEN + "%s" + TextFormatting.RESET + "/" + TextFormatting.RED + "%s",
-                    generatePercentageStep((int) (playersOnline/(double)maxPlayers) * 100), playersOnline, maxPlayers));
+                    generatePercentageStep((int) ((playersOnline/(double)maxPlayers) * 100)), playersOnline, maxPlayers));
         }
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
         ChatHelper.sendMessage(iCommandSender, ChatHelper.centerText("TPS Info"));
