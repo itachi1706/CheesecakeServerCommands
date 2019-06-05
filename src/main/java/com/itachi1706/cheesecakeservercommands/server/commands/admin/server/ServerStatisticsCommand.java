@@ -169,11 +169,11 @@ public class ServerStatisticsCommand implements ICommand {
         return 0;
     }
     
-    public static String getReadableMemorySizeString(long fileSizeInBytes) {
+    static String getReadableMemorySizeString(double fileSizeInBytes) {
         int i = -1;
         String[] byteUnits = {"KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
         do {
-            fileSizeInBytes = fileSizeInBytes / 1024;
+            fileSizeInBytes = fileSizeInBytes / 1024.0;
             i++;
         } while (fileSizeInBytes > 1024);
 
