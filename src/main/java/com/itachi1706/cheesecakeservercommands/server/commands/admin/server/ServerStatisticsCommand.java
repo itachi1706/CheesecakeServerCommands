@@ -80,6 +80,7 @@ public class ServerStatisticsCommand implements ICommand {
         long allocatedMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
         long usedMemory = allocatedMemory - freeMemory;
+        int processors = runtime.availableProcessors();
         double percentageMemoryUsed = (usedMemory/(double) maxMemory) * 100;
         double percentageMemoryAllocated = (allocatedMemory/(double) maxMemory) * 100;
 
@@ -87,7 +88,7 @@ public class ServerStatisticsCommand implements ICommand {
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
         ChatHelper.sendMessage(iCommandSender, ChatHelper.centerText("System Statistics"));
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks());
-        ChatHelper.sendMessage(iCommandSender, String.format("CPU: %s (%d%%)", generatePercentageStep(percentageCPU), percentageCPU));
+        ChatHelper.sendMessage(iCommandSender, String.format("CPU: %s (%d%%) [%s cores]", generatePercentageStep(percentageCPU), percentageCPU, TextFormatting.LIGHT_PURPLE + "" + processors + TextFormatting.RESET));
         ChatHelper.sendMessage(iCommandSender, String.format("Memory: %s " + TextFormatting.GREEN + "%s" + TextFormatting.RESET + "/" + TextFormatting.RED + "%s" + TextFormatting.RESET + " (%.0f%%)",
                 generatePercentageStep((int) percentageMemoryUsed), getReadableMemorySizeString(usedMemory), getReadableMemorySizeString(maxMemory), percentageMemoryUsed));
         ChatHelper.sendMessage(iCommandSender, String.format("Allocated: %s (%.0f%%)", getReadableMemorySizeString(allocatedMemory), percentageMemoryAllocated));
