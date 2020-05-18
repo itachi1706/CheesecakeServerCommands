@@ -5,7 +5,6 @@ import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,7 +29,7 @@ public class LocateCommand implements ICommand {
 
     public LocateCommand(){
         this.aliases = new ArrayList<>();
-        this.aliases.add("locate");
+        this.aliases.add("locateplayer");
         this.aliases.add("loc");
         this.aliases.add("gps");
     }
@@ -38,13 +37,13 @@ public class LocateCommand implements ICommand {
     @Override
     @Nonnull
     public String getName() {
-        return "locate";
+        return "locateplayer";
     }
 
     @Override
     @Nonnull
     public String getUsage(@Nonnull ICommandSender sender) {
-        return "/locate [player]";
+        return "/locateplayer [player]";
     }
 
     @Override
