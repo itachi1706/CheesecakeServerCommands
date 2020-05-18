@@ -41,7 +41,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/invsee [player]", "Views player inventory"));
         sub.add(new HelpSub("/kick <player> [reason]", "Kicks a player from the server with an optional color coded reason"));
         sub.add(new HelpSub("/kill [player] [death cause]", "Kills yourself or another player"));
-        sub.add(new HelpSub("/locate [player]", "Locates a player's location"));
+        sub.add(new HelpSub("/locateplayer [player]", "Locates a player's location"));
         sub.add(new HelpSub("/smite [player/me/x] [y] [z]", "Smites a player or location"));
         sub.add(new HelpSub("/speed <fly/walk/all> <speed/reset> [player]", "Set Fly/Walk speed of player"));
         sub.add(new HelpSub("/sudo <player> <command>", "Runs a command as a user" + TextFormatting.DARK_RED + " (VERY DANGEROUS)"));
