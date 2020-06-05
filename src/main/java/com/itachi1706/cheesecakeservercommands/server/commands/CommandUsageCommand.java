@@ -29,11 +29,13 @@ public class CommandUsageCommand implements ICommand {
     private List<String> aliases;
 
     /* Commands List
-    /commandsuse viewlogs <player> <#>
-    /commandsuse viewplayerstats <player>
-    /commandsuse dellogs <player>
-    /commandsuse help
-    /commandsuse stats */
+    /commanduse viewlogs <player> <#>
+    /commanduse viewplayerstats <player>
+    /commanduse dellogs <player>
+    /commanduse ignore <player>
+    /commanduse unignore <player>
+    /commanduse help
+    /commanduse stats */
 
     public CommandUsageCommand(){
         this.aliases = new ArrayList<>();
@@ -60,13 +62,13 @@ public class CommandUsageCommand implements ICommand {
 
     private void sendHelp(ICommandSender iCommandSender){
         ChatHelper.sendMessage(iCommandSender, "Commands List:");
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse stats"
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commanduse stats"
                 + TextFormatting.AQUA + " Gets General Command Statistics Info");
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse viewlogs <player> <#>"
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commanduse viewlogs <player> <#>"
                 + TextFormatting.AQUA + " View Player Command Usage Info");
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse viewplayerstats <player>"
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commanduse viewplayerstats <player>"
                 + TextFormatting.AQUA + " View Player Command Usage Stats");
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse dellogs <player>"
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commanduse dellogs <player>"
                 + TextFormatting.AQUA + " Delete Player Command Usage History");
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commanduse ignore <player>"
                 + TextFormatting.AQUA + " Exempts name from having its command usage logged");
@@ -87,7 +89,7 @@ public class CommandUsageCommand implements ICommand {
         switch (subCommand.toLowerCase()) {
             case "viewlogs":
                 if (args.length < 2 || args.length > 3) {
-                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse viewlogs <player> <#>");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commanduse viewlogs <player> <#>");
                     break;
                 }
                 playerName = args[1];
@@ -108,7 +110,7 @@ public class CommandUsageCommand implements ICommand {
                 break;
             case "viewplayerstats":
                 if (args.length != 2) {
-                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse viewplayerstats <player>");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commanduse viewplayerstats <player>");
                     break;
                 }
 
@@ -137,7 +139,7 @@ public class CommandUsageCommand implements ICommand {
                 break;
             case "dellogs":
                 if (args.length != 2) {
-                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse dellogs <player>");
+                    ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commanduse dellogs <player>");
                     break;
                 }
 
@@ -145,11 +147,11 @@ public class CommandUsageCommand implements ICommand {
                 break;
             case "help":
             case "ignore":
-                if (args.length != 2) ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse ignore <player>");
+                if (args.length != 2) ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commanduse ignore <player>");
                 else toggleCommandUseException(iCommandSender, true, args[1]);
                 break;
             case "unignore":
-                if (args.length != 2) ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse unignore <player>");
+                if (args.length != 2) ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commanduse unignore <player>");
                 else toggleCommandUseException(iCommandSender, false, args[1]);
                 break;
             default: sendHelp(iCommandSender); break;
@@ -179,7 +181,7 @@ public class CommandUsageCommand implements ICommand {
         if (args.length == 1)
             return CommandBase.getListOfStringsMatchingLastWord(args, "help", "viewlogs", "viewplayerstats", "dellogs", "stats", "ignore", "unignore");
         if (args.length == 2 && (args[0].equalsIgnoreCase("viewplayerstats") || args[0].equalsIgnoreCase("viewlogs") ||
-                args[0].equalsIgnoreCase("dellogs"))) {
+                args[0].equalsIgnoreCase("dellogs")|| args[0].equalsIgnoreCase("ignore")|| args[0].equalsIgnoreCase("unignore"))) {
             HashSet<String> names = new HashSet<>();
             for (LastKnownUsernames name : CheesecakeServerCommands.lastKnownUsernames) {
                 names.add(name.getLastKnownUsername());
