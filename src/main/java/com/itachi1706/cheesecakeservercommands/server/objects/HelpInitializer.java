@@ -101,6 +101,8 @@ public class HelpInitializer {
         sub.add(new HelpSub("/commanduse viewlogs <player> <#>", "View Player Command Usage Info"));
         sub.add(new HelpSub("/commanduse viewplayerstats <player>", "View Player Command Usage Stats"));
         sub.add(new HelpSub("/commanduse dellogs <player>", "Delete Player Command Usage History"));
+        sub.add(new HelpSub("/commanduse ignore <player>", "Exempts name from having its command usage logged"));
+        sub.add(new HelpSub("/commanduse unignore <player>", "Unexempts name from having its command usage logged"));
         return sub.toArray(new HelpSub[0]);
     }
 

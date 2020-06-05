@@ -27,4 +27,8 @@ public class ServerUtil {
         }
         return false;
     }
+
+    public static boolean checkIfCommandUseIgnored(String name) {
+        return AdminSilenced.isIgnored(name);
+    }
 }

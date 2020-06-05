@@ -11,6 +11,7 @@ import java.util.UUID;
 public class AdminSilenced {
 
     static List<UUID> silencedList = new ArrayList<>();
+    static List<String> ignoredCommandUser = new ArrayList<>();
     static boolean enabled = false;
 
     public static final String MY_UUID = "fee9070f-bfaf-49df-8013-95320a7c5e68";
@@ -53,6 +54,20 @@ public class AdminSilenced {
         enabled = false;
         nbt.markDirty();
         return true;
+    }
+
+    public static void ignoreCommandUser(CSCAdminSilenceWorldSavedData nbt, String userName) {
+        ignoredCommandUser.add(userName);
+        nbt.markDirty();
+    }
+
+    public static void unignoreCommandUser(CSCAdminSilenceWorldSavedData nbt, String userName) {
+        ignoredCommandUser.remove(userName);
+        nbt.markDirty();
+    }
+
+    public static boolean isIgnored(String userName) {
+        return ignoredCommandUser.contains(userName);
     }
 
     public static boolean getState() {

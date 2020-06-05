@@ -22,6 +22,7 @@ public class CSCAdminSilenceWorldSavedData extends WorldSavedData {
 
     private static final String SILENCE_LIST = "AdminSilencedList";
     private static final String SILENCE_ENABLED = "AdminSilencedEnabled";
+    private static final String CMDUSE_IGNORE_LIST = "CommandUseList";
 
     public CSCAdminSilenceWorldSavedData() {
         super(DATA_NAME);
@@ -40,6 +41,11 @@ public class CSCAdminSilenceWorldSavedData extends WorldSavedData {
             UUID uuid = UUID.fromString(s);
             AdminSilenced.silencedList.add(uuid);
         }
+        NBTTagList cmdlist = nbt.getTagList(SILENCE_LIST, Constants.NBT.TAG_STRING);
+        for (int i=0;i < cmdlist.tagCount();i++) {
+            String s = cmdlist.getStringTagAt(i);
+            AdminSilenced.ignoredCommandUser.add(s);
+        }
         AdminSilenced.enabled = nbt.getBoolean(SILENCE_ENABLED);
         LogHelper.info("Read from Admin Silence NBT");
     }
@@ -52,7 +58,13 @@ public class CSCAdminSilenceWorldSavedData extends WorldSavedData {
             NBTTagString s = new NBTTagString(uuid.toString());
             list.appendTag(s);
         }
+        NBTTagList cmdList = new NBTTagList();
+        for (String s : AdminSilenced.ignoredCommandUser) {
+            NBTTagString str = new NBTTagString(s);
+            cmdList.appendTag(str);
+        }
         nbt.setTag(SILENCE_LIST, list);
+        nbt.setTag(CMDUSE_IGNORE_LIST, cmdList);
         nbt.setBoolean(SILENCE_ENABLED, AdminSilenced.enabled);
         LogHelper.info("Wrote to Admin Silence NBT");
         return nbt;

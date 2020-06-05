@@ -4,6 +4,8 @@ import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.dbstorage.CommandsLogDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
+import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
 import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
 import net.minecraft.command.CommandBase;
@@ -66,6 +68,10 @@ public class CommandUsageCommand implements ICommand {
                 + TextFormatting.AQUA + " View Player Command Usage Stats");
         ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commandsuse dellogs <player>"
                 + TextFormatting.AQUA + " Delete Player Command Usage History");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commanduse ignore <player>"
+                + TextFormatting.AQUA + " Exempts name from having its command usage logged");
+        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "/commanduse unignore <player>"
+                + TextFormatting.AQUA + " Unexempts name from having its command usage logged");
     }
 
     @Override
@@ -138,7 +144,32 @@ public class CommandUsageCommand implements ICommand {
                 CommandsLogDB.deleteLogs(iCommandSender, args[1]);
                 break;
             case "help":
+            case "ignore":
+                if (args.length != 2) ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse ignore <player>");
+                else toggleCommandUseException(iCommandSender, true, args[1]);
+                break;
+            case "unignore":
+                if (args.length != 2) ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Invalid Usage! Usage: /commandsuse unignore <player>");
+                else toggleCommandUseException(iCommandSender, false, args[1]);
+                break;
             default: sendHelp(iCommandSender); break;
+        }
+    }
+
+    private void toggleCommandUseException(@Nonnull ICommandSender iCommandSender, boolean ignore, String name) {
+        CSCAdminSilenceWorldSavedData data = CSCAdminSilenceWorldSavedData.get(iCommandSender.getEntityWorld(), true);
+        // Sanity check
+        if ((AdminSilenced.isIgnored(name) && ignore) || (!AdminSilenced.isIgnored(name) && !ignore)) {
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Command Usage logging for " + name + " is " + ((ignore) ? "" : "not ") + "currently ignored");
+            return;
+        }
+
+        if (ignore) {
+            AdminSilenced.ignoreCommandUser(data, name);
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + name + " has been added to the command logging ignore list");
+        } else {
+            AdminSilenced.unignoreCommandUser(data, name);
+            ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + name + " has been removed from the command logging ignore list");
         }
     }
 
@@ -146,7 +177,7 @@ public class CommandUsageCommand implements ICommand {
     @Nonnull
     public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1)
-            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "viewlogs", "viewplayerstats", "dellogs", "stats");
+            return CommandBase.getListOfStringsMatchingLastWord(args, "help", "viewlogs", "viewplayerstats", "dellogs", "stats", "ignore", "unignore");
         if (args.length == 2 && (args[0].equalsIgnoreCase("viewplayerstats") || args[0].equalsIgnoreCase("viewlogs") ||
                 args[0].equalsIgnoreCase("dellogs"))) {
             HashSet<String> names = new HashSet<>();

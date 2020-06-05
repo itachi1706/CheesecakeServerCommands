@@ -68,6 +68,7 @@ public class PlayerEvents {
         String[] args = event.getParameters();
         String ip = "localhost";
         String name = sender.getName();
+        if (ServerUtil.checkIfCommandUseIgnored(name)) return; // Don't log ignored users
         UUID uuid = UUID.randomUUID();
         if (sender instanceof EntityPlayerMP) {
             // Check if fake player
