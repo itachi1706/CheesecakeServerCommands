@@ -41,7 +41,7 @@ public class CSCAdminSilenceWorldSavedData extends WorldSavedData {
             UUID uuid = UUID.fromString(s);
             AdminSilenced.silencedList.add(uuid);
         }
-        NBTTagList cmdlist = nbt.getTagList(SILENCE_LIST, Constants.NBT.TAG_STRING);
+        NBTTagList cmdlist = nbt.getTagList(CMDUSE_IGNORE_LIST, Constants.NBT.TAG_STRING);
         for (int i=0;i < cmdlist.tagCount();i++) {
             String s = cmdlist.getStringTagAt(i);
             AdminSilenced.ignoredCommandUser.add(s);
