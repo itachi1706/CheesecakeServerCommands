@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeservercommands.server.objects;
+package com.itachi1706.cheesecakeservercommands.objects;
 
 /**
  * Created by Kenneth on 11/7/2016.

@@ -1,13 +1,15 @@
 package com.itachi1706.cheesecakeservercommands;
 
+import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
+import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
 import com.itachi1706.cheesecakeservercommands.reference.References;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
@@ -15,10 +17,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,7 @@ public class CheesecakeServerCommands
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static HashMap<String, DamageSource> knownDamageSources;
+    private static ArrayList<BaseCommand> commands = new ArrayList<>();
 
     public CheesecakeServerCommands()
     {
@@ -77,13 +80,27 @@ public class CheesecakeServerCommands
     // Register commands here
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
+        LOGGER.info("Starting command registration");
+        // Add commands
+        commands.add(new MainCommand("csc", 2, true));
+        commands.add(new MainCommand("cheesecakeservercommands", 2, true));
 
+
+        // Register to Forge
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        commands.forEach((cmd) -> {
+            if (cmd.setExecution() != null) {
+                LOGGER.info("Added command: " + cmd.getName());
+                dispatcher.register(cmd.getBuilder());
+            }
+        });
+        LOGGER.info("Command registration complete");
     }
 
     // Server stopping event. Save stuff here
     @SubscribeEvent
     public void onServerStopping(ServerStoppingEvent event) {
-
+        LOGGER.info("HELLO from server stopping");
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD

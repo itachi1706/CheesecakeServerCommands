@@ -1,6 +1,6 @@
-package com.itachi1706.cheesecakeservercommands.server.objects;
+package com.itachi1706.cheesecakeservercommands.objects;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class HelpInitializer {
         sub.add(new HelpSub("/locateplayer [player]", "Locates a player's location"));
         sub.add(new HelpSub("/smite [player/me/x] [y] [z]", "Smites a player or location"));
         sub.add(new HelpSub("/speed <fly/walk/all> <speed/reset> [player]", "Set Fly/Walk speed of player"));
-        sub.add(new HelpSub("/sudo <player> <command>", "Runs a command as a user" + TextFormatting.DARK_RED + " (VERY DANGEROUS)"));
+        sub.add(new HelpSub("/sudo <player> <command>", "Runs a command as a user" + ChatFormatting.DARK_RED + " (VERY DANGEROUS)"));
         sub.add(new HelpSub("/tphere <player>", "Teleports another player to you"));
         sub.add(new HelpSub("/tpto <player>", "Teleports to a player"));
         sub.add(new HelpSub("/wow [player]", "Trolls yourself or another player"));
