@@ -1,0 +1,16 @@
+[
+{
+  "modid": "cheesecakeservercommands",
+  "name": "Cheesecake Server Commands",
+  "description": "Internal commands mod for the Cheesecake Network",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://www.itachi1706.com",
+  "updateUrl": "",
+  "authorList": ["itachi1706"],
+  "credits": "This is solely designed and meant for the use by the Cheesecake Network. If you somehow used it and it crash, don't complain",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
