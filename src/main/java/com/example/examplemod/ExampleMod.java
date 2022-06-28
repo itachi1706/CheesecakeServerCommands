@@ -4,7 +4,9 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
@@ -18,7 +20,7 @@ import org.slf4j.Logger;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("examplemod")
+@Mod("cheesecakeservercommands")
 public class ExampleMod
 {
     // Directly reference a slf4j logger
@@ -64,6 +66,18 @@ public class ExampleMod
     {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+    // Register commands here
+    @SubscribeEvent
+    public void registerCommands(RegisterCommandsEvent event) {
+
+    }
+
+    // Server stopping event. Save stuff here
+    @SubscribeEvent
+    public void onServerStopping(ServerStoppingEvent event) {
+
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
