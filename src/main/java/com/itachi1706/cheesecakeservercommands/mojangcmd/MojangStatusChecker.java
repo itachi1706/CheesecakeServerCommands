@@ -1,9 +1,9 @@
 package com.itachi1706.cheesecakeservercommands.mojangcmd;
 
-import net.minecraft.util.text.TextFormatting;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import net.minecraft.ChatFormatting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public enum MojangStatusChecker {
     MAIN_WEBSITE("Minecraft Website", "minecraft.net");
 
     private String name, serviceURL;
-    private JSONParser jsonParser = new JSONParser();
+    private JsonParser jsonParser = new JsonParser();
 
     MojangStatusChecker(String name, String serviceURL) {
         this.name = name;
@@ -55,14 +55,12 @@ public enum MojangStatusChecker {
             URL url = new URL("http://status.mojang.com/check?service=" + serviceURL);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 
-            Object object = jsonParser.parse(bufferedReader);
-            JSONObject jsonObject = (JSONObject) object;
-
-            String status = (String) jsonObject.get(serviceURL);
+            JsonObject jsonObject = JsonParser.parseString(bufferedReader.toString()).getAsJsonObject();
+            String status = jsonObject.get(serviceURL).getAsString();
 
             return Status.get(status);
 
-        } catch (IOException | ParseException exception) {
+        } catch (IOException | JsonParseException exception) {
             if (!suppressErrors) {
                 exception.printStackTrace();
             }
@@ -72,10 +70,10 @@ public enum MojangStatusChecker {
     }
 
     public enum Status {
-        ONLINE("Online", TextFormatting.GREEN.toString(), "No problems detected! :)"),
-        UNSTABLE("Unstable", TextFormatting.YELLOW.toString(), "Intermittent Connection :("),
-        OFFLINE("Offline", TextFormatting.DARK_RED.toString(), "Currently Offline! D:"),
-        UNKNOWN("Unknown", TextFormatting.WHITE.toString(), "Unable to connect to Mojang Server!");
+        ONLINE("Online", ChatFormatting.GREEN.toString(), "No problems detected! :)"),
+        UNSTABLE("Unstable", ChatFormatting.YELLOW.toString(), "Intermittent Connection :("),
+        OFFLINE("Offline", ChatFormatting.DARK_RED.toString(), "Currently Offline! D:"),
+        UNKNOWN("Unknown", ChatFormatting.WHITE.toString(), "Unable to connect to Mojang Server!");
 
         private String status, color, description;
 
