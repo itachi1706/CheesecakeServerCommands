@@ -9,6 +9,7 @@ buildscript {
 }
 plugins {
   id 'com.github.johnrengelman.shadow' version '1.2.4'
+  id "org.sonarqube" version "3.4.0.2513"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -83,6 +84,14 @@ jar {
 }
 jar.dependsOn shadowJar
 jar.enabled = false
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "itachi1706_CheesecakeServerCommands"
+    property "sonar.organization", "itachi1706"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
+}
 
 processResources {
     // this will ensure that this task is redone when the versions change.
