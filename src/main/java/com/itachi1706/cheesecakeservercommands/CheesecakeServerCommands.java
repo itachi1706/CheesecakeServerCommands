@@ -6,6 +6,7 @@ import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
+import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 import net.minecraft.commands.CommandSourceStack;
@@ -21,9 +22,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 
 import javax.management.MBeanServer;
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +39,7 @@ public class CheesecakeServerCommands
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    public static File configFileDirectory;
     public static HashMap<String, DamageSource> knownDamageSources;
     private static ArrayList<BaseCommand> commands = new ArrayList<>();
 
@@ -57,6 +61,15 @@ public class CheesecakeServerCommands
     {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
+
+        // Setup configuration object
+        File file = new File(FMLPaths.CONFIGDIR.get() + File.separator + "cheesecakeserver");
+        LogHelper.info(">>> Folder name: " + file.getAbsolutePath());
+        if (!file.exists() && file.mkdir()){
+            LogHelper.info("Created Cheesecake Server Internal Directory");
+        }
+
+        configFileDirectory = file;
 
     }
 
@@ -85,7 +98,7 @@ public class CheesecakeServerCommands
 
         // Init OS Bean
         platformBean = ManagementFactory.getPlatformMBeanServer();
-        
+
         InitDamageSources.initalizeDamages();
     }
 

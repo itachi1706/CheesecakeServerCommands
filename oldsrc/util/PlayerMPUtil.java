@@ -21,39 +21,6 @@ public class PlayerMPUtil {
         return !(sender instanceof EntityPlayer) || isOperator((EntityPlayer) sender);
     }
 
-    public static boolean isOperator(EntityPlayer player){
-        if (ServerUtil.getServerInstance().isSinglePlayer())
-            return true;
-
-        GameProfile profile = player.getGameProfile();
-        return ServerUtil.getServerInstance().getPlayerList().canSendCommands(profile);
-    }
-
-    public static boolean isPlayer(ICommandSender sender){
-        return sender instanceof EntityPlayer;
-    }
-
-    public static EntityPlayer castToPlayer(ICommandSender sender){
-        if (isPlayer(sender))
-            return (EntityPlayer) sender;
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<EntityPlayerMP> getOnlinePlayers(){
-        return ServerUtil.getServerInstance().getPlayerList().getPlayers();
-    }
-
-    public static EntityPlayerMP getPlayer(String username) {
-        List<EntityPlayerMP> players = getOnlinePlayers();
-        for (EntityPlayerMP playerMP : players) {
-            if (playerMP.getName().equals(username)) {
-                return playerMP;
-            }
-        }
-        return null;
-    }
-
     /**
      * Get player's looking-at spot.
      *

@@ -1,15 +1,17 @@
 package com.itachi1706.cheesecakeservercommands.noteblocksongs;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Song;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.objects.NoteblockSong;
-import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import org.json.simple.JSONObject;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import com.itachi1706.cheesecakeservercommands.util.TextUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -39,7 +41,7 @@ public class NoteblockSongs {
 		if (playing) next();
 	}
 	
-	public static void sendMsg(@Nullable ICommandSender sender) {
+	public static void sendMsg(@Nullable CommandSourceStack sender) {
 		try {
             /*
               What this prints:
@@ -51,38 +53,139 @@ public class NoteblockSongs {
               	{DESC}
               	Length: {SONG_LENGTH}
              */
-			String toTell = "[\"\",{\"text\":\"Now playing: \",\"color\":\"gold\"},{\"text\":\"" + JSONObject.escape(names.get(currentIndex))
-			+ "\",\"color\":\"green\"";
-			StringBuilder chatText = new StringBuilder();
-			chatText.append(toTell).append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"")
-                    .append(JSONObject.escape(player.song.getName().trim().isEmpty() ? names.get(currentIndex) : player.song.getName()))
-                    .append("\\n\",\"color\":\"green\"}");
-			if (!player.song.getAuthor().trim().equals("")) chatText.append(",\"Author: \",{\"text\":\"")
-                    .append(JSONObject.escape(player.song.getAuthor())).append("\\n\",\"color\":\"gold\"}");
-			if (!player.song.getOriginalAuthor().trim().equals("")) chatText.append(",\"Original author: \",{\"text\":\"")
-                    .append(JSONObject.escape(player.song.getOriginalAuthor())).append("\\n\",\"color\":\"gold\"}");
-			if (!player.song.getDescription().trim().equals("")) chatText.append(",\"Description: \\n\",{\"text\":\"")
-                    .append(JSONObject.escape(player.song.getDescription())).append("\\n\",\"italic\":true}");
-			chatText.append(",\"Length: \",{\"text\":\"").append(getTimeString(player.length).replaceAll("\"", "\\\\\\\""))
-                    .append("\",\"color\":\"gold\"}],\"color\":\"green\"}}]");
+			Gson gson = new Gson();
+			JsonArray arr = new JsonArray();
+			arr.add("");
+
+			/*
+				[
+					"",
+					{
+						"text": "Now playing: ",
+						"color": "gold"
+					},
+					{
+						"text": "Song Name",
+						"color": "green",
+						"hoverEvent": {
+							"action": "show_text",
+							"value": [
+								"",
+								{
+									"text": "song name\n",
+									"color": "green"
+								},
+								"Author: ",
+								{
+									"text": "authorname\n",
+									"color": "gold"
+								},
+								"Original author: ",
+								{
+									"text": "orig author\n",
+									"color": "gold"
+								},
+								"Description: \n",
+								{
+									"text": "descriptionhere\n",
+									"italic": true
+								},
+								"Length: ",
+								{
+									"text": "playerLen",
+									"color": "gold"
+								}
+							],
+							"color": "green"
+						}
+					}
+				]
+			 */
+
+			// Now Playing Element
+			JsonObject nowPlaying = new JsonObject();
+			nowPlaying.addProperty("text", "Now playing: ");
+			nowPlaying.addProperty("color", "gold");
+			arr.add(nowPlaying);
+
+			// Song Name Element
+			JsonObject songName = new JsonObject();
+			songName.addProperty("text", names.get(currentIndex));
+			songName.addProperty("color", "green");
+
+			String chatTextWithoutHover = gson.toJson(arr);
+
+			// Hover Event
+			JsonObject hoverEvent = new JsonObject();
+			hoverEvent.addProperty("action", "show_text");
+
+			JsonArray hoverValues = new JsonArray();
+			hoverValues.add("");
+
+			// Hover Event "Song Name"
+			JsonObject hoverSongName = new JsonObject();
+			hoverSongName.addProperty("text", (player.song.getName().trim().isEmpty() ? names.get(currentIndex) : player.song.getName()) + "\\n");
+			hoverSongName.addProperty("color", "green");
+			hoverValues.add(hoverSongName);
+
+			// Hover Event Author if exist
+			if (!player.song.getAuthor().trim().equals("")) {
+				hoverValues.add("Author: ");
+				JsonObject hoverAuthorName = new JsonObject();
+				hoverAuthorName.addProperty("text", player.song.getAuthor() + "\\n");
+				hoverAuthorName.addProperty("color", "gold");
+				hoverValues.add(hoverAuthorName);
+			}
+
+			// Hover Event Original Author if exist
+			if (!player.song.getOriginalAuthor().trim().equals("")) {
+				hoverValues.add("Original author: ");
+				JsonObject hoverOriginalAuthorName = new JsonObject();
+				hoverOriginalAuthorName.addProperty("text", player.song.getOriginalAuthor() + "\\n");
+				hoverOriginalAuthorName.addProperty("color", "gold");
+				hoverValues.add(hoverOriginalAuthorName);
+			}
+
+			// Hover Event Description if exist
+			if (!player.song.getDescription().trim().equals("")) {
+				hoverValues.add("Description: \\n");
+				JsonObject hoverDescription = new JsonObject();
+				hoverDescription.addProperty("text", player.song.getDescription() + "\\n");
+				hoverDescription.addProperty("italic", "true");
+				hoverValues.add(hoverDescription);
+			}
+
+			hoverValues.add("Length: ");
+			JsonObject length = new JsonObject();
+			length.addProperty("text", getTimeString(player.length));
+			length.addProperty("color", "gold");
+
+
+			hoverEvent.add("value", hoverValues);
+			hoverEvent.addProperty("color", "green");
+			songName.add("hoverEvent", hoverEvent);
+
+			arr.add(songName);
+
+			String chatText = gson.toJson(arr);
 
             LogHelper.info("NBS: Playing " + names.get(currentIndex));
             if (sender == null) {
                 switch (messageState) {
                     case MESSAGE_STATE_CHAT:
-                        ChatHelper.sendGlobalMessage(ITextComponent.Serializer.jsonToComponent(chatText.toString()));
+						TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatText);
                         break;
                     case MESSAGE_STATE_INFO:
-                        ChatHelper.sendGlobalInfoMessage(ITextComponent.Serializer.jsonToComponent(toTell + "}]"));
+						TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), chatTextWithoutHover);
                         break;
                     default:
-                        ChatHelper.sendGlobalMessage(ITextComponent.Serializer.jsonToComponent(chatText.toString()));
-                        ChatHelper.sendGlobalInfoMessage(ITextComponent.Serializer.jsonToComponent(toTell + "}]"));
+						TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatText);
+						TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), chatTextWithoutHover);
                         break;
 
                 }
             } else {
-                ChatHelper.sendMessage(sender, ITextComponent.Serializer.jsonToComponent(chatText.toString()));
+				sender.sendSuccess(new TextComponent(chatText), false);
             }
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -116,11 +219,11 @@ public class NoteblockSongs {
 	 * @param sender Command Sender
 	 * @param index The numerical order of the song in the list.
 	 */
-	public static void play(ICommandSender sender, int index) {
+	public static void play(CommandSourceStack sender, int index) {
 		if (playing) player.stop();
 		if (songs.isEmpty()) {
-			ChatHelper.sendMessage(sender, new TextComponentString(
-					TextFormatting.RED + "There are not any songs in songs folder..."
+			sender.sendFailure(new TextComponent(
+					ChatFormatting.RED + "There are not any songs in songs folder..."
 			));
 			return;
 		}
@@ -137,7 +240,7 @@ public class NoteblockSongs {
 	/**
 	 * Plays the first song.
 	 */
-	public static void play(ICommandSender sender) {
+	public static void play(CommandSourceStack sender) {
 		play(sender,0);
 	}
 	
