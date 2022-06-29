@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
+import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
@@ -78,12 +79,30 @@ public class CheesecakeServerCommands
     }
 
     // Register commands here
+
+    /**
+     * Register Commands here and set their permission level
+     *
+     * <a href="https://minecraft.fandom.com/wiki/Permission_level">Permission Levels</a> (see {@link CommandPermissionsLevel})
+     * 0 - Normal Player
+     * 1 - Player can bypass spawn protection.
+     * 2 - Player or executor can use more commands (see Commands) and player can use command blocks. (Cheat commands)
+     * 3 - Player or executor can use more commands. (Multiplayer management)
+     * 4 - Player or executor can use all the commands. (Server management)
+     *
+     * From Command Code checkPermission
+     * return true -> 0
+     * return isOperatorOrConsole -> 2
+     *
+     * @param event Register Commands Event
+     */
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         LOGGER.info("Starting command registration");
+
         // Add commands
-        commands.add(new MainCommand("csc", 2, true));
-        commands.add(new MainCommand("cheesecakeservercommands", 2, true));
+        commands.add(new MainCommand("csc", CommandPermissionsLevel.ALL, true));
+        commands.add(new MainCommand("cheesecakeservercommands", CommandPermissionsLevel.ALL, true));
 
 
         // Register to Forge
