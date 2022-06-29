@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
+import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.mojang.brigadier.CommandDispatcher;
@@ -46,6 +47,7 @@ public class CheesecakeServerCommands
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new PlayerEvents());
     }
 
     private void setup(final FMLCommonSetupEvent event)
