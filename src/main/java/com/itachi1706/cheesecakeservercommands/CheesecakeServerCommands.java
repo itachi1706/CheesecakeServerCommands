@@ -4,6 +4,7 @@ import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
+import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
@@ -22,6 +23,8 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
+import javax.management.MBeanServer;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -55,7 +58,6 @@ public class CheesecakeServerCommands
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
 
-
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
@@ -72,12 +74,19 @@ public class CheesecakeServerCommands
                 collect(Collectors.toList()));
     }
 
+    public static MBeanServer platformBean;
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+
+        // Init OS Bean
+        platformBean = ManagementFactory.getPlatformMBeanServer();
+        
+        InitDamageSources.initalizeDamages();
     }
 
     // Register commands here
