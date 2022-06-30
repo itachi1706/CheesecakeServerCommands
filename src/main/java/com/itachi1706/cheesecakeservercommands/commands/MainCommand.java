@@ -76,7 +76,7 @@ public class MainCommand extends BaseCommand {
             if (main.getKey().equalsIgnoreCase(modules)) {
                 if (main.isAdminOnly() && !isOp) {
                     sendFailureMessage(sender, ChatFormatting.RED + "You do not have permission to view help for this module!");
-                    return Command.SINGLE_SUCCESS;
+                    return 0;
                 }
                 found = main;
                 break;
@@ -84,7 +84,7 @@ public class MainCommand extends BaseCommand {
         }
         if (found == null) {
             sendFailureMessage(sender, ChatFormatting.RED + "Invalid Module. View modules with /csc list");
-            return Command.SINGLE_SUCCESS;
+            return 0;
         }
         HelpSub[] subHelps = found.getCommands();
         sendSuccessMessage(sender, ChatFormatting.AQUA + found.getName());

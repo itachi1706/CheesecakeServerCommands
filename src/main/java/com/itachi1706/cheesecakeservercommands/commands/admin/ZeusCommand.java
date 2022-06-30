@@ -32,11 +32,12 @@ public class ZeusCommand extends BaseCommand {
     private int strikeYourself(CommandSourceStack sender) {
         if (!ServerPlayerUtil.isPlayer(sender)) {
             sendFailureMessage(sender, "CONSOLE cannot feel the wrath of Zeus");
-        } else {
-            ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
-            kaboom(player);
-            TextUtil.sendAdminChatMessage(sender, "Made own self suffer the wrath of Zeus");
+            return 0;
         }
+
+        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        kaboom(player);
+        TextUtil.sendAdminChatMessage(sender, "Made own self suffer the wrath of Zeus");
 
         return Command.SINGLE_SUCCESS;
     }
@@ -44,11 +45,12 @@ public class ZeusCommand extends BaseCommand {
     private int strikeOtherPlayer(CommandSourceStack sender, ServerPlayer player) {
         if (player == null) {
             sendFailureMessage(sender, "Player not found");
-        } else {
-            kaboom(player);
-            sendSuccessMessage(sender, ChatFormatting.GOLD + "Made " + player.getName().getString() + " suffer the wrath of Zeus!");
-            TextUtil.sendAdminChatMessage(sender, "Made " + player.getName().getString() + " suffer the wrath of Zeus");
+            return 0;
         }
+
+        kaboom(player);
+        sendSuccessMessage(sender, ChatFormatting.GOLD + "Made " + player.getName().getString() + " suffer the wrath of Zeus!");
+        TextUtil.sendAdminChatMessage(sender, "Made " + player.getName().getString() + " suffer the wrath of Zeus");
 
         return Command.SINGLE_SUCCESS;
     }

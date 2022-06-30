@@ -2,6 +2,8 @@ package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
+import com.itachi1706.cheesecakeservercommands.commands.PingCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
@@ -153,7 +155,11 @@ public class CheesecakeServerCommands
 
         // Admin Commands
         commands.add(new ZeusCommand("zeus", CommandPermissionsLevel.OPS, true));
+        commands.add(new WowCommand("wow", CommandPermissionsLevel.ALL, true));
+        commands.add(new WowCommand("doge", CommandPermissionsLevel.ALL, true));
 
+        // General Commands (For all players)
+        commands.add(new PingCommand("ping", CommandPermissionsLevel.ALL, false));
 
         // Register to Forge
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
