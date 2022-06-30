@@ -48,45 +48,4 @@ public class PlayerMPUtil {
         Vec3d pos2 = pos1.addVector(lookAt.x * maxDistance, lookAt.y * maxDistance, lookAt.z * maxDistance);
         return player.world.rayTraceBlocks(pos1, pos2);
     }
-
-    /**
-     * Give player the item stack or drop it if his inventory is full
-     * If the player inventory fills up while it gets full, spill over to the ground
-     *
-     * @param player
-     * @param item
-     */
-    public static void give(EntityPlayer player, ItemStack item)
-    {
-        int itemstack = item.getCount();
-        while (itemstack > 64) {
-            ItemStack senditem = item.copy();
-            senditem.setCount(64);
-            EntityItem entityitem = player.dropItem(senditem, false);
-            if (entityitem == null) continue;
-            entityitem.setNoPickupDelay();
-            entityitem.setOwner(player.getName());
-            itemstack -= 64;
-        }
-        item.setCount(itemstack);
-        EntityItem entityitem = player.dropItem(item, false);
-        if (entityitem == null) return;
-        entityitem.setNoPickupDelay();
-        entityitem.setOwner(player.getName());
-    }
-
-    /**
-     * Give player the item stack or drop it if his inventory is full
-     * This command execute without ground spillage if player is given into his/her inventory
-     *
-     * @param player
-     * @param item
-     */
-    public static void giveNormal(EntityPlayer player, ItemStack item)
-    {
-        EntityItem entityitem = player.dropItem(item, false);
-        if (entityitem == null) return;
-        entityitem.setNoPickupDelay();
-        entityitem.setOwner(player.getName());
-    }
 }

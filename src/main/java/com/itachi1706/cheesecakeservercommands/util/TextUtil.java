@@ -13,6 +13,10 @@ import java.util.stream.Stream;
 
 public class TextUtil {
 
+    public static TextComponent getText(String text) {
+        return new TextComponent(text);
+    }
+
     private static void sendMessage(ServerPlayer player, Component textComponent, boolean actionBar) {
         player.displayClientMessage(textComponent, actionBar);
     }
@@ -34,7 +38,12 @@ public class TextUtil {
         sendMessage(player, new TranslatableComponent(translationKey, args), false);
     }
 
-    // Action Bar
+    public static void sendChatMessage(ServerPlayer player, List<String> texts) {
+        for (String text : texts)
+            sendChatMessage(player, getText(text));
+    }
+
+    // Action Bar (Info Message)
 
     public static void sendActionMessage(ServerPlayer player, Component textComponent) {
         sendMessage(player, textComponent, true);
@@ -73,7 +82,7 @@ public class TextUtil {
         String text = textComponent.getString();
 
         text = "[" + player.getName() + ": " + text + "]";
-        TextComponent newtext = new TextComponent(ChatFormatting.GRAY + "" + ChatFormatting.ITALIC + text);
+        TextComponent newtext = getText(ChatFormatting.GRAY + "" + ChatFormatting.ITALIC + text);
         List<ServerPlayer> players = ServerPlayerUtil.getOnlinePlayers();
         LogHelper.info(text);
 
@@ -85,7 +94,7 @@ public class TextUtil {
 
     }
     public static void sendAdminChatMessage(ServerPlayer player, String message) {
-        sendAdminChatMessage(player, new TextComponent(message));
+        sendAdminChatMessage(player, getText(message));
     }
 
     public static void sendAdminChatMessage(CommandSourceStack sender, Component textComponent) {
@@ -94,7 +103,7 @@ public class TextUtil {
 
 
         text = "[" + sender.getTextName() + ": " + text + "]";
-        TextComponent newtext = new TextComponent(ChatFormatting.GRAY + "" + ChatFormatting.ITALIC + text);
+        TextComponent newtext = getText(ChatFormatting.GRAY + "" + ChatFormatting.ITALIC + text);
         List<ServerPlayer> players = ServerPlayerUtil.getOnlinePlayers();
         LogHelper.info(text);
 
@@ -106,7 +115,7 @@ public class TextUtil {
     }
 
     public static void sendAdminChatMessage(CommandSourceStack sender, String message) {
-        sendAdminChatMessage(sender, new TextComponent(message));
+        sendAdminChatMessage(sender, getText(message));
     }
 
     // Utilities

@@ -4,7 +4,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -45,6 +47,47 @@ public class ServerPlayerUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * Give player the item stack or drop it if his inventory is full
+     * If the player inventory fills up while it gets full, spill over to the ground
+     *
+     * @param player
+     * @param item
+     */
+    public static void give(Player player, ItemStack item)
+    {
+        int itemstack = item.getCount();
+        while (itemstack > 64) {
+            ItemStack senditem = item.copy();
+            senditem.setCount(64);
+            ItemEntity entityitem = player.drop(senditem, false);
+            if (entityitem == null) continue;
+            entityitem.setNoPickUpDelay();
+            entityitem.setOwner(player.getUUID());
+            itemstack -= 64;
+        }
+        item.setCount(itemstack);
+        ItemEntity entityitem = player.drop(item, false);
+        if (entityitem == null) return;
+        entityitem.setNoPickUpDelay();
+        entityitem.setOwner(player.getUUID());
+    }
+
+    /**
+     * Give player the item stack or drop it if his inventory is full
+     * This command execute without ground spillage if player is given into his/her inventory
+     *
+     * @param player
+     * @param item
+     */
+    public static void giveNormal(Player player, ItemStack item)
+    {
+        ItemEntity entityitem = player.drop(item, false);
+        if (entityitem == null) return;
+        entityitem.setNoPickUpDelay();
+        entityitem.setOwner(player.getUUID());
     }
 
 }
