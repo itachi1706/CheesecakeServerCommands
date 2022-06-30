@@ -69,6 +69,7 @@ public class GarbageCollectorCommand implements ICommand {
     @Override
     public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
+        // Its now OPs, but we should put it console level for this
     }
 
     @Override

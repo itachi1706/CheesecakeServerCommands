@@ -5,6 +5,7 @@ import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
 import com.itachi1706.cheesecakeservercommands.commands.PingCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStatisticsCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
@@ -157,6 +158,9 @@ public class CheesecakeServerCommands
         commands.add(new ZeusCommand("zeus", CommandPermissionsLevel.OPS, true));
         commands.add(new WowCommand("wow", CommandPermissionsLevel.ALL, true));
         commands.add(new WowCommand("doge", CommandPermissionsLevel.ALL, true));
+
+        // Essentials Server
+        commands.add(new ServerStatisticsCommand("serverstats", CommandPermissionsLevel.CONSOLE, true));
 
         // General Commands (For all players)
         commands.add(new PingCommand("ping", CommandPermissionsLevel.ALL, false));

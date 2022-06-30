@@ -74,6 +74,7 @@ public class ServerPropertiesCommand implements ICommand {
     @Override
     public boolean checkPermission(@Nonnull MinecraftServer server, @Nonnull ICommandSender iCommandSender) {
         return PlayerMPUtil.isOperatorOrConsole(iCommandSender);
+        // Put it console level instead of OPs
     }
 
     @Override
