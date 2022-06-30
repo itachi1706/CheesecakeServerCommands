@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -85,6 +86,27 @@ public class TextUtil {
     }
     public static void sendAdminChatMessage(ServerPlayer player, String message) {
         sendAdminChatMessage(player, new TextComponent(message));
+    }
+
+    public static void sendAdminChatMessage(CommandSourceStack sender, Component textComponent) {
+        //        if (ServerUtil.checkIfAdminSilenced(player)) return; // Don't send if admin silenced
+        String text = textComponent.getString();
+
+
+        text = "[" + sender.getTextName() + ": " + text + "]";
+        TextComponent newtext = new TextComponent(ChatFormatting.GRAY + "" + ChatFormatting.ITALIC + text);
+        List<ServerPlayer> players = ServerPlayerUtil.getOnlinePlayers();
+        LogHelper.info(text);
+
+        for (ServerPlayer serverPlayer : players) {
+            if (ServerPlayerUtil.isOperator(serverPlayer) && !serverPlayer.getName().getString().equals(sender.getTextName())) {
+                sendMessage(serverPlayer, newtext, false);
+            }
+        }
+    }
+
+    public static void sendAdminChatMessage(CommandSourceStack sender, String message) {
+        sendAdminChatMessage(sender, new TextComponent(message));
     }
 
     // Utilities

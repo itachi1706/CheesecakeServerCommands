@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
@@ -29,8 +30,7 @@ import javax.management.MBeanServer;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(References.MOD_ID)
@@ -39,8 +39,8 @@ public class CheesecakeServerCommands
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static File configFileDirectory;
-    public static HashMap<String, DamageSource> knownDamageSources;
+    private static File configFileDirectory;
+    private static Map<String, DamageSource> knownDamageSources;
     private static ArrayList<BaseCommand> commands = new ArrayList<>();
 
     public CheesecakeServerCommands()
@@ -69,8 +69,23 @@ public class CheesecakeServerCommands
             LogHelper.info("Created Cheesecake Server Internal Directory");
         }
 
-        configFileDirectory = file;
+        setConfigFileDirectory(file);
+    }
 
+    private static void setConfigFileDirectory(File file){
+        configFileDirectory = file;
+    }
+
+    public static File getConfigFileDirectory(){
+        return configFileDirectory;
+    }
+
+    public static Map<String, DamageSource> getKnownDamageSources() {
+        return knownDamageSources;
+    }
+
+    public static void setKnownDamageSources(Map<String, DamageSource> knownDamageSources) {
+        CheesecakeServerCommands.knownDamageSources = knownDamageSources;
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
@@ -83,11 +98,11 @@ public class CheesecakeServerCommands
     {
         // Some example code to receive and process InterModComms from other mods
         LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.messageSupplier().get()).
-                collect(Collectors.toList()));
+                map(m->m.messageSupplier().get()).toList());
     }
 
-    public static MBeanServer platformBean;
+    // Init OS Bean
+    private static MBeanServer platformBean;
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
@@ -97,9 +112,17 @@ public class CheesecakeServerCommands
         LOGGER.info("HELLO from server starting");
 
         // Init OS Bean
-        platformBean = ManagementFactory.getPlatformMBeanServer();
+        setPlatformBean(ManagementFactory.getPlatformMBeanServer());
 
         InitDamageSources.initalizeDamages();
+    }
+
+    private static void setPlatformBean(MBeanServer myBean) {
+        platformBean = myBean;
+    }
+
+    public static MBeanServer getPlatformBean() {
+        return platformBean;
     }
 
     // Register commands here
@@ -128,12 +151,15 @@ public class CheesecakeServerCommands
         commands.add(new MainCommand("csc", CommandPermissionsLevel.ALL, true));
         commands.add(new MainCommand("cheesecakeservercommands", CommandPermissionsLevel.ALL, true));
 
+        // Admin Commands
+        commands.add(new ZeusCommand("zeus", CommandPermissionsLevel.OPS, true));
+
 
         // Register to Forge
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-        commands.forEach((cmd) -> {
+        commands.forEach(cmd -> {
             if (cmd.setExecution() != null) {
-                LOGGER.info("Added command: " + cmd.getName());
+                LOGGER.info("Added command: {}", cmd.getName());
                 dispatcher.register(cmd.getBuilder());
             }
         });
@@ -145,17 +171,4 @@ public class CheesecakeServerCommands
     public void onServerStopping(ServerStoppingEvent event) {
         LOGGER.info("HELLO from server stopping");
     }
-
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-    // Event bus for receiving Registry Events)
-//    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-//    public static class RegistryEvents
-//    {
-//        @SubscribeEvent
-//        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent)
-//        {
-//            // Register a new block here
-//            LOGGER.info("HELLO from Register Block");
-//        }
-//    }
 }

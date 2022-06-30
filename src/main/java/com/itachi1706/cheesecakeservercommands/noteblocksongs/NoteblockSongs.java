@@ -279,7 +279,7 @@ public class NoteblockSongs {
 	public static void refreshSongs() {
 		stop();
 		player = null;
-		String path = CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + "/songs";
+		String path = CheesecakeServerCommands.getConfigFileDirectory().getAbsolutePath() + "/songs";
 		File songsFolder = new File(path);
 		File[] files = songsFolder.listFiles();
 		songs = new ArrayList<>();

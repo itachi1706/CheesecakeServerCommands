@@ -21,7 +21,7 @@ public class ServerPlayerUtil {
         return ServerUtil.getServerPlayers().isOp(profile);
     }
 
-    public static Player castToPlayer(CommandSourceStack sender){
+    public static ServerPlayer castToPlayer(CommandSourceStack sender){
         try {
             return sender.getPlayerOrException();
         } catch (CommandSyntaxException e) {

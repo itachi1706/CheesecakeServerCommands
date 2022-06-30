@@ -12,6 +12,7 @@ import net.minecraft.world.World;
  * for com.itachi1706.cheesecakeservercommands.util in CheesecakeServerCommands
  */
 public class WorldUtil {
+    // TODO: World seems to be called Level now
     /**
      * Checks if the blocks from [x,y,z] to [x,y+h-1,z] are either air or replacable
      *

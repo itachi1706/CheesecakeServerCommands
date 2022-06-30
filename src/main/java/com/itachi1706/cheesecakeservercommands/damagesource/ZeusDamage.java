@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
  * for com.itachi1706.cheesecakeservercommands.damagesource in CheesecakeServerCommands
  */
 public class ZeusDamage extends DamageSource {
-    public ZeusDamage(String p_19333_) {
-        super(p_19333_);
+    public ZeusDamage(String keyName) {
+        super(keyName);
     }
 
     @Override
-    public @NotNull Component getLocalizedDeathMessage(LivingEntity p_19343_) {
+    public @NotNull Component getLocalizedDeathMessage(LivingEntity livingEntity) {
         String text = "%s suffered the Wrath of Zeus!";
-        String username = p_19343_.getName().toString();
+        String username = livingEntity.getName().getString();
         LogHelper.info(username);
         String finaltext = String.format(text, username);
         return new TextComponent(finaltext);
