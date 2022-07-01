@@ -7,6 +7,8 @@ import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStatisticsCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
@@ -33,6 +35,7 @@ import javax.management.MBeanServer;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -44,7 +47,9 @@ public class CheesecakeServerCommands
 
     private static File configFileDirectory;
     private static Map<String, DamageSource> knownDamageSources;
-    private static ArrayList<BaseCommand> commands = new ArrayList<>();
+    private static final ArrayList<BaseCommand> commands = new ArrayList<>();
+
+    private static List<LastKnownUsernames> lastKnownUsernames = new ArrayList<>();
 
     public CheesecakeServerCommands()
     {
@@ -87,6 +92,14 @@ public class CheesecakeServerCommands
         return knownDamageSources;
     }
 
+    public static List<LastKnownUsernames> getLastKnownUsernames() {
+        return lastKnownUsernames;
+    }
+
+    public static void setLastKnownUsernames(List<LastKnownUsernames> lastKnownUsernames) {
+        CheesecakeServerCommands.lastKnownUsernames = lastKnownUsernames;
+    }
+
     public static void setKnownDamageSources(Map<String, DamageSource> knownDamageSources) {
         CheesecakeServerCommands.knownDamageSources = knownDamageSources;
     }
@@ -114,10 +127,21 @@ public class CheesecakeServerCommands
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
 
+        // Register Loggers
+        registerLoggers();
+
         // Init OS Bean
         setPlatformBean(ManagementFactory.getPlatformMBeanServer());
 
         InitDamageSources.initalizeDamages();
+    }
+
+    private void registerLoggers(){
+        if (LastKnownUsernameJsonHelper.fileExists())
+            setLastKnownUsernames(LastKnownUsernameJsonHelper.readFromFile());
+
+//        LoginLogoutDB.checkTablesExists();
+//        CommandsLogDB.checkTablesExists();
     }
 
     private static void setPlatformBean(MBeanServer myBean) {
