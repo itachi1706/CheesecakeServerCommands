@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeservercommands;
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
 import com.itachi1706.cheesecakeservercommands.commands.PingCommand;
+import com.itachi1706.cheesecakeservercommands.commands.ServerPropertiesCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStatisticsCommand;
@@ -177,6 +178,7 @@ public class CheesecakeServerCommands
         // Add commands
         commands.add(new MainCommand("csc", CommandPermissionsLevel.ALL, true));
         commands.add(new MainCommand("cheesecakeservercommands", CommandPermissionsLevel.ALL, true));
+        commands.add(new ServerPropertiesCommand("serverproperties", CommandPermissionsLevel.CONSOLE, true));
 
         // Admin Commands
         commands.add(new ZeusCommand("zeus", CommandPermissionsLevel.OPS, true));
