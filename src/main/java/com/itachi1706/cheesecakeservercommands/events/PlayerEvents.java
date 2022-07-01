@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.events;
 
+import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
@@ -29,9 +30,9 @@ public class PlayerEvents {
 
         LogHelper.info("Player " + player.getDisplayName().getString() + " with UUID " + player.getStringUUID() + " logged in");
 
+        LastKnownUsernameJsonHelper.logUsernameToList(player);
+        LastKnownUsernameJsonHelper.logLastSeenToList(player, true);
         // TODO: Reimplement
-//        LastKnownUsernameJsonHelper.logUsernameToList(player);
-//        LastKnownUsernameJsonHelper.logLastSeenToList(player, true);
 //        LoginLogoutDB.addLoginLog(player);
     }
 
@@ -42,12 +43,12 @@ public class PlayerEvents {
             return;
 
         LogHelper.info("Player " + player.getDisplayName().toString() + " with UUID " + player.getStringUUID() + " logged out");
+        LastKnownUsernameJsonHelper.logLastSeenToList(player, false);
         // TODO: Reimplement
-//        LastKnownUsernameJsonHelper.logLastSeenToList(player, false);
 //        LoginLogoutDB.addLogoutLog(player);
-//        if (player instanceof ServerPlayer){
-//            LastKnownUsernameJsonHelper.logGamemodeToLit((ServerPlayer)player);
-//        }
+        if (player instanceof ServerPlayer){
+            LastKnownUsernameJsonHelper.logGamemodeToLit((ServerPlayer)player);
+        }
     }
 
     @SubscribeEvent

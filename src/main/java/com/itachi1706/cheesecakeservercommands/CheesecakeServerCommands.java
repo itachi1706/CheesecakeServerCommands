@@ -1,9 +1,6 @@
 package com.itachi1706.cheesecakeservercommands;
 
-import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.commands.MainCommand;
-import com.itachi1706.cheesecakeservercommands.commands.PingCommand;
-import com.itachi1706.cheesecakeservercommands.commands.ServerPropertiesCommand;
+import com.itachi1706.cheesecakeservercommands.commands.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStatisticsCommand;
@@ -176,6 +173,9 @@ public class CheesecakeServerCommands
         LOGGER.info("Starting command registration");
 
         // Add commands
+        commands.add(new CCLoggerCommand("cclogger", CommandPermissionsLevel.SERVER, true));
+        commands.add(new CCLoggerCommand("cheesecakelogger", CommandPermissionsLevel.SERVER, true));
+        commands.add(new CCLoggerCommand("ccl", CommandPermissionsLevel.SERVER, true));
         commands.add(new MainCommand("csc", CommandPermissionsLevel.ALL, true));
         commands.add(new MainCommand("cheesecakeservercommands", CommandPermissionsLevel.ALL, true));
         commands.add(new ServerPropertiesCommand("serverproperties", CommandPermissionsLevel.CONSOLE, true));
