@@ -7,6 +7,7 @@ import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStati
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
@@ -132,6 +133,7 @@ public class CheesecakeServerCommands
         setPlatformBean(ManagementFactory.getPlatformMBeanServer());
 
         InitDamageSources.initalizeDamages();
+        NoteblockSongs.refreshSongs();
     }
 
     private void registerLoggers(){
@@ -189,7 +191,12 @@ public class CheesecakeServerCommands
         commands.add(new ServerStatisticsCommand("serverstats", CommandPermissionsLevel.CONSOLE, true));
 
         // General Commands (For all players)
-        commands.add(new PingCommand("ping", CommandPermissionsLevel.ALL, false));
+        commands.add(new PingCommand("ping", CommandPermissionsLevel.ALL, true));
+
+        // NBS Player
+        commands.add(new NoteblockSongsCommand("noteblocksongs", CommandPermissionsLevel.OPS, true));
+        commands.add(new NoteblockSongsCommand("midi", CommandPermissionsLevel.OPS, true));
+        commands.add(new NoteblockSongsCommand("nbs", CommandPermissionsLevel.OPS, true));
 
         // Register to Forge
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();

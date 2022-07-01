@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.events;
 
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
+import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
@@ -53,8 +54,8 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent event) {
-//        if (NoteblockSongs.playing)
-//            NoteblockSongs.player.onTick();
+       if (NoteblockSongs.playing)
+           NoteblockSongs.player.onTick();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

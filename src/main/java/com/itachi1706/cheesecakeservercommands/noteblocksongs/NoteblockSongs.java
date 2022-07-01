@@ -11,6 +11,8 @@ import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nullable;
@@ -113,7 +115,9 @@ public class NoteblockSongs {
 			songName.addProperty("text", names.get(currentIndex));
 			songName.addProperty("color", "green");
 
-			String chatTextWithoutHover = gson.toJson(arr);
+			JsonArray dupeChatTextNoHover = arr.deepCopy();
+			dupeChatTextNoHover.add(songName);
+			String chatTextWithoutHover = gson.toJson(dupeChatTextNoHover);
 
 			// Hover Event
 			JsonObject hoverEvent = new JsonObject();
@@ -124,7 +128,7 @@ public class NoteblockSongs {
 
 			// Hover Event "Song Name"
 			JsonObject hoverSongName = new JsonObject();
-			hoverSongName.addProperty("text", (player.song.getName().trim().isEmpty() ? names.get(currentIndex) : player.song.getName()) + "\\n");
+			hoverSongName.addProperty("text", (player.song.getName().trim().isEmpty() ? names.get(currentIndex) : player.song.getName()) + "\n");
 			hoverSongName.addProperty("color", "green");
 			hoverValues.add(hoverSongName);
 
@@ -132,7 +136,7 @@ public class NoteblockSongs {
 			if (!player.song.getAuthor().trim().equals("")) {
 				hoverValues.add("Author: ");
 				JsonObject hoverAuthorName = new JsonObject();
-				hoverAuthorName.addProperty("text", player.song.getAuthor() + "\\n");
+				hoverAuthorName.addProperty("text", player.song.getAuthor() + "\n");
 				hoverAuthorName.addProperty("color", "gold");
 				hoverValues.add(hoverAuthorName);
 			}
@@ -141,16 +145,16 @@ public class NoteblockSongs {
 			if (!player.song.getOriginalAuthor().trim().equals("")) {
 				hoverValues.add("Original author: ");
 				JsonObject hoverOriginalAuthorName = new JsonObject();
-				hoverOriginalAuthorName.addProperty("text", player.song.getOriginalAuthor() + "\\n");
+				hoverOriginalAuthorName.addProperty("text", player.song.getOriginalAuthor() + "\n");
 				hoverOriginalAuthorName.addProperty("color", "gold");
 				hoverValues.add(hoverOriginalAuthorName);
 			}
 
 			// Hover Event Description if exist
 			if (!player.song.getDescription().trim().equals("")) {
-				hoverValues.add("Description: \\n");
+				hoverValues.add("Description: \n");
 				JsonObject hoverDescription = new JsonObject();
-				hoverDescription.addProperty("text", player.song.getDescription() + "\\n");
+				hoverDescription.addProperty("text", player.song.getDescription() + "\n");
 				hoverDescription.addProperty("italic", "true");
 				hoverValues.add(hoverDescription);
 			}
@@ -159,6 +163,7 @@ public class NoteblockSongs {
 			JsonObject length = new JsonObject();
 			length.addProperty("text", getTimeString(player.length));
 			length.addProperty("color", "gold");
+			hoverValues.add(length);
 
 
 			hoverEvent.add("value", hoverValues);
@@ -170,22 +175,20 @@ public class NoteblockSongs {
 			String chatText = gson.toJson(arr);
 
             LogHelper.info("NBS: Playing " + names.get(currentIndex));
+			MutableComponent chatTextComp = Component.Serializer.fromJson(chatText);
+			MutableComponent infoTextComp = Component.Serializer.fromJson(chatTextWithoutHover);
             if (sender == null) {
-                switch (messageState) {
-                    case MESSAGE_STATE_CHAT:
-						TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatText);
-                        break;
-                    case MESSAGE_STATE_INFO:
-						TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), chatTextWithoutHover);
-                        break;
-                    default:
-						TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatText);
-						TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), chatTextWithoutHover);
-                        break;
-
-                }
+				switch (messageState) {
+					case MESSAGE_STATE_CHAT -> TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatTextComp);
+					case MESSAGE_STATE_INFO ->
+							TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), infoTextComp);
+					default -> {
+						TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatTextComp);
+						TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), infoTextComp);
+					}
+				}
             } else {
-				sender.sendSuccess(new TextComponent(chatText), false);
+				sender.sendSuccess(chatTextComp, false);
             }
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -294,5 +297,7 @@ public class NoteblockSongs {
 					e.printStackTrace();
 				}
 		}
+
+		LogHelper.info("Added {} songs to Noteblock List", songs.size());
 	}
 }

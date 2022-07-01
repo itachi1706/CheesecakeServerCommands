@@ -4,7 +4,12 @@ import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Layer;
 import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Note;
 import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Song;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
-import org.apache.commons.lang3.NotImplementedException;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import net.minecraft.network.protocol.game.ClientboundCustomSoundPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +32,15 @@ public class NoteblockSong {
 		List<NoteblockNote> toPlay = getNotesAt(currentTick/speed);
 		if (toPlay.size() > 0) for (NoteblockNote n : getNotesAt(currentTick/speed)) {
 			float pitch = (float)Math.pow(2.0D, (double)(n.note.getPitch() - 45) / 12.0D);
-			// TODO: Revamp this
-			throw new NotImplementedException("TODO");
-//			for (WorldServer s : DimensionManager.getWorlds()) {
-//				if (!s.playerEntities.isEmpty()) {
-//					for (EntityPlayer player : s.playerEntities) {
-//                        if (player instanceof EntityPlayerMP) {
-//                            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-//                            playerMP.connection.sendPacket(new SPacketCustomSound("minecraft:block.note." +
-//                                    names[n.note.getInstrument().getID()], SoundCategory.RECORDS, playerMP.posX, playerMP.posY, playerMP.posZ,
-//                                    NoteblockSongs.volume * n.volume, pitch));
-//                        }
-//					}
-//				}
-//			}
+
+// 			// TODO: Revamp this
+			for (ServerLevel s : ServerUtil.getServerInstance().getAllLevels()) {
+				if (s.players().isEmpty()) continue;
+				for (ServerPlayer player : s.players()) {
+					ResourceLocation sound = new ResourceLocation("minecraft", "block.note_block." + names[n.note.getInstrument().getID()]);
+					player.connection.send(new ClientboundCustomSoundPacket(sound, SoundSource.RECORDS, player.position(), NoteblockSongs.volume * n.volume, pitch));
+				}
+			}
 		}
 	}
 	
