@@ -128,14 +128,15 @@ public class ServerStatisticsCommand extends BaseCommand {
         return sb.toString();
     }
 
-    public static String getReadableMemorySizeString(double fileSizeInBytes) {
+    public static String getReadableMemorySizeString(long fileSizeInBytes) {
         int i = -1;
+        double fileSizeBytes = fileSizeInBytes;
         String[] byteUnits = {"KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
         do {
-            fileSizeInBytes = fileSizeInBytes / 1024.0;
+            fileSizeBytes = fileSizeBytes / 1024.0;
             i++;
-        } while (fileSizeInBytes > 1024);
+        } while (fileSizeBytes > 1024);
 
-        return String.format("%.1f %s", Math.max(fileSizeInBytes, 0.1), byteUnits[i]);
+        return String.format("%.1f %s", Math.max(fileSizeBytes, 0.1), byteUnits[i]);
     }
 }
