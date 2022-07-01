@@ -54,8 +54,8 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent event) {
-       if (NoteblockSongs.playing)
-           NoteblockSongs.player.onTick();
+       if (NoteblockSongs.isPlaying())
+           NoteblockSongs.getPlayer().onTick();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

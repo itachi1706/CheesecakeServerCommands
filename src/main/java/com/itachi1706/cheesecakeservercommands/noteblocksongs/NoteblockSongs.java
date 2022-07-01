@@ -25,95 +25,94 @@ import java.util.Random;
 
 public class NoteblockSongs {
 	private static int currentIndex = 0;
-	public static List<Song> songs = new ArrayList<>();
-	public static List<String> names = new ArrayList<>();
-	private static Iterator<Song> current = songs.iterator();
-	public static boolean playing = false, random = false;
-	public static NoteblockSong player;
-	public static float volume = 1;
-	public static int messageState = 0; // Defaults to MESSAGE_STATE_CHAT
+	private static List<Song> songs = new ArrayList<>();
+	private static List<String> names = new ArrayList<>();
+	private static Iterator<Song> current;
+	private static boolean playing = false;
+	private static boolean random = false;
+	private static NoteblockSong player;
+	private static final float VOLUME = 1;
+	private static int messageState = 0; // Defaults to MESSAGE_STATE_CHAT
 
-	public static final int MESSAGE_STATE_CHAT = 0, MESSAGE_STATE_INFO = 1, MESSAGE_STATE_ALL = 2;
+	public static final int MESSAGE_STATE_CHAT = 0;
+	public static final int MESSAGE_STATE_INFO = 1;
+	public static final int MESSAGE_STATE_ALL = 2;
+
+	private static final Random rng = new Random();
+
+	private static final String GREEN = "green";
+	private static final String COLOR = "color";
 
 	private NoteblockSongs() {
 	    throw new IllegalStateException("This is a utility class");
     }
+
+	// Getters and Setters
+
+	public static List<Song> getSongs() {
+		return songs;
+	}
+
+	public static List<String> getNames() {
+		return names;
+	}
+
+	public static void setRandom(boolean random) {
+		NoteblockSongs.random = random;
+	}
+
+	public static void setMessageState(int messageState) {
+		NoteblockSongs.messageState = messageState;
+	}
+
+	public static NoteblockSong getPlayer() {
+		return player;
+	}
+
+	public static void setPlayer(NoteblockSong player) {
+		NoteblockSongs.player = player;
+	}
+
+	public static float getVolume() {
+		return VOLUME;
+	}
+
+	// Methods
 	
 	public static void onSongEnd() {
 		if (playing) next();
 	}
-	
+
+	/**
+	 * Sends the Song Message
+	 *
+	 * What this prints:
+	 * Now playing: {AUTHOR} - {SONG_NAME}
+	 * Tooltip: {SONG_NAME}
+	 * Author: {AUTHOR}
+	 * Original author: {ORIG_AUTHOR}
+	 * Description:
+	 * {DESC}
+	 * Length: {SONG_LENGTH}
+	 *
+	 * @param sender Command Sender
+	 */
 	public static void sendMsg(@Nullable CommandSourceStack sender) {
 		try {
-            /*
-              What this prints:
-              	Now playing: {AUTHOR} - {SONG_NAME}
-              	Tooltip: {SONG_NAME}
-              	Author: {AUTHOR}
-              	Original author: {ORIG_AUTHOR}
-              	Description:
-              	{DESC}
-              	Length: {SONG_LENGTH}
-             */
 			Gson gson = new Gson();
 			JsonArray arr = new JsonArray();
 			arr.add("");
 
-			/*
-				[
-					"",
-					{
-						"text": "Now playing: ",
-						"color": "gold"
-					},
-					{
-						"text": "Song Name",
-						"color": "green",
-						"hoverEvent": {
-							"action": "show_text",
-							"value": [
-								"",
-								{
-									"text": "song name\n",
-									"color": "green"
-								},
-								"Author: ",
-								{
-									"text": "authorname\n",
-									"color": "gold"
-								},
-								"Original author: ",
-								{
-									"text": "orig author\n",
-									"color": "gold"
-								},
-								"Description: \n",
-								{
-									"text": "descriptionhere\n",
-									"italic": true
-								},
-								"Length: ",
-								{
-									"text": "playerLen",
-									"color": "gold"
-								}
-							],
-							"color": "green"
-						}
-					}
-				]
-			 */
-
 			// Now Playing Element
 			JsonObject nowPlaying = new JsonObject();
 			nowPlaying.addProperty("text", "Now playing: ");
-			nowPlaying.addProperty("color", "gold");
+			nowPlaying.addProperty(COLOR, "gold");
 			arr.add(nowPlaying);
 
 			// Song Name Element
 			JsonObject songName = new JsonObject();
 			songName.addProperty("text", names.get(currentIndex));
-			songName.addProperty("color", "green");
+			songName.addProperty(COLOR, GREEN);
 
 			JsonArray dupeChatTextNoHover = arr.deepCopy();
 			dupeChatTextNoHover.add(songName);
@@ -128,46 +127,46 @@ public class NoteblockSongs {
 
 			// Hover Event "Song Name"
 			JsonObject hoverSongName = new JsonObject();
-			hoverSongName.addProperty("text", (player.song.getName().trim().isEmpty() ? names.get(currentIndex) : player.song.getName()) + "\n");
-			hoverSongName.addProperty("color", "green");
+			hoverSongName.addProperty("text", (player.getSong().getName().trim().isEmpty() ? names.get(currentIndex) : player.getSong().getName()) + "\n");
+			hoverSongName.addProperty(COLOR, GREEN);
 			hoverValues.add(hoverSongName);
 
 			// Hover Event Author if exist
-			if (!player.song.getAuthor().trim().equals("")) {
+			if (!player.getSong().getAuthor().trim().equals("")) {
 				hoverValues.add("Author: ");
 				JsonObject hoverAuthorName = new JsonObject();
-				hoverAuthorName.addProperty("text", player.song.getAuthor() + "\n");
-				hoverAuthorName.addProperty("color", "gold");
+				hoverAuthorName.addProperty("text", player.getSong().getAuthor() + "\n");
+				hoverAuthorName.addProperty(COLOR, "gold");
 				hoverValues.add(hoverAuthorName);
 			}
 
 			// Hover Event Original Author if exist
-			if (!player.song.getOriginalAuthor().trim().equals("")) {
+			if (!player.getSong().getOriginalAuthor().trim().equals("")) {
 				hoverValues.add("Original author: ");
 				JsonObject hoverOriginalAuthorName = new JsonObject();
-				hoverOriginalAuthorName.addProperty("text", player.song.getOriginalAuthor() + "\n");
-				hoverOriginalAuthorName.addProperty("color", "gold");
+				hoverOriginalAuthorName.addProperty("text", player.getSong().getOriginalAuthor() + "\n");
+				hoverOriginalAuthorName.addProperty(COLOR, "gold");
 				hoverValues.add(hoverOriginalAuthorName);
 			}
 
 			// Hover Event Description if exist
-			if (!player.song.getDescription().trim().equals("")) {
+			if (!player.getSong().getDescription().trim().equals("")) {
 				hoverValues.add("Description: \n");
 				JsonObject hoverDescription = new JsonObject();
-				hoverDescription.addProperty("text", player.song.getDescription() + "\n");
+				hoverDescription.addProperty("text", player.getSong().getDescription() + "\n");
 				hoverDescription.addProperty("italic", "true");
 				hoverValues.add(hoverDescription);
 			}
 
 			hoverValues.add("Length: ");
 			JsonObject length = new JsonObject();
-			length.addProperty("text", getTimeString(player.length));
-			length.addProperty("color", "gold");
+			length.addProperty("text", getTimeString(player.getLength()));
+			length.addProperty(COLOR, "gold");
 			hoverValues.add(length);
 
 
 			hoverEvent.add("value", hoverValues);
-			hoverEvent.addProperty("color", "green");
+			hoverEvent.addProperty(COLOR, GREEN);
 			songName.add("hoverEvent", hoverEvent);
 
 			arr.add(songName);
@@ -188,7 +187,12 @@ public class NoteblockSongs {
 					}
 				}
             } else {
-				sender.sendSuccess(chatTextComp, false);
+				if (chatTextComp == null) {
+					LogHelper.error("NBS: Chat Text is null");
+					sender.sendFailure(new TextComponent("An internal server error has occurred"));
+				} else {
+					sender.sendSuccess(chatTextComp, false);
+				}
             }
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -231,7 +235,7 @@ public class NoteblockSongs {
 			return;
 		}
 		current = songs.iterator();
-		if (random) index = new Random().nextInt(songs.size());
+		if (random) index = rng.nextInt(songs.size());
 		currentIndex = index;
 		if (index > 0) for (int i = 0; i < index; i++) current.next();
 		player = new NoteblockSong(current.next());
@@ -254,7 +258,7 @@ public class NoteblockSongs {
 		player.stop();
 		if (random) {
 		    current = songs.iterator();
-		    currentIndex = new Random().nextInt(songs.size());
+		    currentIndex = rng.nextInt(songs.size());
 		    if (currentIndex > 0) for (int i = 0; i < currentIndex; i++) current.next();
         } else {
             if (!current.hasNext()) {

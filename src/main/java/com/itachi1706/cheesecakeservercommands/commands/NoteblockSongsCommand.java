@@ -18,6 +18,7 @@ public class NoteblockSongsCommand extends BaseCommand {
 
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
+        final String INDEX = "index";
         return builder
                 .then(Commands.literal("help").executes(context -> displayHelp(context.getSource())))
                 .then(Commands.literal("list").executes(context -> displaySongList(context.getSource(), 1))
@@ -26,14 +27,14 @@ public class NoteblockSongsCommand extends BaseCommand {
                 .then(Commands.literal("randomplay").executes(context -> playSong(context.getSource(), true, true))
                         .then(Commands.argument("type", StringArgumentType.string()).suggests(((context, builder) -> SharedSuggestionProvider.suggest(playSuggestionList, builder)))
                                 .executes(context -> playSong(context.getSource(), true, StringArgumentType.getString(context, "type")))
-                                .then(Commands.argument("index", IntegerArgumentType.integer(1))
-                                        .executes(context -> playSong(context.getSource(), true, StringArgumentType.getString(context, "type"), IntegerArgumentType.getInteger(context, "index")))))
+                                .then(Commands.argument(INDEX, IntegerArgumentType.integer(1))
+                                        .executes(context -> playSong(context.getSource(), true, StringArgumentType.getString(context, "type"), IntegerArgumentType.getInteger(context, INDEX)))))
                 )
                 .then(Commands.literal("play").executes(context -> playSong(context.getSource(), false, true))
                         .then(Commands.argument("type", StringArgumentType.string()).suggests(((context, builder) -> SharedSuggestionProvider.suggest(playSuggestionList, builder)))
                                 .executes(context -> playSong(context.getSource(), false, StringArgumentType.getString(context, "type")))
-                                .then(Commands.argument("index", IntegerArgumentType.integer(1))
-                                        .executes(context -> playSong(context.getSource(), false, StringArgumentType.getString(context, "type"), IntegerArgumentType.getInteger(context, "index"))))))
+                                .then(Commands.argument(INDEX, IntegerArgumentType.integer(1))
+                                        .executes(context -> playSong(context.getSource(), false, StringArgumentType.getString(context, "type"), IntegerArgumentType.getInteger(context, INDEX))))))
                 .then(Commands.literal("stop").executes(context -> stopPlaying(context.getSource())))
                 .then(Commands.literal("refresh").executes(context -> refreshSongs(context.getSource())))
                 .then(Commands.literal("next").executes(context -> nextSong(context.getSource())))
@@ -62,9 +63,9 @@ public class NoteblockSongsCommand extends BaseCommand {
             sendFailureMessage(sender, ChatFormatting.RED + "Songs are already being played server-wide");
             return 0;
         }
-        if (defaultState) NoteblockSongs.messageState = NoteblockSongs.MESSAGE_STATE_CHAT; // Reset default
+        if (defaultState) NoteblockSongs.setMessageState(NoteblockSongs.MESSAGE_STATE_CHAT); // Reset default
 
-        NoteblockSongs.random = random;
+        NoteblockSongs.setRandom(random);
 
         if (defaultState) sendSuccessMessage(sender, ChatFormatting.GREEN + "Started playing songs");
         NoteblockSongs.play(sender);
@@ -75,20 +76,23 @@ public class NoteblockSongsCommand extends BaseCommand {
     private void setBaseOnType(CommandSourceStack sender, String type) {
         // see if its chat, info or all
         switch (type.toLowerCase()) {
-            case "all":
+            case "all" -> {
                 sendSuccessMessage(sender, ChatFormatting.GREEN + "Started playing songs with song info in both chat and hotbar");
-                NoteblockSongs.messageState = NoteblockSongs.MESSAGE_STATE_ALL;
-                break;
-            case "info":
+                NoteblockSongs.setMessageState(NoteblockSongs.MESSAGE_STATE_ALL);
+            }
+            case "info" -> {
                 sendSuccessMessage(sender, ChatFormatting.GREEN + "Started playing songs with song info above hotbar");
-                NoteblockSongs.messageState = NoteblockSongs.MESSAGE_STATE_INFO;
-                break;
-            default:
-                sendSuccessMessage(sender, ChatFormatting.RED + "Invalid Type. Assuming default");
-            case "chat":
+                NoteblockSongs.setMessageState(NoteblockSongs.MESSAGE_STATE_INFO);
+            }
+            case "chat" -> {
                 sendSuccessMessage(sender, ChatFormatting.GREEN + "Started playing songs with song info in chat");
-                NoteblockSongs.messageState = NoteblockSongs.MESSAGE_STATE_CHAT;
-                break;
+                NoteblockSongs.setMessageState(NoteblockSongs.MESSAGE_STATE_CHAT);
+            }
+            default -> {
+                sendSuccessMessage(sender, ChatFormatting.RED + "Invalid Type. Assuming default");
+                sendSuccessMessage(sender, ChatFormatting.GREEN + "Started playing songs with song info in chat");
+                NoteblockSongs.setMessageState(NoteblockSongs.MESSAGE_STATE_CHAT);
+            }
         }
     }
 
@@ -100,7 +104,7 @@ public class NoteblockSongsCommand extends BaseCommand {
 
     private int playSong(CommandSourceStack sender, boolean random, String type, int index) {
         // see if its chat, info or all
-        NoteblockSongs.random = random;
+        NoteblockSongs.setRandom(random);
         setBaseOnType(sender, type);
         NoteblockSongs.play(sender, index - 1);
         return Command.SINGLE_SUCCESS;
@@ -119,7 +123,7 @@ public class NoteblockSongsCommand extends BaseCommand {
 
     private int refreshSongs(CommandSourceStack sender) {
         NoteblockSongs.refreshSongs();
-        sendSuccessMessage(sender, ChatFormatting.GREEN + "Reloaded " + NoteblockSongs.songs.size() + " songs");
+        sendSuccessMessage(sender, ChatFormatting.GREEN + "Reloaded " + NoteblockSongs.getSongs().size() + " songs");
 
         return Command.SINGLE_SUCCESS;
     }
@@ -138,22 +142,21 @@ public class NoteblockSongsCommand extends BaseCommand {
     }
 
     private int displaySongList(CommandSourceStack sender, int pageIndex) {
-        int totalPages = NoteblockSongs.names.size() / 10;
-        if (NoteblockSongs.names.size() % 10 != 0) totalPages++;
+        int totalPages = NoteblockSongs.getNames().size() / 10;
+        if (NoteblockSongs.getNames().size() % 10 != 0) totalPages++;
         if (pageIndex < 1) pageIndex = 1;
         if (pageIndex > totalPages) pageIndex = totalPages;
         sendSuccessMessage(sender, ChatFormatting.DARK_GREEN + "--- Noteblock Song List Page " + pageIndex + " of " + totalPages + " ---");
         int skipVal = ((pageIndex - 1) * 10) - 1; //0-9, 10-19, 20-29
         int toAdd = skipVal + 2;
         int printed = 0;
-        for (String name : NoteblockSongs.names) {
-            if (skipVal >= 0) {
-                skipVal--;
-                continue;
+        for (String name : NoteblockSongs.getNames()) {
+            if (skipVal >= 0) skipVal--;
+            else {
+                if (printed >= 10) break;
+                sendSuccessMessage(sender, (toAdd + printed) + ". " + name);
+                printed++;
             }
-            if (printed >= 10) break;
-            sendSuccessMessage(sender, (toAdd + printed) + ". " + name);
-            printed++;
         }
 
         return Command.SINGLE_SUCCESS;
