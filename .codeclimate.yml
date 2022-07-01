@@ -18,7 +18,7 @@ plugins:
   sonar-java:
     enabled: true
     config:
-      sonar.java.source: 8
+      sonar.java.source: 17
 ratings:
   paths:
   - "**.java"
