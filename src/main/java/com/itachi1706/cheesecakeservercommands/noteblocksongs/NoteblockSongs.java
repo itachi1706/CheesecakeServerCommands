@@ -78,7 +78,7 @@ public class NoteblockSongs {
 	}
 
 	// Methods
-	
+
 	public static void onSongEnd() {
 		if (playing) next();
 	}
@@ -164,13 +164,11 @@ public class NoteblockSongs {
 			length.addProperty(COLOR, "gold");
 			hoverValues.add(length);
 
-
 			hoverEvent.add("value", hoverValues);
 			hoverEvent.addProperty(COLOR, GREEN);
 			songName.add("hoverEvent", hoverEvent);
 
 			arr.add(songName);
-
 			String chatText = gson.toJson(arr);
 
             LogHelper.info("NBS: Playing " + names.get(currentIndex));
@@ -179,8 +177,7 @@ public class NoteblockSongs {
             if (sender == null) {
 				switch (messageState) {
 					case MESSAGE_STATE_CHAT -> TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatTextComp);
-					case MESSAGE_STATE_INFO ->
-							TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), infoTextComp);
+					case MESSAGE_STATE_INFO -> TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), infoTextComp);
 					default -> {
 						TextUtil.sendGlobalChatMessage(ServerUtil.getServerPlayers(), chatTextComp);
 						TextUtil.sendGlobalActionMessage(ServerUtil.getServerPlayers(), infoTextComp);
@@ -216,11 +213,11 @@ public class NoteblockSongs {
 		String secString = (seconds < 10 && secs > 59) ? "0" + seconds : Integer.toString(seconds);
 		return (hours > 0 ? hours + "h" : "") + ((hours == 0 && minutes > 0) ? minString + ":" : "") + secString + (secs < 60 ? "\"" : "");
 	}
-	
+
 	public static boolean isPlaying() {
 		return playing;
 	}
-	
+
 	/**
 	 * Plays index-th song.
 	 * @param sender Command Sender
@@ -243,14 +240,14 @@ public class NoteblockSongs {
 		player.start();
 		sendMsg(null);
 	}
-	
+
 	/**
 	 * Plays the first song.
 	 */
 	public static void play(CommandSourceStack sender) {
 		play(sender,0);
 	}
-	
+
 	/**
 	 * Plays the next song.
 	 */
@@ -270,7 +267,7 @@ public class NoteblockSongs {
 		player.start();
 		sendMsg(null);
 	}
-	
+
 	/**
 	 * Pauses playing.
 	 */
@@ -279,7 +276,7 @@ public class NoteblockSongs {
 		playing = false;
 		random = false;
 	}
-	
+
 	/**
 	 * Refreshes the song list.
 	 */
