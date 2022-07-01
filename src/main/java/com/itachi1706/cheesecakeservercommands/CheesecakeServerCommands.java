@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.commands.*;
+import com.itachi1706.cheesecakeservercommands.commands.admin.SudoCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStatisticsCommand;
@@ -220,7 +221,7 @@ public class CheesecakeServerCommands
         // event.registerServerCommand(new InvSeeCommand());
         // event.registerServerCommand(new BurnCommand());
         // event.registerServerCommand(new LocateCommand());
-        // event.registerServerCommand(new SudoCommand());
+        commands.add(new SudoCommand("sudo", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new GamemodeCommand());
         // event.registerServerCommand(new TpToCommand());
         // event.registerServerCommand(new TpHereCommand());
