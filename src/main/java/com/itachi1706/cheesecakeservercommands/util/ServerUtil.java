@@ -5,6 +5,7 @@ import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +21,10 @@ public class ServerUtil {
 
     public static MinecraftServer getServerInstance() {
         return ServerLifecycleHooks.getCurrentServer();
+    }
+
+    public static DedicatedServer getDedicatedServerInstance() {
+        return (DedicatedServer) getServerInstance();
     }
 
     public static PlayerList getServerPlayers() {

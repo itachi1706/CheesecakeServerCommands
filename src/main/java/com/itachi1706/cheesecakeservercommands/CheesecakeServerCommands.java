@@ -240,7 +240,7 @@ public class CheesecakeServerCommands
 
         // Essentials Server
         commands.add(new ModlistCommand("modlist", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new ServerSettingsCommand());
+        commands.add(new ServerSettingsCommand("serversettings", CommandPermissionsLevel.CONSOLE, true));
         commands.add(new ServerStatisticsCommand("serverstats", CommandPermissionsLevel.CONSOLE, true));
         commands.add(new GarbageCollectorCommand("gc", CommandPermissionsLevel.CONSOLE, true));
         commands.add(new GetCommandBookCommand("getcommandbook", CommandPermissionsLevel.OPS, true));
