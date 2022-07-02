@@ -201,7 +201,7 @@ public class CheesecakeServerCommands
         commands.add(new ZeusCommand("zeus", CommandPermissionsLevel.OPS, true));
         commands.add(new WowCommand("wow", CommandPermissionsLevel.ALL, true));
         commands.add(new WowCommand("doge", CommandPermissionsLevel.ALL, true));
-        // event.registerServerCommand(new FlingCommand());
+        commands.add(new FlingCommand("fling", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new KickCommand());
 
         // event.registerServerCommand(new EnchantForceCommand());

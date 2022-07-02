@@ -26,13 +26,13 @@ public class HealCommand extends BaseCommand {
 
     private int healMe(CommandSourceStack sender) {
         if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot feed CONSOLE");
+            sendFailureMessage(sender, "Cannot heal CONSOLE");
             return 0;
         }
 
         ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
         if (player == null) {
-            sendFailureMessage(sender, "Cannot feed " + sender.getTextName());
+            sendFailureMessage(sender, "Cannot heal " + sender.getTextName());
             return 0;
         }
 
