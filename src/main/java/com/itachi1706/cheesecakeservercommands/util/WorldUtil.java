@@ -87,6 +87,7 @@ public class WorldUtil {
 
     public static void placeInWorld(Player player)
     {
+        // TODO: Place in world not working yet
         int getY = placeInWorld(player.getLevel(), player.getBlockX(), player.getBlockY(), player.getBlockZ(), 2);
 
         player.setPos(player.getX() + 0.5, getY, player.getZ() + 0.5);

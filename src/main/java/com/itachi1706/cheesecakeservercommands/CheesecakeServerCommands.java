@@ -213,15 +213,15 @@ public class CheesecakeServerCommands
         // Adapted from Essentials
 
         // Essentials Server Commands
-        // event.registerServerCommand(new FlyCommand());
-        // event.registerServerCommand(new GodCommand());
+        commands.add(new FlyCommand("fly", CommandPermissionsLevel.OPS, true));
+        commands.add(new GodCommand("god", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new SpeedCommand());
-        // event.registerServerCommand(new HealCommand());
-        // event.registerServerCommand(new FeedCommand());
+        commands.add(new HealCommand("heal", CommandPermissionsLevel.OPS, true));
+        commands.add(new FeedCommand("feed", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new SmiteCommand());
         // event.registerServerCommand(new KillCommand());
         // event.registerServerCommand(new InvSeeCommand());
-        // event.registerServerCommand(new BurnCommand());
+        commands.add(new BurnCommand("burn", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new LocateCommand());
         commands.add(new SudoCommand("sudo", CommandPermissionsLevel.OPS, true));
         commands.add(new GamemodeCommand("gm", CommandPermissionsLevel.OPS, true));
