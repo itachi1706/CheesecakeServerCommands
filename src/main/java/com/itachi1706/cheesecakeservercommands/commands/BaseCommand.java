@@ -9,6 +9,8 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 
+import java.util.List;
+
 public abstract class BaseCommand {
 
     protected LiteralArgumentBuilder<CommandSourceStack> builder;
@@ -45,6 +47,11 @@ public abstract class BaseCommand {
 
     public void sendMessage(ServerPlayer player, Component textComponent) {
         TextUtil.sendChatMessage(player, textComponent);
+    }
+
+    public void sendSuccessMessage(CommandSourceStack sender, List<String> textArr) {
+        for (String text : textArr)
+            sendSuccessMessage(sender, text, false);
     }
 
     public void sendSuccessMessage(CommandSourceStack sender, String text) {

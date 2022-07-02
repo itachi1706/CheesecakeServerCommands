@@ -29,14 +29,6 @@ public class MainCommand extends BaseCommand {
                 .then(Commands.literal("modulehelp").executes(context -> subCmd(context.getSource(), "modulehelp"))
                         .then(Commands.argument("module", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Arrays.stream(this.mainHelp).map(HelpMain::getKey).toList(), builder))
                                 .executes(context -> listCommands(context.getSource(), StringArgumentType.getString(context, "module")))))
-                /*
-                  Old code for Admin Silence tab complete
-                  TODO: Convert to suggestions in post admin silence execution
-
-                  if (args.length >= 2 && args[0].equalsIgnoreCase("adminsilence")) {
-                      return AdminSilenceCommand.getTabCompletions(server, sender, args, targetPos);
-                  }
-                 */
                 .then(Commands.literal("adminsilence").executes(context -> subCmd(context.getSource(), "adminsilence")));
     }
 
@@ -50,9 +42,8 @@ public class MainCommand extends BaseCommand {
         switch (arg) {
             case "list" -> listModules(sender);
             case "modulehelp" -> sendFailureMessage(sender, ChatFormatting.RED + "Please select a module. View modules with /csc list");
-            // TODO: Replace Admin Silence Command
-            // Old Code: case "adminsilence" -> AdminSilenceCommand.execute(server, iCommandSender, args);
-            case "adminsilence" -> sendFailureMessage(sender, "This command is not yet implemented");
+            case "adminsilence" -> sendFailureMessage(sender, "Please use /adminsilence instead now");
+            default -> sendFailureMessage(sender, "Invalid command");
         }
         return Command.SINGLE_SUCCESS;
     }

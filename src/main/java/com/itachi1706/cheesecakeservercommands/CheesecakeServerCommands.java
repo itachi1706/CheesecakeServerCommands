@@ -4,11 +4,14 @@ import com.itachi1706.cheesecakeservercommands.commands.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.SudoCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.server.AdminSilenceCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.GarbageCollectorCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStatisticsCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
+import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
+import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
@@ -135,8 +138,8 @@ public class CheesecakeServerCommands
 
         // Register Loggers
         registerLoggers();
-        // CSCAdminSilenceWorldSavedData.get(event.getServer().getEntityWorld(), true);
-        // LogHelper.info("Admin Silenced List: " + AdminSilenced.getState());
+        CSCAdminSilenceWorldSavedData.get();
+        LogHelper.info("Admin Silenced List: " + AdminSilenced.getState());
 
         // Init OS Bean
         setPlatformBean(ManagementFactory.getPlatformMBeanServer());
@@ -191,6 +194,7 @@ public class CheesecakeServerCommands
         commands.add(new ServerPropertiesCommand("serverproperties", CommandPermissionsLevel.CONSOLE, true));
         commands.add(new MainCommand("csc", CommandPermissionsLevel.ALL, true));
         commands.add(new MainCommand("cheesecakeservercommands", CommandPermissionsLevel.ALL, true));
+        commands.add(new AdminSilenceCommand("adminsilence", CommandPermissionsLevel.CONSOLE, true));
 
         // Admin Commands
         // event.registerServerCommand(new GMCCommand());

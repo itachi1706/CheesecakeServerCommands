@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeservercommands.events;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,16 +62,14 @@ public class PlayerEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onCommandUse(CommandEvent event) {
         CommandSourceStack sender = event.getParseResults().getContext().getSource();
-        // TODO: Reimplement
-//        if (ServerUtil.checkIfAdminSilenced(sender)) return; // Don't log admin silenced players
+        if (ServerUtil.checkIfAdminSilenced(sender)) return; // Don't log admin silenced players
 
         String commandExecuted = event.getParseResults().getReader().getString();
         String commandBase = commandExecuted.split(" ")[0].substring(1);
         String ip = "localhost";
         String name = sender.getTextName();
 
-        // TODO: Reimplement
-//        if (ServerUtil.checkIfCommandUseIgnored(name)) return; // Don't log ignored users
+        if (ServerUtil.checkIfCommandUseIgnored(name)) return; // Don't log ignored users
         UUID uuid = UUID.randomUUID();
         try {
             ServerPlayer playerMP = sender.getPlayerOrException();

@@ -78,7 +78,7 @@ public class TextUtil {
     // Admin Messages
 
     public static void sendAdminChatMessage(ServerPlayer player, Component textComponent) {
-//        if (ServerUtil.checkIfAdminSilenced(player)) return; // Don't send if admin silenced
+        if (ServerUtil.checkIfAdminSilenced(player)) return; // Don't send if admin silenced
         String text = textComponent.getString();
 
         text = "[" + player.getName() + ": " + text + "]";
@@ -98,7 +98,7 @@ public class TextUtil {
     }
 
     public static void sendAdminChatMessage(CommandSourceStack sender, Component textComponent) {
-        //        if (ServerUtil.checkIfAdminSilenced(player)) return; // Don't send if admin silenced
+        if (ServerUtil.checkIfAdminSilenced(sender)) return; // Don't send if admin silenced
         String text = textComponent.getString();
 
 
