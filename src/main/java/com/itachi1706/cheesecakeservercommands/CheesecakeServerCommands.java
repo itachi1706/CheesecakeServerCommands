@@ -6,6 +6,7 @@ import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.AdminSilenceCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.GarbageCollectorCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.server.ModlistCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.ServerStatisticsCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
@@ -241,7 +242,7 @@ public class CheesecakeServerCommands
         // event.registerServerCommand(new RepairCommand());
 
         // Essentials Server
-        // event.registerServerCommand(new ModlistCommand());
+        commands.add(new ModlistCommand("modlist", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new ServerSettingsCommand());
         commands.add(new ServerStatisticsCommand("serverstats", CommandPermissionsLevel.CONSOLE, true));
         commands.add(new GarbageCollectorCommand("gc", CommandPermissionsLevel.CONSOLE, true));
