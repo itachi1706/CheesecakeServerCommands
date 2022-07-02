@@ -1,9 +1,7 @@
 package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.commands.*;
-import com.itachi1706.cheesecakeservercommands.commands.admin.SudoCommand;
-import com.itachi1706.cheesecakeservercommands.commands.admin.WowCommand;
-import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.*;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
@@ -19,6 +17,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.GameType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -195,10 +194,10 @@ public class CheesecakeServerCommands
         commands.add(new AdminSilenceCommand("adminsilence", CommandPermissionsLevel.CONSOLE, true));
 
         // Admin Commands
-        // event.registerServerCommand(new GMCCommand());
-        // event.registerServerCommand(new GMSCommand());
-        // event.registerServerCommand(new GMACommand());
-        // event.registerServerCommand(new GMSPCommand());
+        commands.add(new GMCommand("gmc", CommandPermissionsLevel.OPS, true, GameType.CREATIVE, "Creative Mode"));
+        commands.add(new GMCommand("gms", CommandPermissionsLevel.OPS, true, GameType.SURVIVAL, "Survival Mode"));
+        commands.add(new GMCommand("gma", CommandPermissionsLevel.OPS, true, GameType.ADVENTURE, "Adventure Mode"));
+        commands.add(new GMCommand("gmsp", CommandPermissionsLevel.OPS, true, GameType.SPECTATOR, "Spectator Mode"));
         commands.add(new ZeusCommand("zeus", CommandPermissionsLevel.OPS, true));
         commands.add(new WowCommand("wow", CommandPermissionsLevel.ALL, true));
         commands.add(new WowCommand("doge", CommandPermissionsLevel.ALL, true));
@@ -225,7 +224,7 @@ public class CheesecakeServerCommands
         // event.registerServerCommand(new BurnCommand());
         // event.registerServerCommand(new LocateCommand());
         commands.add(new SudoCommand("sudo", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new GamemodeCommand());
+        commands.add(new GamemodeCommand("gm", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new TpToCommand());
         // event.registerServerCommand(new TpHereCommand());
 
