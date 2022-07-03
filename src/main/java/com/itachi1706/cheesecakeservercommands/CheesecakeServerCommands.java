@@ -202,7 +202,7 @@ public class CheesecakeServerCommands
         commands.add(new WowCommand("wow", CommandPermissionsLevel.ALL, true));
         commands.add(new WowCommand("doge", CommandPermissionsLevel.ALL, true));
         commands.add(new FlingCommand("fling", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new KickCommand());
+        commands.add(new KickCommand("pkick", CommandPermissionsLevel.OPS, true));
 
         // event.registerServerCommand(new EnchantForceCommand());
         // event.registerServerCommand(new InvSeeEnderChestCommand());
@@ -220,7 +220,6 @@ public class CheesecakeServerCommands
         commands.add(new FeedCommand("feed", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new SmiteCommand());
         commands.add(new KillCommand("pkill", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new KillCommand());
         // event.registerServerCommand(new InvSeeCommand());
         commands.add(new BurnCommand("burn", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new LocateCommand());
