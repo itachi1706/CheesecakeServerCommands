@@ -219,6 +219,7 @@ public class CheesecakeServerCommands
         commands.add(new HealCommand("heal", CommandPermissionsLevel.OPS, true));
         commands.add(new FeedCommand("feed", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new SmiteCommand());
+        commands.add(new KillCommand("pkill", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new KillCommand());
         // event.registerServerCommand(new InvSeeCommand());
         commands.add(new BurnCommand("burn", CommandPermissionsLevel.OPS, true));
