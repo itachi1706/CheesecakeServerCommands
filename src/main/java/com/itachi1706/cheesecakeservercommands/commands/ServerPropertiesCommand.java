@@ -39,7 +39,7 @@ public class ServerPropertiesCommand extends BaseCommand {
         sendSuccessMessage(sender, ChatFormatting.BLUE + TextUtil.centerText("Server Status"));
         sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
         sendSuccessMessage(sender, ChatFormatting.GOLD + "Server: " + ChatFormatting.AQUA + tmp.getServerModName());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Type: " + ChatFormatting.AQUA + ((serverSide) ? "Dedicated Server (MP)" : "Single Player World (SP)"));
+        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Type: " + ChatFormatting.AQUA + ( serverSide ? "Dedicated Server (MP)" : "Single Player World (SP)"));
         sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Version: " + ChatFormatting.AQUA + tmp.getServerVersion());
         if (serverSide) sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Online Mode: " + ChatFormatting.AQUA + dedicatedServer.getProperties().onlineMode);
         sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Modded State: " + ChatFormatting.AQUA + tmp.getModdedStatus().confidence().name());
