@@ -27,7 +27,8 @@ public class MainCommand extends BaseCommand {
         return builder.executes(context -> listMain(context.getSource()))
                 .then(Commands.literal("list").executes(context -> subCmd(context.getSource(), "list")))
                 .then(Commands.literal("modulehelp").executes(context -> subCmd(context.getSource(), "modulehelp"))
-                        .then(Commands.argument("module", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Arrays.stream(this.mainHelp).map(HelpMain::getKey).toList(), builder))
+                        .then(Commands.argument("module", StringArgumentType.string())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(Arrays.stream(this.mainHelp).map(HelpMain::getKey).toList(), builder))
                                 .executes(context -> listCommands(context.getSource(), StringArgumentType.getString(context, "module")))))
                 .then(Commands.literal("adminsilence").executes(context -> subCmd(context.getSource(), "adminsilence")));
     }

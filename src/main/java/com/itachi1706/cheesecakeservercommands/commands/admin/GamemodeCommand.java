@@ -27,7 +27,7 @@ public class GamemodeCommand extends BaseCommand {
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder
                 .then(Commands.argument(ARG_GAMEMODE, StringArgumentType.string())
-                        .suggests(((context, builder) -> SharedSuggestionProvider.suggest(gametypeList, builder)))
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(gametypeList, builder))
                         .executes(context -> setOwnGamemode(context.getSource(), StringArgumentType.getString(context, ARG_GAMEMODE)))
                         .then(Commands.argument("player", EntityArgument.players())
                                 .executes(context -> setPlayerGamemode(context.getSource(), EntityArgument.getPlayer(context, "player"), StringArgumentType.getString(context, ARG_GAMEMODE)))));
