@@ -18,6 +18,7 @@
 
 An internal forge app handling server commands for the Cheesecake Network 
 
-This is an application primarily designed for use with Forge Modded Servers in the Cheesecake Network. As such this mod is specially designed and is not meant for use by other servers. As such, no feature requests will be entertained.
+This is an application primarily designed for use with Forge Modded Servers on the Cheesecake Network. 
+As such this mod is specially designed and is not meant for use by other servers and no feature requests will be entertained.
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=itachi1706_CheesecakeServerCommands)](https://sonarcloud.io/summary/new_code?id=itachi1706_CheesecakeServerCommands)
