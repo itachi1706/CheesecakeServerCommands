@@ -64,7 +64,7 @@ public class AdminSilenceCommand extends BaseCommand {
         List<String> chatString = new ArrayList<>();
         chatString.add(ChatFormatting.GOLD + TextUtil.generateChatBreaks('-'));
         chatString.add("Found " + uuidList.size() + " names");
-        chatString.add("Enabled: " + ((AdminSilenced.getState()) ? ChatFormatting.GREEN : ChatFormatting.RED) + AdminSilenced.getState());
+        chatString.add("Enabled: " + ( AdminSilenced.getState() ? ChatFormatting.GREEN : ChatFormatting.RED) + AdminSilenced.getState());
         chatString.add(ChatFormatting.GOLD + TextUtil.generateChatBreaks('-'));
         for (UUID uuid : uuidList) {
             LastKnownUsernames tryPName = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);

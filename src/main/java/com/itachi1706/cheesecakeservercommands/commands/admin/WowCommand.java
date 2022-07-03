@@ -60,7 +60,7 @@ public class WowCommand extends BaseCommand {
     private void sendToEveryone(CommandSourceStack starter, ServerPlayer recepient) {
         List<ServerPlayer> players = ServerPlayerUtil.getOnlinePlayers();
         for (ServerPlayer player : players) {
-            if (!(player.getName().equals(starter.getTextName()))) {
+            if (! player.getName().equals(starter.getTextName())) {
                 if (recepient != null && !player.getName().equals(recepient.getName())) {
                     sendMessage(player, ChatFormatting.GOLD + recepient.getName().getString() + ChatFormatting.GRAY + " just got doged :D");
                 } else if (recepient == null) {
