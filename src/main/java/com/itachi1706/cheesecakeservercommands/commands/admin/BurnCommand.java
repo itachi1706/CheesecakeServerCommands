@@ -20,7 +20,7 @@ public class BurnCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> burnMe(context.getSource()))
-                .then(Commands.argument("players", EntityArgument.players())
+                .then(Commands.argument("players", EntityArgument.player())
                         .executes(context -> burnOthers(context.getSource(), EntityArgument.getPlayer(context, "players"))));
     }
 

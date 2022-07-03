@@ -20,7 +20,7 @@ public class SudoCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder
-                .then(Commands.argument("player", EntityArgument.players())
+                .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("command", MessageArgument.message())
                                 .executes(context -> executeCommandAsPlayer(context.getSource(), EntityArgument.getPlayer(context, "player"),
                                         MessageArgument.getMessage(context, "command").getString()))));

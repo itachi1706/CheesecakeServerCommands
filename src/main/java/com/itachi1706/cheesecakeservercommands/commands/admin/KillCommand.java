@@ -27,7 +27,7 @@ public class KillCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> killYourself(context.getSource()))
-                .then(Commands.argument(ARG_PLAYER, EntityArgument.players())
+                .then(Commands.argument(ARG_PLAYER, EntityArgument.player())
                         .executes(context -> killOthers(context.getSource(), EntityArgument.getPlayer(context, ARG_PLAYER)))
                         .then(Commands.argument("cause", StringArgumentType.string())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(CheesecakeServerCommands.getKnownDamageSources().keySet(), builder))

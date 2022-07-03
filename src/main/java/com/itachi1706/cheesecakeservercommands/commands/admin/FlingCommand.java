@@ -27,7 +27,7 @@ public class FlingCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> flingMyself(context.getSource()))
-                .then(Commands.argument("players", EntityArgument.players())
+                .then(Commands.argument("players", EntityArgument.player())
                         .executes(context -> flingOthers(context.getSource(), EntityArgument.getPlayer(context, "players"))));
     }
 

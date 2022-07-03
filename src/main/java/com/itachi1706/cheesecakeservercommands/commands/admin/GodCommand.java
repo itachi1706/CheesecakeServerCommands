@@ -25,7 +25,7 @@ public class GodCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> toggleGodModeToMe(context.getSource()))
-                .then(Commands.argument("players", EntityArgument.players())
+                .then(Commands.argument("players", EntityArgument.player())
                         .executes(context -> toggleGodModeToOthers(context.getSource(), EntityArgument.getPlayer(context, "players"))));
     }
 

@@ -20,7 +20,7 @@ public class HealCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> healMe(context.getSource()))
-                .then(Commands.argument("players", EntityArgument.players())
+                .then(Commands.argument("players", EntityArgument.player())
                         .executes(context -> healOthers(context.getSource(), EntityArgument.getPlayer(context, "players"))));
     }
 

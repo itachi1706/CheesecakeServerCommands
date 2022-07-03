@@ -26,7 +26,7 @@ public class GMCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> setOwnGamemode(context.getSource()))
-                .then(Commands.argument("player", EntityArgument.players())
+                .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> setPlayerGamemode(context.getSource(), EntityArgument.getPlayer(context, "player"))));
     }
 

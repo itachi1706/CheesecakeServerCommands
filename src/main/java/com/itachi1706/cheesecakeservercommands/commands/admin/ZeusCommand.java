@@ -25,7 +25,7 @@ public class ZeusCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> strikeYourself(context.getSource()))
-                .then(Commands.argument("player", EntityArgument.players())
+                .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> strikeOtherPlayer(context.getSource(), EntityArgument.getPlayer(context, "player"))));
     }
 

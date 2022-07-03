@@ -23,7 +23,7 @@ public class WowCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> wowYourself(context.getSource()))
-                .then(Commands.argument("player", EntityArgument.players())
+                .then(Commands.argument("player", EntityArgument.player())
                         // Just for this command requires OP for others but not yourself
                         .requires(source -> source.hasPermission(CommandPermissionsLevel.OPS))
                         .executes(context -> wowOthers(context.getSource(), EntityArgument.getPlayer(context, "player"))));

@@ -29,7 +29,7 @@ public class GamemodeCommand extends BaseCommand {
                 .then(Commands.argument(ARG_GAMEMODE, StringArgumentType.string())
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(gametypeList, builder))
                         .executes(context -> setOwnGamemode(context.getSource(), StringArgumentType.getString(context, ARG_GAMEMODE)))
-                        .then(Commands.argument("player", EntityArgument.players())
+                        .then(Commands.argument("player", EntityArgument.player())
                                 .executes(context -> setPlayerGamemode(context.getSource(), EntityArgument.getPlayer(context, "player"), StringArgumentType.getString(context, ARG_GAMEMODE)))));
     }
 

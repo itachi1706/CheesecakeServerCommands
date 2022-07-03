@@ -30,7 +30,7 @@ public class GetCommandBookCommand extends BaseCommand {
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> giveBook(context.getSource()))
-                .then(Commands.argument("player", EntityArgument.players())
+                .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> giveBook(context.getSource(), EntityArgument.getPlayer(context, "player"), false)));
     }
 
