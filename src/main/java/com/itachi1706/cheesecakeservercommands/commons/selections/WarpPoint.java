@@ -1,18 +1,18 @@
 package com.itachi1706.cheesecakeservercommands.commons.selections;
 
 import com.google.gson.annotations.Expose;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Created by Kenneth on 2/5/2016.
  * for com.itachi1706.cheesecakeservercommands.commons.selections in CheesecakeServerCommands
  */
 public class WarpPoint {
-    protected int dim;
+    protected String dim;
 
     protected float pitch;
 
@@ -25,11 +25,11 @@ public class WarpPoint {
     protected double zd;
 
     @Expose(serialize = false)
-    protected WorldServer world;
+    protected ServerLevel world;
 
     // ------------------------------------------------------------
 
-    public WarpPoint(int dimension, double x, double y, double z, float playerPitch, float playerYaw)
+    public WarpPoint(String dimension, double x, double y, double z, float playerPitch, float playerYaw)
     {
         this.dim = dimension;
         this.xd = x;
@@ -39,10 +39,10 @@ public class WarpPoint {
         this.yaw = playerYaw;
     }
 
-    public WarpPoint(WorldServer world, double x, double y, double z, float playerPitch, float playerYaw)
+    public WarpPoint(ServerLevel world, double x, double y, double z, float playerPitch, float playerYaw)
     {
         this.world = world;
-        this.dim = world.provider.getDimension();
+        this.dim = world.dimension().location().toString();
         this.xd = x;
         this.yd = y;
         this.zd = z;
@@ -50,12 +50,12 @@ public class WarpPoint {
         this.yaw = playerYaw;
     }
 
-    public WarpPoint(int dimension, RayTraceResult location, float pitch, float yaw)
+    public WarpPoint(String dimension, HitResult location, float pitch, float yaw)
     {
-        this(dimension, location.getBlockPos().getX() + 0.5, location.getBlockPos().getY(), location.getBlockPos().getZ() + 0.5, pitch, yaw);
+        this(dimension, location.getLocation().x + 0.5, location.getLocation().y, location.getLocation().z + 0.5, pitch, yaw);
     }
 
-    public WarpPoint(Point point, int dimension, float pitch, float yaw)
+    public WarpPoint(Point point, String dimension, float pitch, float yaw)
     {
         this(dimension, point.getX(), point.getY(), point.getZ(), pitch, yaw);
     }
@@ -72,8 +72,7 @@ public class WarpPoint {
 
     public WarpPoint(Entity entity)
     {
-        this(entity.world instanceof WorldServer ? (WorldServer) entity.world : null, entity.posX, entity.posY, entity.posZ, entity.rotationPitch,
-                entity.rotationYaw);
+        this(entity.getLevel() instanceof ServerLevel ? (ServerLevel) entity.getLevel() : null, entity.position().x, entity.position().y, entity.position().z, entity.getXRot(), entity.getYRot());
     }
 
     public WarpPoint(WarpPoint point)
@@ -83,7 +82,7 @@ public class WarpPoint {
 
     // ------------------------------------------------------------
 
-    public int getDimension()
+    public String getDimension()
     {
         return dim;
     }
@@ -128,15 +127,15 @@ public class WarpPoint {
         return yaw;
     }
 
-    public void setDimension(int dim)
+    public void setDimension(String dim)
     {
         this.dim = dim;
     }
 
-    public WorldServer getWorld()
+    public ServerLevel getWorld()
     {
-        if (world == null || world.provider.getDimension() != dim)
-            world = DimensionManager.getWorld(dim);
+        if (world == null || !world.dimension().location().toString().equals(dim))
+            world = ServerUtil.getServerInstance().overworld(); // Default overworld
         return world;
     }
 
@@ -188,7 +187,7 @@ public class WarpPoint {
      */
     public double distance(Entity e)
     {
-        return Math.sqrt((xd - e.posX) * (xd - e.posX) + (yd - e.posY) * (yd - e.posY) + (zd - e.posZ) * (zd - e.posZ));
+        return Math.sqrt((xd - e.position().x) * (xd - e.position().x) + (yd - e.position().y) * (yd - e.position().y) + (zd - e.position().z) * (zd - e.position().z));
     }
 
     public void validatePositiveY()
@@ -197,9 +196,9 @@ public class WarpPoint {
             yd = 0;
     }
 
-    public Vec3d toVec3()
+    public Vec3 toVec3()
     {
-        return new Vec3d(xd, yd, zd);
+        return new Vec3(xd, yd, zd);
     }
 
     public WorldPoint toWorldPoint()
@@ -249,7 +248,7 @@ public class WarpPoint {
         h = h * 31 + Double.valueOf(zd).hashCode();
         h = h * 31 + Double.valueOf(pitch).hashCode();
         h = h * 31 + Double.valueOf(yaw).hashCode();
-        h = h * 31 + dim;
+        h = h * 31 + dim.hashCode();
         return h;
     }
 }

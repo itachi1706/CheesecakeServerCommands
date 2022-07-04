@@ -1,8 +1,8 @@
 package com.itachi1706.cheesecakeservercommands.commons.selections;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,17 +37,17 @@ public class Point {
 
     public Point(Entity entity)
     {
-        x = (int) Math.floor(entity.posX);
-        y = (int) Math.floor(entity.posY);
-        z = (int) Math.floor(entity.posZ);
+        x = (int) Math.floor(entity.position().x);
+        y = (int) Math.floor(entity.position().y);
+        z = (int) Math.floor(entity.position().z);
     }
 
-    public Point(RayTraceResult location)
+    public Point(HitResult location)
     {
-        this(location.getBlockPos().getX(), location.getBlockPos().getY(), location.getBlockPos().getZ());
+        this(location.getLocation().x, location.getLocation().y, location.getLocation().z);
     }
 
-    public Point(Vec3d vector)
+    public Point(Vec3 vector)
     {
         this((int) vector.x, (int) vector.y, (int) vector.z);
     }
@@ -154,9 +154,9 @@ public class Point {
             y = 0;
     }
 
-    public Vec3d toVec3()
+    public Vec3 toVec3()
     {
-        return new Vec3d(x, y, z);
+        return new Vec3(x, y, z);
     }
 
     // ------------------------------------------------------------

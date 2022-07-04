@@ -222,7 +222,9 @@ public class CheesecakeServerCommands
         commands.add(new KillCommand("pkill", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new InvSeeCommand());
         commands.add(new BurnCommand("burn", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new LocateCommand());
+        commands.add(new LocateCommand("loc", CommandPermissionsLevel.OPS, true));
+        commands.add(new LocateCommand("locateplayer", CommandPermissionsLevel.OPS, true));
+        commands.add(new LocateCommand("gps", CommandPermissionsLevel.OPS, true));
         commands.add(new SudoCommand("sudo", CommandPermissionsLevel.OPS, true));
         commands.add(new GamemodeCommand("gm", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new TpToCommand());

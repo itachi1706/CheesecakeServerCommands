@@ -1,14 +1,14 @@
 package com.itachi1706.cheesecakeservercommands.commons.selections;
 
 import com.google.gson.annotations.Expose;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.event.world.BlockEvent;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,34 +18,34 @@ import java.util.regex.Pattern;
  * for com.itachi1706.cheesecakeservercommands.commons.selections in CheesecakeServerCommands
  */
 public class WorldPoint extends Point {
-    protected int dim;
+    protected String dim;
 
     @Expose(serialize = false)
-    protected World world;
+    protected Level world;
 
     // ------------------------------------------------------------
 
-    public WorldPoint(int dimension, int x, int y, int z)
+    public WorldPoint(String dimension, double x, double y, double z)
     {
         super(x, y, z);
         dim = dimension;
     }
 
-    public WorldPoint(int dimension, RayTraceResult location)
+    public WorldPoint(String dimension, HitResult location)
     {
-        this(dimension, location.getBlockPos().getX(), location.getBlockPos().getY(), location.getBlockPos().getZ());
+        this(dimension, location.getLocation().x, location.getLocation().y, location.getLocation().z);
     }
 
-    public WorldPoint(World world, int x, int y, int z)
+    public WorldPoint(ServerLevel world, double x, double y, double z)
     {
         super(x, y, z);
-        this.dim = world.provider.getDimension();
+        this.dim = world.dimension().location().toString();
         this.world = world;
     }
 
-    public WorldPoint(World world, RayTraceResult location)
+    public WorldPoint(ServerLevel world, HitResult location)
     {
-        this(world, location.getBlockPos().getX(), location.getBlockPos().getY(), location.getBlockPos().getZ());
+        this(world, location.getLocation().x, location.getLocation().y, location.getLocation().z);
     }
 
     // TODO: Figure out how to convert this
@@ -58,11 +58,11 @@ public class WorldPoint extends Point {
     public WorldPoint(Entity entity)
     {
         super(entity);
-        this.dim = entity.dimension;
-        this.world = entity.world;
+        this.dim = entity.getLevel().dimension().location().toString();
+        this.world = entity.getLevel();
     }
 
-    public WorldPoint(int dim, Vec3d vector)
+    public WorldPoint(String dim, Vec3 vector)
     {
         super(vector);
         this.dim = dim;
@@ -73,7 +73,7 @@ public class WorldPoint extends Point {
         this(other.dim, other.x, other.y, other.z);
     }
 
-    public WorldPoint(int dimension, Point point)
+    public WorldPoint(String dimension, Point point)
     {
         this(dimension, point.x, point.y, point.z);
     }
@@ -83,10 +83,11 @@ public class WorldPoint extends Point {
         this(other.getDimension(), other.getBlockX(), other.getBlockY(), other.getBlockZ());
     }
 
-    public WorldPoint(BlockEvent event)
-    {
-        this(event.getWorld(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
-    }
+    // TODO: Figure out how to get Level from this
+    // public WorldPoint(BlockEvent event)
+    // {
+    //     this(event.getWorld(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
+    // }
 
     // TODO: Figure out how to convert this
     /*public static WorldPoint create(ICommandSender sender)
@@ -96,12 +97,12 @@ public class WorldPoint extends Point {
 
     // ------------------------------------------------------------
 
-    public int getDimension()
+    public String getDimension()
     {
         return dim;
     }
 
-    public void setDimension(int dim)
+    public void setDimension(String dim)
     {
         this.dim = dim;
     }
@@ -127,11 +128,11 @@ public class WorldPoint extends Point {
         return this;
     }
 
-    public World getWorld()
+    public Level getWorld()
     {
-        if (world != null && world.provider.getDimension() != dim)
+        if (world != null && !world.dimension().location().toString().equals(dim))
             return world;
-        world = DimensionManager.getWorld(dim);
+        world = ServerUtil.getServerInstance().overworld(); // Get overworld by default
         return world;
     }
 
@@ -175,7 +176,7 @@ public class WorldPoint extends Point {
         {
             try
             {
-                return new WorldPoint(Integer.parseInt(m.group(4)), Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
+                return new WorldPoint(m.group(4), Double.parseDouble(m.group(1)), Double.parseDouble(m.group(2)), Double.parseDouble(m.group(3)));
             }
             catch (NumberFormatException e)
             {
@@ -207,7 +208,7 @@ public class WorldPoint extends Point {
         int h = 1 + x;
         h = h * 31 + y;
         h = h * 31 + z;
-        h = h * 31 + dim;
+        h = h * 31 + dim.hashCode();
         return h;
     }
 }
