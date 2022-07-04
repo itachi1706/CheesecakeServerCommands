@@ -215,7 +215,7 @@ public class CheesecakeServerCommands
         // Essentials Server Commands
         commands.add(new FlyCommand("fly", CommandPermissionsLevel.OPS, true));
         commands.add(new GodCommand("god", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new SpeedCommand());
+        commands.add(new SpeedCommand("speed", CommandPermissionsLevel.OPS, true));
         commands.add(new HealCommand("heal", CommandPermissionsLevel.OPS, true));
         commands.add(new FeedCommand("feed", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new SmiteCommand());
