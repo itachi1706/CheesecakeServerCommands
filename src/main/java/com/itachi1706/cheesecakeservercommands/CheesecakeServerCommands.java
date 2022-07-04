@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeservercommands;
 import com.itachi1706.cheesecakeservercommands.commands.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.*;
+import com.itachi1706.cheesecakeservercommands.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
@@ -247,7 +248,7 @@ public class CheesecakeServerCommands
         commands.add(new GetCommandBookCommand("getcommandbook", CommandPermissionsLevel.OPS, true));
 
         // Essentials World
-        // event.registerServerCommand(new BiomeInfoCommand());
+        commands.add(new BiomeInfoCommand("biomeinfo", CommandPermissionsLevel.OPS, true));
 
         // General Commands (For all players)
         commands.add(new PingCommand("ping", CommandPermissionsLevel.ALL, true));
