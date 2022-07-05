@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeservercommands;
 import com.itachi1706.cheesecakeservercommands.commands.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.item.ClearInventoryCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.item.GiveItemCommand;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
@@ -210,8 +211,8 @@ public class CheesecakeServerCommands
         // event.registerServerCommand(new InvSeeEnderChestCommand());
         commands.add(new ClearInventoryCommand("clearinventory", CommandPermissionsLevel.OPS, true));
         commands.add(new ClearInventoryCommand("ci", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new ClearInventoryCommand());
-        // event.registerServerCommand(new GiveItemCommand());
+        commands.add(new GiveItemCommand("giveitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new GiveItemCommand("i", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new MoreItemsCommand());
 
         // Adapted from Essentials
