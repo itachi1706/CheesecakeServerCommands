@@ -27,18 +27,20 @@ public class BiomeInfoCommand extends BaseCommand {
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> getCurrentBiomeSelf(context.getSource()))
                 .then(Commands.literal("list").executes(context -> listAllBiomes(context.getSource())))
-                .then(Commands.argument("players", EntityArgument.player()).executes(context -> getCurrentBiomeOthers(context.getSource(), EntityArgument.getPlayer(context, "players"))));
+                .then(Commands.literal("find")
+                        .then(Commands.argument("players", EntityArgument.player())
+                                .executes(context -> getCurrentBiomeOthers(context.getSource(), EntityArgument.getPlayer(context, "players")))));
     }
 
     private int getCurrentBiomeSelf(CommandSourceStack sender) {
         if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot view biome for CONSOLE");
+            sendFailureMessage(sender, "Cannot find current biome for CONSOLE");
             return 0;
         }
 
         ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
         if (player == null) {
-            sendFailureMessage(sender, "Cannot view biome for " + sender.getTextName());
+            sendFailureMessage(sender, "Cannot find current biome for " + sender.getTextName());
             return 0;
         }
 
