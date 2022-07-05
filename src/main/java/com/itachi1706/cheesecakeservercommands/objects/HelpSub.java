@@ -7,7 +7,8 @@ import net.minecraft.ChatFormatting;
  * for com.itachi1706.cheesecakeservercommands.server.objects in CheesecakeServerCommands
  */
 public class HelpSub {
-    private String command, usage;
+    private final String command;
+    private final String usage;
 
     public HelpSub(String command) {
         this.command = command;

@@ -10,6 +10,10 @@ import java.util.UUID;
  */
 public class AdminSilenced {
 
+    private AdminSilenced() {
+        throw new IllegalStateException("Utility Class");
+    }
+
     static List<UUID> silencedList = new ArrayList<>();
     static List<String> ignoredCommandUser = new ArrayList<>();
     static boolean enabled = false;

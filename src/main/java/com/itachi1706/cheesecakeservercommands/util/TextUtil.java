@@ -13,6 +13,10 @@ import java.util.stream.Stream;
 
 public class TextUtil {
 
+    private TextUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static TextComponent getText(String text) {
         return new TextComponent(text);
     }

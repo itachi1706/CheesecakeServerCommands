@@ -9,6 +9,12 @@ import net.minecraft.world.item.ItemStack;
  */
 public class NBTHelper {
 
+    private static final String TAG_STATE_EXCEPTION = "Tag should not be null anymore";
+    
+    private NBTHelper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static boolean hasTag(ItemStack itemStack, String keyName)
     {
         return itemStack != null && itemStack.getTag() != null && itemStack.getTag().contains(keyName);
@@ -39,6 +45,10 @@ public class NBTHelper {
     public static void setLong(ItemStack itemStack, String keyName, long keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putLong(keyName, keyValue);
     }
@@ -47,6 +57,10 @@ public class NBTHelper {
     public static String getString(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         if (!itemStack.getTag().contains(keyName))
         {
@@ -59,6 +73,10 @@ public class NBTHelper {
     public static void setString(ItemStack itemStack, String keyName, String keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putString(keyName, keyValue);
     }
@@ -67,6 +85,10 @@ public class NBTHelper {
     public static boolean getBoolean(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         if (!itemStack.getTag().contains(keyName))
         {
@@ -79,6 +101,10 @@ public class NBTHelper {
     public static void setBoolean(ItemStack itemStack, String keyName, boolean keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putBoolean(keyName, keyValue);
     }
@@ -87,6 +113,10 @@ public class NBTHelper {
     public static byte getByte(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         if (!itemStack.getTag().contains(keyName))
         {
@@ -99,6 +129,10 @@ public class NBTHelper {
     public static void setByte(ItemStack itemStack, String keyName, byte keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putByte(keyName, keyValue);
     }
@@ -107,6 +141,10 @@ public class NBTHelper {
     public static short getShort(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         if (!itemStack.getTag().contains(keyName))
         {
@@ -119,6 +157,10 @@ public class NBTHelper {
     public static void setShort(ItemStack itemStack, String keyName, short keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putShort(keyName, keyValue);
     }
@@ -127,6 +169,10 @@ public class NBTHelper {
     public static int getInt(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         if (!itemStack.getTag().contains(keyName))
         {
@@ -139,6 +185,10 @@ public class NBTHelper {
     public static void setInteger(ItemStack itemStack, String keyName, int keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putInt(keyName, keyValue);
     }
@@ -147,6 +197,10 @@ public class NBTHelper {
     public static long getLong(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         if (!itemStack.getTag().contains(keyName))
         {
@@ -160,6 +214,10 @@ public class NBTHelper {
     public static float getFloat(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         if (!itemStack.getTag().contains(keyName))
         {
@@ -172,6 +230,10 @@ public class NBTHelper {
     public static void setFloat(ItemStack itemStack, String keyName, float keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putFloat(keyName, keyValue);
     }
@@ -180,7 +242,11 @@ public class NBTHelper {
     public static double getDouble(ItemStack itemStack, String keyName)
     {
         initNBTTagCompound(itemStack);
-
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
+        
         if (!itemStack.getTag().contains(keyName))
         {
             setDouble(itemStack, keyName, 0);
@@ -192,6 +258,10 @@ public class NBTHelper {
     public static void setDouble(ItemStack itemStack, String keyName, double keyValue)
     {
         initNBTTagCompound(itemStack);
+        if (itemStack.getTag() == null)
+        {
+            throw new IllegalStateException(TAG_STATE_EXCEPTION);
+        }
 
         itemStack.getTag().putDouble(keyName, keyValue);
     }

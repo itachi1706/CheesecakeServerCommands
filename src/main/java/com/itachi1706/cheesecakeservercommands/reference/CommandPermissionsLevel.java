@@ -2,6 +2,10 @@ package com.itachi1706.cheesecakeservercommands.reference;
 
 public class CommandPermissionsLevel {
 
+    private CommandPermissionsLevel() {
+        throw new IllegalStateException("Reference Class");
+    }
+
     /**
      * Everyone can use this command
      */

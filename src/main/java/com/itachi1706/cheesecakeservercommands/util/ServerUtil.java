@@ -8,7 +8,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
@@ -18,6 +17,10 @@ import java.util.UUID;
  * for com.itachi1706.cheesecakeservercommands.util in CheesecakeServerCommands
  */
 public class ServerUtil {
+
+    private ServerUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static MinecraftServer getServerInstance() {
         return ServerLifecycleHooks.getCurrentServer();
@@ -42,7 +45,7 @@ public class ServerUtil {
     }
 
     public static boolean checkIfAdminSilenced(ServerPlayer player) {
-       if (player instanceof Player && AdminSilenced.getState()) {
+       if (player != null && AdminSilenced.getState()) {
            UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(player.getName().getString());
            if (uuid != null && AdminSilenced.contains(uuid)) return true; // Don't send admin message
            return UUID.fromString(AdminSilenced.MY_UUID).equals(uuid);

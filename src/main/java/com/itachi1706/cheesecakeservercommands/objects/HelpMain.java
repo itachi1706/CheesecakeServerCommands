@@ -6,9 +6,10 @@ package com.itachi1706.cheesecakeservercommands.objects;
  */
 public class HelpMain {
 
-    private String key, name;
+    private final String key;
+    private final String name;
     private HelpSub[] commands;
-    private boolean adminOnly;
+    private final boolean adminOnly;
 
     public HelpMain(String key, HelpSub[] commands) {
         this.key = key;

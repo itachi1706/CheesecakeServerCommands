@@ -14,7 +14,7 @@ import java.util.Map;
 public class InitDamageSources {
 
     private InitDamageSources() {
-        throw new IllegalStateException("Utility class");
+        throw new IllegalStateException("Reference class");
     }
 
     public static void initalizeDamages() {

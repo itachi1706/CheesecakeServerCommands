@@ -15,6 +15,10 @@ import java.util.List;
  */
 public class ServerPlayerUtil {
 
+    private ServerPlayerUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static boolean isOperator(Player player){
         if (ServerUtil.getServerInstance().isSingleplayer())
             return true;
@@ -53,8 +57,8 @@ public class ServerPlayerUtil {
      * Give player the item stack or drop it if his inventory is full
      * If the player inventory fills up while it gets full, spill over to the ground
      *
-     * @param player
-     * @param item
+     * @param player Player object
+     * @param item Item to give
      */
     public static void give(Player player, ItemStack item)
     {
@@ -79,8 +83,8 @@ public class ServerPlayerUtil {
      * Give player the item stack or drop it if his inventory is full
      * This command execute without ground spillage if player is given into his/her inventory
      *
-     * @param player
-     * @param item
+     * @param player Player object
+     * @param item Item to give
      */
     public static void giveNormal(Player player, ItemStack item)
     {

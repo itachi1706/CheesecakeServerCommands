@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
+import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -10,15 +11,18 @@ import net.minecraft.world.level.block.state.BlockState;
  * for com.itachi1706.cheesecakeservercommands.util in CheesecakeServerCommands
  */
 public class WorldUtil {
-    // TODO: World seems to be called Level now
+    private WorldUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Checks if the blocks from [x,y,z] to [x,y+h-1,z] are either air or replacable
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param h
+     * @param world Level object
+     * @param x X coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @param h height of the block
      * @return y value
      */
     public static boolean isFree(Level world, int x, int y, int z, int h)
@@ -37,11 +41,11 @@ public class WorldUtil {
      * it returns the next location that is on the ground. If the blocks at [x,y,z] are not free, it goes up until it
      * finds a free spot.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param h
+     * @param world Level object
+     * @param x X coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @param h height of the block
      * @return y value
      */
     public static int placeInWorld(Level world, int x, int y, int z, int h)
@@ -69,10 +73,10 @@ public class WorldUtil {
      * it returns the next location that is on the ground. If the blocks at [x,y,z] are not free, it goes up until it
      * finds a free spot.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param world Level object
+     * @param x X coordinate
+     * @param y y coordinate
+     * @param z z coordinate
      * @return y value
      */
     public static int placeInWorld(Level world, int x, int y, int z)
@@ -80,19 +84,18 @@ public class WorldUtil {
         return placeInWorld(world, x, y, z, 2);
     }
 
-//    public static WorldPoint placeInWorld(WorldPoint p)
-//    {
-//        return p.setY(placeInWorld(p.getWorld(), p.getX(), p.getY(), p.getZ(), 2));
-//    }
+    public static WorldPoint placeInWorld(WorldPoint p)
+    {
+       return p.setY(placeInWorld(p.getWorld(), p.getX(), p.getY(), p.getZ(), 2));
+    }
 
     public static void placeInWorld(Player player)
     {
-        // TODO: Place in world not working yet
         int getY = placeInWorld(player.getLevel(), player.getBlockX(), player.getBlockY(), player.getBlockZ(), 2);
 
         player.setPos(player.getX() + 0.5, getY, player.getZ() + 0.5);
-        //        WorldPoint p = placeInWorld(new WorldPoint(player));
-//        player.setPositionAndUpdate(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+        WorldPoint p = placeInWorld(new WorldPoint(player));
+        player.moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
     }
 
     /* ------------------------------------------------------------ */

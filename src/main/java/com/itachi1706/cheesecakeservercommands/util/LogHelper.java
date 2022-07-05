@@ -12,6 +12,10 @@ import org.slf4j.MarkerFactory;
  */
 public class LogHelper {
 
+    private LogHelper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static final Marker MOD_MARKER = MarkerFactory.getMarker(References.MOD_ID);
     private static final Logger LOGGER = LogUtils.getLogger();
 

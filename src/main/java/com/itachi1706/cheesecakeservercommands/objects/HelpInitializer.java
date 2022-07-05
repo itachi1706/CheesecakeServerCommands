@@ -11,6 +11,10 @@ import java.util.List;
  */
 public class HelpInitializer {
 
+    private HelpInitializer() {
+        throw new IllegalStateException("Reference Class");
+    }
+
     public static HelpMain[] initialize() {
         List<HelpMain> help = new ArrayList<>();
         help.add(new HelpMain("cheesecakelogger", "Cheesecake Logger Module Commands", initializeLogger(), true));

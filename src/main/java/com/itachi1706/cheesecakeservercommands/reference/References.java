@@ -6,6 +6,10 @@ package com.itachi1706.cheesecakeservercommands.reference;
  */
 public class References {
 
+    private References() {
+        throw new IllegalStateException("Reference Class");
+    }
+
     public static final String MOD_ID = "cheesecakeservercommands";
     public static final String MOD_ID_SHORT = "csc";
     public static final String API_PROVIDES = "cheesecakeservercommands|API";

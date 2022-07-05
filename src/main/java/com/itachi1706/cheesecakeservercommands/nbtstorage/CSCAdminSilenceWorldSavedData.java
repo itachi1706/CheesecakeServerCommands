@@ -27,7 +27,7 @@ public class CSCAdminSilenceWorldSavedData extends SavedData {
     private static final String CMDUSE_IGNORE_LIST = "CommandUseList";
 
     public CSCAdminSilenceWorldSavedData() {
-
+        // Nothing to init
     }
 
     public static CSCAdminSilenceWorldSavedData create() {
@@ -73,12 +73,14 @@ public class CSCAdminSilenceWorldSavedData extends SavedData {
     }
 
     /**
-     * Retired use {@link CSCAdminSilenceWorldSavedData#get()} instead
+     * Get instance
+     *
      * @param world Server World
      * @param global Is Global
      * @return Saved Data
+     * @deprecated Retired use {@link CSCAdminSilenceWorldSavedData#get()} instead
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public static CSCAdminSilenceWorldSavedData get(ServerLevel world, boolean global) {
         // The IS_GLOBAL constant is there for clarity, and should be simplified into the right branch.
         return get();
