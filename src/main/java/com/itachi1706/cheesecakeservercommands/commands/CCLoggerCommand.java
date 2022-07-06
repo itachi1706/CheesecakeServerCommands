@@ -13,7 +13,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingMenu;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -107,11 +111,13 @@ public class CCLoggerCommand extends BaseCommand {
 
         ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
         assert player != null; // Validated above already
-        player.getAbilities().mayfly = !player.getAbilities().mayfly;
-        if (!player.isOnGround()) {
-            player.getAbilities().flying = player.getAbilities().mayfly;
-        }
-        player.onUpdateAbilities();
+        // player.getAbilities().mayfly = !player.getAbilities().mayfly;
+        // if (!player.isOnGround()) {
+        //     player.getAbilities().flying = player.getAbilities().mayfly;
+        // }
+        // player.onUpdateAbilities();
+        player.openMenu(new SimpleMenuProvider((i, inventory, player1) -> new CraftingMenu(i, inventory, ContainerLevelAccess.create(player1.level, player1.getOnPos())), new TextComponent("Test")));
+
 
         return Command.SINGLE_SUCCESS;
     }

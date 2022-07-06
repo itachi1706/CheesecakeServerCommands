@@ -11,6 +11,9 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
+import com.itachi1706.cheesecakeservercommands.proxy.ClientProxy;
+import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
+import com.itachi1706.cheesecakeservercommands.proxy.ServerProxy;
 import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
@@ -25,6 +28,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -51,6 +55,7 @@ public class CheesecakeServerCommands
     private static File configFileDirectory;
     private static Map<String, DamageSource> knownDamageSources;
     private static final ArrayList<BaseCommand> commands = new ArrayList<>();
+    public static final IProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     public CheesecakeServerCommands()
     {
@@ -65,6 +70,8 @@ public class CheesecakeServerCommands
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerEvents());
         // MinecraftForge.EVENT_BUS.register(new TeleportHelper());
+
+        PROXY.init();
     }
 
     private void setup(final FMLCommonSetupEvent event)
