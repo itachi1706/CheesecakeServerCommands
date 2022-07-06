@@ -2,8 +2,7 @@ package com.itachi1706.cheesecakeservercommands;
 
 import com.itachi1706.cheesecakeservercommands.commands.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.*;
-import com.itachi1706.cheesecakeservercommands.commands.admin.item.ClearInventoryCommand;
-import com.itachi1706.cheesecakeservercommands.commands.admin.item.GiveItemCommand;
+import com.itachi1706.cheesecakeservercommands.commands.admin.item.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
@@ -52,12 +51,6 @@ public class CheesecakeServerCommands
     private static File configFileDirectory;
     private static Map<String, DamageSource> knownDamageSources;
     private static final ArrayList<BaseCommand> commands = new ArrayList<>();
-
-    // @Mod.Instance(References.MOD_ID)
-    // public static CheesecakeServerCommands instance;
-    //
-    // @SidedProxy(clientSide = References.CLIENT_PROXY, serverSide = References.SERVER_PROXY)
-    // public static IProxy proxy;
 
     public CheesecakeServerCommands()
     {
@@ -207,13 +200,12 @@ public class CheesecakeServerCommands
         commands.add(new FlingCommand("fling", CommandPermissionsLevel.OPS, true));
         commands.add(new KickCommand("pkick", CommandPermissionsLevel.OPS, true));
 
-        // event.registerServerCommand(new EnchantForceCommand());
         // event.registerServerCommand(new InvSeeEnderChestCommand());
         commands.add(new ClearInventoryCommand("clearinventory", CommandPermissionsLevel.OPS, true));
         commands.add(new ClearInventoryCommand("ci", CommandPermissionsLevel.OPS, true));
         commands.add(new GiveItemCommand("giveitem", CommandPermissionsLevel.OPS, true));
         commands.add(new GiveItemCommand("i", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new MoreItemsCommand());
+        commands.add(new MoreItemsCommand("more", CommandPermissionsLevel.OPS, true));
 
         // Adapted from Essentials
 
@@ -237,12 +229,12 @@ public class CheesecakeServerCommands
 
         // Essentials Items
         // event.registerServerCommand(new CraftCommand());
-        // event.registerServerCommand(new DechantCommand());
-        // event.registerServerCommand(new EnchantCommand());
-        // event.registerServerCommand(new DuplicateCommand());
+        commands.add(new DechantCommand("dechantitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new EnchantCommand("enchantitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new DuplicateCommand("duplicate", CommandPermissionsLevel.OPS, true));
         // event.registerServerCommand(new EnderChestCommand());
-        // event.registerServerCommand(new RenameCommand());
-        // event.registerServerCommand(new RepairCommand());
+        commands.add(new RenameCommand("renameitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new RepairCommand("repairitem", CommandPermissionsLevel.OPS, true));
 
         // Essentials Server
         commands.add(new ModlistCommand("modlist", CommandPermissionsLevel.OPS, true));
