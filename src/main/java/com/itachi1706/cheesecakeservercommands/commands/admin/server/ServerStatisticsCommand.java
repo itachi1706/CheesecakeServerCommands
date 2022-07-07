@@ -39,7 +39,7 @@ public class ServerStatisticsCommand extends BaseCommand {
                 if (value != -1.0) percentageCPU = (int)(value * 1000) / 10;
             }
         } catch (InstanceNotFoundException | MalformedObjectNameException | ReflectionException e) {
-            e.printStackTrace();
+            LogHelper.error("Failed to get CPU usage", e);
         }
 
 

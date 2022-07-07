@@ -38,8 +38,11 @@ public class InitDamageSources {
         knownDamageSource.put(DamageSource.ANVIL.getMsgId(), DamageSource.ANVIL);
         knownDamageSource.put(DamageSource.FALLING_BLOCK.getMsgId(), DamageSource.FALLING_BLOCK);
         knownDamageSource.put(DamageSource.DRAGON_BREATH.getMsgId(), DamageSource.DRAGON_BREATH);
-        // TODO: Update
-//        knownDamageSource.put(DamageSource.FIREWORKS.getMsgId(), DamageSource.FIREWORKS);
+        knownDamageSource.put(DamageSource.DRY_OUT.getMsgId(), DamageSource.DRY_OUT);
+        knownDamageSource.put(DamageSource.SWEET_BERRY_BUSH.getMsgId(), DamageSource.SWEET_BERRY_BUSH);
+        knownDamageSource.put(DamageSource.FREEZE.getMsgId(), DamageSource.FREEZE);
+        knownDamageSource.put(DamageSource.FALLING_STALACTITE.getMsgId(), DamageSource.FALLING_STALACTITE);
+        knownDamageSource.put(DamageSource.STALAGMITE.getMsgId(), DamageSource.STALAGMITE);
         knownDamageSource.put("zeus", ZeusCommand.getDamageSource());
 
         CheesecakeServerCommands.setKnownDamageSources(knownDamageSource);

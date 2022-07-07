@@ -16,6 +16,9 @@ import java.util.Arrays;
 public class MainCommand extends BaseCommand {
 
     private final HelpMain[] mainHelp;
+    
+    private static final String ARG_MODULE_HELP = "modulehelp";
+    private static final String ARG_ADMIN_SILENCE = "adminsilence";
 
     public MainCommand(String command, int permissionLevel, boolean enabled) {
         super(command, permissionLevel, enabled);
@@ -26,11 +29,11 @@ public class MainCommand extends BaseCommand {
     public LiteralArgumentBuilder<CommandSourceStack> setExecution() {
         return builder.executes(context -> listMain(context.getSource()))
                 .then(Commands.literal("list").executes(context -> subCmd(context.getSource(), "list")))
-                .then(Commands.literal("modulehelp").executes(context -> subCmd(context.getSource(), "modulehelp"))
+                .then(Commands.literal(ARG_MODULE_HELP).executes(context -> subCmd(context.getSource(), ARG_MODULE_HELP))
                         .then(Commands.argument("module", StringArgumentType.string())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(Arrays.stream(this.mainHelp).map(HelpMain::getKey).toList(), builder))
                                 .executes(context -> listCommands(context.getSource(), StringArgumentType.getString(context, "module")))))
-                .then(Commands.literal("adminsilence").executes(context -> subCmd(context.getSource(), "adminsilence")));
+                .then(Commands.literal(ARG_ADMIN_SILENCE).executes(context -> subCmd(context.getSource(), ARG_ADMIN_SILENCE)));
     }
 
     private int listMain(CommandSourceStack sender) {
@@ -42,8 +45,8 @@ public class MainCommand extends BaseCommand {
     private int subCmd(CommandSourceStack sender, String arg) {
         switch (arg) {
             case "list" -> listModules(sender);
-            case "modulehelp" -> sendFailureMessage(sender, ChatFormatting.RED + "Please select a module. View modules with /csc list");
-            case "adminsilence" -> sendFailureMessage(sender, "Please use /adminsilence instead now");
+            case ARG_MODULE_HELP -> sendFailureMessage(sender, ChatFormatting.RED + "Please select a module. View modules with /csc list");
+            case ARG_ADMIN_SILENCE -> sendFailureMessage(sender, "Please use /adminsilence instead now");
             default -> sendFailureMessage(sender, "Invalid command");
         }
         return Command.SINGLE_SUCCESS;

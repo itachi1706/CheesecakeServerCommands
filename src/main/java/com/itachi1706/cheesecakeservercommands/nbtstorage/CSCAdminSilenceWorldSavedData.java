@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.jetbrains.annotations.NotNull;
@@ -70,20 +69,6 @@ public class CSCAdminSilenceWorldSavedData extends SavedData {
         nbt.putBoolean(SILENCE_ENABLED, AdminSilenced.enabled);
         LogHelper.info("Wrote to Admin Silence NBT");
         return nbt;
-    }
-
-    /**
-     * Get instance
-     *
-     * @param world Server World
-     * @param global Is Global
-     * @return Saved Data
-     * @deprecated Retired use {@link CSCAdminSilenceWorldSavedData#get()} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static CSCAdminSilenceWorldSavedData get(ServerLevel world, boolean global) {
-        // The IS_GLOBAL constant is there for clarity, and should be simplified into the right branch.
-        return get();
     }
 
     public static CSCAdminSilenceWorldSavedData get() {
