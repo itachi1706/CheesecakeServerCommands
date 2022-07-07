@@ -19,6 +19,7 @@ import java.util.UUID;
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.dbstorage
  */
 public class CommandsLogDB extends BaseSQLiteDB {
+    // TODO: Use https://www.sqlitetutorial.net/sqlite-java/insert/ PreparedStatements instead to prevent SQL Injections
 
     private static CommandsLogDB instance;
 

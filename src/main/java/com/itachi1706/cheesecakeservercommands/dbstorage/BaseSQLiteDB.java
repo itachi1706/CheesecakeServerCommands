@@ -11,6 +11,7 @@ import java.sql.*;
 import java.util.List;
 
 public abstract class BaseSQLiteDB {
+    // TODO: Use https://www.sqlitetutorial.net/sqlite-java/insert/ PreparedStatements instead to prevent SQL Injections
 
     private final String dbName;
 
@@ -21,7 +22,6 @@ public abstract class BaseSQLiteDB {
     protected Connection getSQLiteDBConnection() {
         Connection c;
         try {
-            Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:" + CheesecakeServerCommands.getConfigFileDirectory().getAbsolutePath() + File.separator + this.dbName + ".db");
         } catch (Exception e) {
             LogHelper.error("Error creating DB Connection", e);
