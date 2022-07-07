@@ -1,7 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
+import com.itachi1706.cheesecakeservercommands.libs.selections.WorldPoint;
 import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;

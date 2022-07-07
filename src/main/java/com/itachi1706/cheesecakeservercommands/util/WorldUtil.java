@@ -1,6 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
-import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
+import com.itachi1706.cheesecakeservercommands.libs.selections.WorldPoint;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

@@ -1,8 +1,6 @@
-package com.itachi1706.cheesecakeservercommands.commons.selections;
+package com.itachi1706.cheesecakeservercommands.libs.selections;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,21 +38,6 @@ public class Point {
         x = (int) Math.floor(entity.position().x);
         y = (int) Math.floor(entity.position().y);
         z = (int) Math.floor(entity.position().z);
-    }
-
-    public Point(HitResult location)
-    {
-        this(location.getLocation().x, location.getLocation().y, location.getLocation().z);
-    }
-
-    public Point(Vec3 vector)
-    {
-        this((int) vector.x, (int) vector.y, (int) vector.z);
-    }
-
-    public Point(Point other)
-    {
-        this(other.x, other.y, other.z);
     }
 
     // ------------------------------------------------------------
@@ -102,61 +85,11 @@ public class Point {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
-    /**
-     * Returns the distance to another point
-     */
-    public double distance(Point v)
-    {
-        return Math.sqrt((x - v.x) * (x - v.x) + (y - v.y) * (y - v.y) + (z - v.z) * (z - v.z));
-    }
-
     public void add(Point v)
     {
         x += v.x;
         y += v.y;
         z += v.z;
-    }
-
-    public void subtract(Point v)
-    {
-        x -= v.x;
-        y -= v.y;
-        z -= v.z;
-    }
-
-    /**
-     * Checks if two points are on the same plane (have the same coordinate on at least one axis)
-     */
-    public boolean alignsWith(Point point)
-    {
-        return x == point.x || y == point.y || z == point.z;
-    }
-
-    /**
-     * Checks if this point has greater or equal coordinates than another point on all axes
-     */
-    public boolean isGreaterEqualThan(Point p)
-    {
-        return x >= p.x && y >= p.y && z >= p.z;
-    }
-
-    /**
-     * Checks if this point has less or equal coordinates than another point on all axes
-     */
-    public boolean isLessEqualThan(Point p)
-    {
-        return x <= p.x && y <= p.y && z <= p.z;
-    }
-
-    public void validatePositiveY()
-    {
-        if (y < 0)
-            y = 0;
-    }
-
-    public Vec3 toVec3()
-    {
-        return new Vec3(x, y, z);
     }
 
     // ------------------------------------------------------------
@@ -180,9 +113,8 @@ public class Point {
     @Override
     public boolean equals(Object object)
     {
-        if (object instanceof Point)
+        if (object instanceof Point p)
         {
-            Point p = (Point) object;
             return x == p.x && y == p.y && z == p.z;
         }
         return false;
