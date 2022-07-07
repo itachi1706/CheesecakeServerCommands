@@ -69,7 +69,6 @@ public class CheesecakeServerCommands
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerEvents());
-        // MinecraftForge.EVENT_BUS.register(new TeleportHelper());
 
         PROXY.init();
     }
@@ -231,8 +230,8 @@ public class CheesecakeServerCommands
         commands.add(new LocateCommand("gps", CommandPermissionsLevel.OPS, true));
         commands.add(new SudoCommand("sudo", CommandPermissionsLevel.OPS, true));
         commands.add(new GamemodeCommand("gm", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new TpToCommand());
-        // event.registerServerCommand(new TpHereCommand());
+        commands.add(new TpToCommand("tpto", CommandPermissionsLevel.OPS, true));
+        commands.add(new TpHereCommand("tphere", CommandPermissionsLevel.OPS, true));
 
         // Essentials Items
         // event.registerServerCommand(new CraftCommand());
