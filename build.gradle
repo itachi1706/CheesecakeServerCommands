@@ -166,8 +166,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-//    compile "org.xerial:sqlite-jdbc:3.23.1"
-//    compile "com.googlecode.json-simple:json-simple:1.1.1"
+    implementation 'org.xerial:sqlite-jdbc:3.36.0.3' // When updating this, update compilation dependencies as well
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -182,6 +181,11 @@ jar {
                 "Implementation-Vendor"   : "cheesecakeservercommandssareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
+    }
+
+    // Add compilation dependencies
+    from {
+        configurations.runtimeClasspath.collect { if(it.name.equalsIgnoreCase("sqlite-jdbc-3.36.0.3.jar")) { zipTree(it)} }
     }
 }
 
