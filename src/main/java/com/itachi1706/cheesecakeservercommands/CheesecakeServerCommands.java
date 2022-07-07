@@ -5,6 +5,8 @@ import com.itachi1706.cheesecakeservercommands.commands.admin.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.item.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.server.*;
 import com.itachi1706.cheesecakeservercommands.commands.admin.world.BiomeInfoCommand;
+import com.itachi1706.cheesecakeservercommands.dbstorage.CommandsLogDB;
+import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
@@ -151,8 +153,8 @@ public class CheesecakeServerCommands
         if (LastKnownUsernameJsonHelper.fileExists())
             setLastKnownUsernames(LastKnownUsernameJsonHelper.readFromFile());
 
-//        LoginLogoutDB.checkTablesExists();
-//        CommandsLogDB.checkTablesExists();
+       LoginLogoutDB.checkTablesExists();
+       CommandsLogDB.checkTablesExists();
     }
 
     private static void setPlatformBean(MBeanServer myBean) {

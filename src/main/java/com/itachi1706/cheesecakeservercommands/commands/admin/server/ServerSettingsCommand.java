@@ -149,30 +149,32 @@ public class ServerSettingsCommand extends BaseCommand {
 
     // Utility classes
     private int getDifficulty(String difficulty) {
+        int id = 0;
         if (difficulty.equalsIgnoreCase("peaceful") || difficulty.equalsIgnoreCase("0")) {
-            return Difficulty.PEACEFUL.getId();
+            id = Difficulty.PEACEFUL.getId();
         } else if (difficulty.equalsIgnoreCase("easy") || difficulty.equalsIgnoreCase("1")) {
-            return Difficulty.EASY.getId();
+            id = Difficulty.EASY.getId();
         } else if (difficulty.equalsIgnoreCase("normal") || difficulty.equalsIgnoreCase("2")) {
-            return Difficulty.NORMAL.getId();
+            id = Difficulty.NORMAL.getId();
         } else if (difficulty.equalsIgnoreCase("hard") || difficulty.equalsIgnoreCase("3")) {
-            return Difficulty.HARD.getId();
-        } else {
-            return 0;
+            id = Difficulty.HARD.getId();
         }
+
+        return id;
     }
 
     private int getGamemode(String gamemode) {
+        int id = 0;
         if (gamemode.equalsIgnoreCase("survival") || gamemode.equalsIgnoreCase("s") || gamemode.equals("0")) {
-            return GameType.SURVIVAL.getId();
+            id = GameType.SURVIVAL.getId();
         } else if (gamemode.equalsIgnoreCase("adventure") || gamemode.equalsIgnoreCase("a") || gamemode.equals("2")) {
-            return GameType.ADVENTURE.getId();
+            id = GameType.ADVENTURE.getId();
         } else if (gamemode.equalsIgnoreCase("creative") || gamemode.equalsIgnoreCase("c") || gamemode.equals("1")) {
-            return GameType.CREATIVE.getId();
+            id = GameType.CREATIVE.getId();
         } else if (gamemode.equalsIgnoreCase("spectator") || gamemode.equalsIgnoreCase("sp") || gamemode.equals("3")) {
-            return GameType.SPECTATOR.getId();
-        }else {
-            return 0;
+            id = GameType.SPECTATOR.getId();
         }
+
+        return id;
     }
 }

@@ -3,13 +3,13 @@ package com.itachi1706.cheesecakeservercommands.dbstorage;
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
-import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
-import com.itachi1706.cheesecakeservercommands.util.PlayerMPUtil;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextFormatting;
+import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
+import com.itachi1706.cheesecakeservercommands.util.TextUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.io.File;
 import java.sql.*;
@@ -29,7 +29,7 @@ public class LoginLogoutDB {
         Connection c;
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:" + CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + File.separator + "logins.db");
+            c = DriverManager.getConnection("jdbc:sqlite:" + CheesecakeServerCommands.getConfigFileDirectory().getAbsolutePath() + File.separator + "logins.db");
         } catch (Exception e) {
             e.printStackTrace();
             LogHelper.error(e.getClass().getName() + ": " + e.getMessage());
@@ -56,25 +56,23 @@ public class LoginLogoutDB {
             LogHelper.error("Login/Logout DB fail to ensure that table is created");
     }
 
-    private static void addLog(EntityPlayerMP player, String type){
+    private static void addLog(ServerPlayer player, String type){
         if (player == null) return;
-        if (player.connection == null) return;
-        if (player.getPlayerIP() == null) return;
-        String ip = player.getPlayerIP();
+        String ip = player.getIpAddress();
         String insertQuery = "INSERT INTO LOGINS (NAME,UUID,IP,X,Y,Z,WORLD,TYPE) " +
-                "VALUES('" + player.getDisplayNameString() + "','" + player.getUniqueID().toString() + "','" + ip + "','"
-                + (Math.round(player.posX * 100.0) / 100.0) + "','" + (Math.round(player.posY * 100.0) / 100.0) + "','"
-                + (Math.round(player.posZ * 100.0) / 100.0) + "','" + player.world.getWorldInfo().getWorldName() + "','"
+                "VALUES('" + player.getDisplayName().getString() + "','" + player.getStringUUID() + "','" + ip + "','"
+                + (Math.round(player.getX() * 100.0) / 100.0) + "','" + (Math.round(player.getY() * 100.0) / 100.0) + "','"
+                + (Math.round(player.getZ() * 100.0) / 100.0) + "','" + player.getLevel().dimension().location() + "','"
                 + type + "');";
 
         Connection db = getSQLiteDBConnection();
         if (db == null){
             LogHelper.error("Unable to add log due to failed db connection");
-            if (PlayerMPUtil.isOperator(player) && type.equalsIgnoreCase("LOGIN")) {
+            if (ServerPlayerUtil.isOperator(player) && type.equalsIgnoreCase("LOGIN")) {
                 try { // Check if ODBC driver is installed if not notify them
                     Class.forName("org.sqlite.JDBC"); // Success
                 } catch (ClassNotFoundException e) {
-                    ChatHelper.sendMessage(player, TextFormatting.RED + "SQLite ODBC driver not installed. Please inform the server administrator to put it into the mods folder!"); // Fail.
+                    TextUtil.sendChatMessage(player, ChatFormatting.RED + "SQLite ODBC driver not installed. Please inform the server administrator to put it into the mods folder!"); // Fail.
                 }
             }
             return;
@@ -83,14 +81,14 @@ public class LoginLogoutDB {
         DBUtils.insertRecord(db, insertQuery, "Unable to insert login record");
     }
 
-    public static void addLoginLog(EntityPlayer player){
-        addLog((EntityPlayerMP) player, "LOGIN");
-        LogHelper.info("Logged Login for " + player.getUniqueID());
+    public static void addLoginLog(Player player){
+        addLog((ServerPlayer) player, "LOGIN");
+        LogHelper.info("Logged Login for " + player.getStringUUID());
     }
 
-    public static void addLogoutLog(EntityPlayer player){
-        addLog((EntityPlayerMP) player, "LOGOUT");
-        LogHelper.info("Logged Logout for " + player.getUniqueID());
+    public static void addLogoutLog(Player player){
+        addLog((ServerPlayer) player, "LOGOUT");
+        LogHelper.info("Logged Logout for " + player.getStringUUID());
     }
 
     public static int getLoginCount(String name){
@@ -120,7 +118,7 @@ public class LoginLogoutDB {
         return loginCount;
     }
 
-    public static void deleteLogs(ICommandSender iCommandSender, String target){
+    public static void deleteLogs(CommandSourceStack CommandSourceStack, String target){
         String sqlQuery = "DELETE FROM LOGINS WHERE NAME='" + target + "' OR UUID='" + target + "';";
         Connection db = getSQLiteDBConnection();
         if (db == null){
@@ -129,9 +127,9 @@ public class LoginLogoutDB {
         }
         try {
             DBUtils.deleteRecord(db, sqlQuery);
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + target + " logs for login/logout deleted!");
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GREEN + target + " logs for login/logout deleted!");
         } catch (Exception e) {
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")");
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")");
             LogHelper.error("Error occurred deleting logs (" + e.toString() + ")");
             e.printStackTrace();
         }
@@ -139,93 +137,93 @@ public class LoginLogoutDB {
 
     private static String sendLogin(int no, String x, String y, String z, String world, String datetime, String ip){
         //1. datetime Login at X: x, Y: y, Z:z, World: world with IP
-        return (TextFormatting.GOLD + "") + no + ". " +
-                TextFormatting.RESET + "" + TextFormatting.ITALIC + datetime + " UTC " + TextFormatting.RESET + "" +
-                TextFormatting.GREEN + "Login " + TextFormatting.RESET + "at " + TextFormatting.GOLD + "" +
-                TextFormatting.AQUA + world + TextFormatting.GOLD + "," + TextFormatting.AQUA + x +
-                TextFormatting.GOLD + "," + TextFormatting.AQUA + y + TextFormatting.GOLD + "," +
-                TextFormatting.AQUA + z + TextFormatting.RESET + " at " + TextFormatting.LIGHT_PURPLE + ip;
+        return (ChatFormatting.GOLD + "") + no + ". " +
+                ChatFormatting.RESET + "" + ChatFormatting.ITALIC + datetime + " UTC " + ChatFormatting.RESET + "" +
+                ChatFormatting.GREEN + "Login " + ChatFormatting.RESET + "at " + ChatFormatting.GOLD + "" +
+                ChatFormatting.AQUA + world + ChatFormatting.GOLD + "," + ChatFormatting.AQUA + x +
+                ChatFormatting.GOLD + "," + ChatFormatting.AQUA + y + ChatFormatting.GOLD + "," +
+                ChatFormatting.AQUA + z + ChatFormatting.RESET + " at " + ChatFormatting.LIGHT_PURPLE + ip;
     }
 
     private static String sendLogout(int no, String x, String y, String z, String world, String datetime, String ip){
         //1. datetime Logout at X: x, Y: y, Z:z, World: world with IP
-        return (TextFormatting.GOLD + "") + no + ". " +
-                TextFormatting.RESET + "" + TextFormatting.ITALIC + datetime + " UTC " + TextFormatting.RESET + "" +
-                TextFormatting.RED + "Logout " + TextFormatting.RESET + "at " + TextFormatting.GOLD + "" +
-                TextFormatting.AQUA + world + TextFormatting.GOLD + "," + TextFormatting.AQUA + x +
-                TextFormatting.GOLD + "," + TextFormatting.AQUA + y + TextFormatting.GOLD + "," +
-                TextFormatting.AQUA + z + TextFormatting.RESET + " at " + TextFormatting.LIGHT_PURPLE + ip;
+        return (ChatFormatting.GOLD + "") + no + ". " +
+                ChatFormatting.RESET + "" + ChatFormatting.ITALIC + datetime + " UTC " + ChatFormatting.RESET + "" +
+                ChatFormatting.RED + "Logout " + ChatFormatting.RESET + "at " + ChatFormatting.GOLD + "" +
+                ChatFormatting.AQUA + world + ChatFormatting.GOLD + "," + ChatFormatting.AQUA + x +
+                ChatFormatting.GOLD + "," + ChatFormatting.AQUA + y + ChatFormatting.GOLD + "," +
+                ChatFormatting.AQUA + z + ChatFormatting.RESET + " at " + ChatFormatting.LIGHT_PURPLE + ip;
     }
 
-    private static void parseMessages(ArrayList<String> stringList, ICommandSender iCommandSender, int arg, String target){
+    private static void parseMessages(ArrayList<String> stringList, CommandSourceStack CommandSourceStack, int arg, String target){
         int maxPossibleValue = stringList.size();	//Max possible based on stringList
         int maxPossiblePage = (stringList.size() / 10) + 1;
         if (maxPossiblePage < arg){
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Max amount of pages is " + maxPossiblePage + ". Please specify a value within that range!");
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.RED + "Max amount of pages is " + maxPossiblePage + ". Please specify a value within that range!");
             return;
         }
         //1 (0-9), 2 (10,19)...
         int minValue = (arg - 1) * 10;
         int maxValue = (arg * 10) - 1;
         if (maxValue > maxPossibleValue) {	//Exceeds
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.centerText(" Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ", '-'));
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GOLD + TextUtil.centerText(" Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ", '-'));
             for (int i = minValue; i < stringList.size(); i++){
-                ChatHelper.sendMessage(iCommandSender, stringList.get(i));
+                TextUtil.sendChatMessage(CommandSourceStack, stringList.get(i));
             }
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GOLD + TextUtil.generateChatBreaks('-'));
             return;
         }
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.centerText(" Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ", '-'));
+        TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GOLD + TextUtil.centerText(" Login History For " + target + " Page " + arg + " of " + maxPossiblePage + " ", '-'));
         for (int i = minValue; i <= maxValue; i++){
-            ChatHelper.sendMessage(iCommandSender, stringList.get(i));
+            TextUtil.sendChatMessage(CommandSourceStack, stringList.get(i));
         }
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
+        TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GOLD + TextUtil.generateChatBreaks('-'));
     }
 
-    public static void checkLoginStats(ICommandSender p, String target, UUID uuid, String firstPlayed, String lastPlayed){
+    public static void checkLoginStats(CommandSourceStack p, String target, UUID uuid, String firstPlayed, String lastPlayed){
         int logins = getLoginCount(target);
         if (logins == -2){
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to convert login count!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to convert login count!");
             return;
         } else if (logins == -1){
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to get login stats!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get login stats!");
             return;
         }
         int logouts = getLogoutCount(target);
         if (logouts == -2){
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to convert logout count!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to convert logout count!");
             return;
         } else if (logouts == -1){
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to get logout stats!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get logout stats!");
             return;
         }
-        String status = TextFormatting.RED + "Offline";
+        String status = ChatFormatting.RED + "Offline";
         String nick = target;
-        String opStatus = TextFormatting.RED + "Not Opped";
-        String gamemode = TextFormatting.GRAY + "Unknown";
-        String currentlocation = TextFormatting.RED + "Offline";
+        String opStatus = ChatFormatting.RED + "Not Opped";
+        String gamemode = ChatFormatting.GRAY + "Unknown";
+        String currentlocation = ChatFormatting.RED + "Offline";
         boolean isOnline = false;
 
         // Check if EntityPlayer is online
-        List<EntityPlayerMP> playerEntityList = PlayerMPUtil.getOnlinePlayers();
-        for (EntityPlayerMP pl : playerEntityList){
-            if (pl.getDisplayNameString().equals(target) || pl.getUniqueID().equals(uuid)){
-                status = TextFormatting.GREEN + "Online";
+        List<ServerPlayer> playerEntityList = ServerPlayerUtil.getOnlinePlayers();
+        for (ServerPlayer pl : playerEntityList){
+            if (pl.getDisplayName().getString().equals(target) || pl.getUUID().equals(uuid)){
+                status = ChatFormatting.GREEN + "Online";
                 isOnline = true;
-                nick = pl.getDisplayNameString();
-                switch (pl.interactionManager.getGameType()){
-                    case CREATIVE: gamemode = TextFormatting.GREEN + "CREATIVE"; break;
-                    case SURVIVAL: gamemode = TextFormatting.GREEN + "SURVIVAL"; break;
-                    case ADVENTURE: gamemode = TextFormatting.GREEN + "ADVENTURE"; break;
-                    case SPECTATOR: gamemode = TextFormatting.GREEN + "SPECTATOR"; break;
-                    case NOT_SET: gamemode = TextFormatting.GRAY + "UNSET"; break;
+                nick = pl.getDisplayName().getString();
+                switch (pl.gameMode.getGameModeForPlayer()){
+                    case CREATIVE: gamemode = ChatFormatting.GREEN + "CREATIVE"; break;
+                    case SURVIVAL: gamemode = ChatFormatting.GREEN + "SURVIVAL"; break;
+                    case ADVENTURE: gamemode = ChatFormatting.GREEN + "ADVENTURE"; break;
+                    case SPECTATOR: gamemode = ChatFormatting.GREEN + "SPECTATOR"; break;
+                    default: gamemode = ChatFormatting.GRAY + "UNSET"; break;
                 }
 
-                if (PlayerMPUtil.isOperator(pl)){
-                    opStatus = TextFormatting.GREEN + "Opped";
+                if (ServerPlayerUtil.isOperator(pl)){
+                    opStatus = ChatFormatting.GREEN + "Opped";
                 }
 
-                currentlocation = pl.posX + ", " + pl.posY + ", " + pl.posZ;
+                currentlocation = pl.getX() + ", " + pl.getY() + ", " + pl.getZ();
                 break;
             }
         }
@@ -234,20 +232,20 @@ public class LoginLogoutDB {
         if (!isOnline){
             LastKnownUsernames names = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
             if (names != null) {
-                if (names.isLoginState()) status = TextFormatting.DARK_RED + "SERVER CRASHED";
+                if (names.isLoginState()) status = ChatFormatting.DARK_RED + "SERVER CRASHED";
                 String s = names.hasLastKnownGamemode() ? names.getLastKnownGamemode() : "";
                 switch (s) {
                     case "creative":
-                        gamemode = TextFormatting.RED + "CREATIVE";
+                        gamemode = ChatFormatting.RED + "CREATIVE";
                         break;
                     case "survival":
-                        gamemode = TextFormatting.RED + "SURVIVAL";
+                        gamemode = ChatFormatting.RED + "SURVIVAL";
                         break;
                     case "adventure":
-                        gamemode = TextFormatting.RED + "ADVENTURE";
+                        gamemode = ChatFormatting.RED + "ADVENTURE";
                         break;
                     default:
-                        gamemode = TextFormatting.GRAY + "UNSET (REQUIRES PLAYER LOGIN TO SET)";
+                        gamemode = ChatFormatting.GRAY + "UNSET (REQUIRES PLAYER LOGIN TO SET)";
                         break;
                 }
             }
@@ -255,17 +253,17 @@ public class LoginLogoutDB {
 
 
         //Present them all out
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + ChatHelper.centerText(" Login Statistics ", '-'));
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Status: " + TextFormatting.RESET + status);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Name: " + TextFormatting.RESET + nick);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "OP Status: " + TextFormatting.RESET + opStatus);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "UUID: " + TextFormatting.RESET + uuid);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Current Gamemode: " + TextFormatting.RESET + gamemode);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Login/Logout Counts: " + TextFormatting.RESET + logins + "/" + logouts);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "First Joined: " + TextFormatting.RESET + firstPlayed);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Last Played: " + TextFormatting.RESET + lastPlayed);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Current Location: " + TextFormatting.RESET + currentlocation);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + ChatHelper.generateChatBreaks('-'));
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + TextUtil.centerText(" Login Statistics ", '-'));
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Status: " + ChatFormatting.RESET + status);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Name: " + ChatFormatting.RESET + nick);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "OP Status: " + ChatFormatting.RESET + opStatus);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "UUID: " + ChatFormatting.RESET + uuid);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Current Gamemode: " + ChatFormatting.RESET + gamemode);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Login/Logout Counts: " + ChatFormatting.RESET + logins + "/" + logouts);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "First Joined: " + ChatFormatting.RESET + firstPlayed);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Last Played: " + ChatFormatting.RESET + lastPlayed);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Current Location: " + ChatFormatting.RESET + currentlocation);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + TextUtil.generateChatBreaks('-'));
     }
 
     private static ArrayList<String> getFullEntityPlayerLogs(String target){
@@ -305,11 +303,11 @@ public class LoginLogoutDB {
         }
     }
 
-    public static void checkLoginLogs(ICommandSender p, String target, int no){
+    public static void checkLoginLogs(CommandSourceStack p, String target, int no){
         ArrayList<String> loginHist = getFullEntityPlayerLogs(target);
         if (loginHist == null){
             //Exception
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to get logs!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get logs!");
         } else {
             parseMessages(loginHist, p, no, target);
         }

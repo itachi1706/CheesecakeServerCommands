@@ -1,10 +1,10 @@
 package com.itachi1706.cheesecakeservercommands.dbstorage;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
-import com.itachi1706.cheesecakeservercommands.util.ChatHelper;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.text.TextFormatting;
+import com.itachi1706.cheesecakeservercommands.util.TextUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -23,7 +23,7 @@ public class CommandsLogDB {
         Connection c;
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:" + CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + File.separator + "command_use.db");
+            c = DriverManager.getConnection("jdbc:sqlite:" + CheesecakeServerCommands.getConfigFileDirectory().getAbsolutePath() + File.separator + "command_use.db");
         } catch (Exception e) {
             e.printStackTrace();
             LogHelper.error(e.getClass().getName() + ": " + e.getMessage());
@@ -47,14 +47,10 @@ public class CommandsLogDB {
             LogHelper.error("Commands Log DB fail to ensure that table is created");
     }
 
-    public static void addLog(String commandUser, UUID uuid, String commandBase, String[] commandArgs, String ip) {
-        StringBuilder commandExecuted = new StringBuilder(commandBase + " ");
-        for (String s : commandArgs) {
-            commandExecuted.append(s).append(" ");
-        }
+    public static void addLog(String commandUser, UUID uuid, String commandBase, String commandExecuted, String ip) {
         String insertQuery = "INSERT INTO COMMANDS (NAME,UUID,IP,COMMAND_BASE,FULL_COMMAND) " +
                 "VALUES('" + commandUser + "','" + uuid + "','" + ip + "','"
-                + commandBase + "','" + commandExecuted.toString().trim() + "');";
+                + commandBase + "','" + commandExecuted.trim() + "');";
 
         Connection db = getSQLiteDBConnection();
         if (db == null) {
@@ -113,7 +109,7 @@ public class CommandsLogDB {
         return commandUsageCount;
     }
 
-    public static void deleteLogs(ICommandSender iCommandSender, String target){
+    public static void deleteLogs(CommandSourceStack CommandSourceStack, String target){
         String sqlQuery = "DELETE FROM COMMANDS WHERE NAME='" + target + "' OR UUID='" + target + "';";
         if (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"))
             sqlQuery = "DELETE FROM COMMANDS WHERE IP='localhost';";
@@ -124,9 +120,9 @@ public class CommandsLogDB {
         }
         try {
             DBUtils.deleteRecord(db, sqlQuery);
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.GREEN + target + " command usage logs deleted!");
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GREEN + target + " command usage logs deleted!");
         } catch (Exception e) {
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")");
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")");
             LogHelper.error("Error occurred deleting logs (" + e.toString() + ")");
             e.printStackTrace();
         }
@@ -134,11 +130,11 @@ public class CommandsLogDB {
 
     private static String sendCommands(int no, String name, String uuid, String command, String datetime, String ip){
         //1. name (uuid) executed command at datetime with IP
-        return TextFormatting.GOLD + "" + no + ". " +
-                TextFormatting.AQUA + name + TextFormatting.RESET + " (" + uuid + ") executed " +
-                TextFormatting.GREEN + "/" + command + TextFormatting.RESET + " at " +
-                TextFormatting.RESET + "" + TextFormatting.ITALIC + datetime + " UTC" +
-                TextFormatting.RESET + " with " + TextFormatting.LIGHT_PURPLE + ip;
+        return ChatFormatting.GOLD + "" + no + ". " +
+                ChatFormatting.AQUA + name + ChatFormatting.RESET + " (" + uuid + ") executed " +
+                ChatFormatting.GREEN + "/" + command + ChatFormatting.RESET + " at " +
+                ChatFormatting.RESET + "" + ChatFormatting.ITALIC + datetime + " UTC" +
+                ChatFormatting.RESET + " with " + ChatFormatting.LIGHT_PURPLE + ip;
     }
 
     private static ArrayList<String> getFullEntityPlayerLogs(String target){
@@ -176,55 +172,55 @@ public class CommandsLogDB {
         }
     }
 
-    public static void checkCommandLogs(ICommandSender p, String target, int no){
+    public static void checkCommandLogs(CommandSourceStack p, String target, int no){
         ArrayList<String> commandList = getFullEntityPlayerLogs(target);
         if (commandList == null){
             //Exception
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to get logs!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get logs!");
         } else {
             parseMessages(commandList, p, no, target);
         }
     }
 
-    private static void parseMessages(ArrayList<String> stringList, ICommandSender iCommandSender, int arg, String target){
+    private static void parseMessages(ArrayList<String> stringList, CommandSourceStack CommandSourceStack, int arg, String target){
         int maxPossibleValue = stringList.size();	//Max possible based on stringList
         int maxPossiblePage = (stringList.size() / 10) + 1;
         if (maxPossiblePage < arg){
-            ChatHelper.sendMessage(iCommandSender, TextFormatting.RED + "Max amount of pages is " + maxPossiblePage + ". Please specify a value within that range!");
+            TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.RED + "Max amount of pages is " + maxPossiblePage + ". Please specify a value within that range!");
             return;
         }
         //1 (0-9), 2 (10,19)...
         int minValue = (arg - 1) * 10;
         int maxValue = (arg * 10) - 1;
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "--- Command History For " + target + " Page " + arg + " of " + maxPossiblePage + " ---");
+        TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GOLD + "--- Command History For " + target + " Page " + arg + " of " + maxPossiblePage + " ---");
         if (maxValue > maxPossibleValue) {	//Exceeds
             for (int i = minValue; i < stringList.size(); i++){
-                ChatHelper.sendMessage(iCommandSender, stringList.get(i));
+                TextUtil.sendChatMessage(CommandSourceStack, stringList.get(i));
             }
         } else {
             for (int i = minValue; i <= maxValue; i++) {
-                ChatHelper.sendMessage(iCommandSender, stringList.get(i));
+                TextUtil.sendChatMessage(CommandSourceStack, stringList.get(i));
             }
         }
-        ChatHelper.sendMessage(iCommandSender, TextFormatting.GOLD + "-------------------------------------------");
+        TextUtil.sendChatMessage(CommandSourceStack, ChatFormatting.GOLD + "-------------------------------------------");
     }
 
-    public static void checkCommandStats(ICommandSender p, String target, UUID uuid){
+    public static void checkCommandStats(CommandSourceStack p, String target, UUID uuid){
         int commands = getCount(target);
         if (commands == -2){
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to convert command usage count!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to convert command usage count!");
             return;
         } else if (commands == -1){
-            ChatHelper.sendMessage(p, TextFormatting.RED + "An Error Occured trying to get command usage stats!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get command usage stats!");
             return;
         }
 
         //Present them all out
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "--- Command Usage Statistics ---");
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Name: " + TextFormatting.RESET + target);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "UUID: " + TextFormatting.RESET + uuid);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "Command Usage Counts: " + TextFormatting.RESET + commands);
-        ChatHelper.sendMessage(p, TextFormatting.GOLD + "-----------------------------");
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "--- Command Usage Statistics ---");
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Name: " + ChatFormatting.RESET + target);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "UUID: " + ChatFormatting.RESET + uuid);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Command Usage Counts: " + ChatFormatting.RESET + commands);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "-----------------------------");
     }
 
     @Nonnull

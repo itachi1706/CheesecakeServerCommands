@@ -1,5 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.events;
 
+import com.itachi1706.cheesecakeservercommands.dbstorage.CommandsLogDB;
+import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
@@ -34,8 +36,7 @@ public class PlayerEvents {
 
         LastKnownUsernameJsonHelper.logUsernameToList(player);
         LastKnownUsernameJsonHelper.logLastSeenToList(player, true);
-        // TODO: Reimplement
-//        LoginLogoutDB.addLoginLog(player);
+        LoginLogoutDB.addLoginLog(player);
     }
 
     @SubscribeEvent
@@ -44,12 +45,11 @@ public class PlayerEvents {
         if (player == null)
             return;
 
-        LogHelper.info("Player " + player.getDisplayName().toString() + " with UUID " + player.getStringUUID() + " logged out");
+        LogHelper.info("Player " + player.getDisplayName().getString() + " with UUID " + player.getStringUUID() + " logged out");
         LastKnownUsernameJsonHelper.logLastSeenToList(player, false);
-        // TODO: Reimplement
-//        LoginLogoutDB.addLogoutLog(player);
-        if (player instanceof ServerPlayer){
-            LastKnownUsernameJsonHelper.logGamemodeToLit((ServerPlayer)player);
+        LoginLogoutDB.addLogoutLog(player);
+        if (player instanceof ServerPlayer serverPlayer){
+            LastKnownUsernameJsonHelper.logGamemodeToLit(serverPlayer);
         }
     }
 
@@ -73,8 +73,7 @@ public class PlayerEvents {
         UUID uuid = UUID.randomUUID();
         try {
             ServerPlayer playerMP = sender.getPlayerOrException();
-            if (playerMP instanceof FakePlayer) {
-                FakePlayer fp = (FakePlayer) playerMP;
+            if (playerMP instanceof FakePlayer fp) {
                 name = "FP-" + fp.getClass().getSimpleName();
                 ip = "fp-" + fp.getClass().getSimpleName() + "-" + playerMP.getName();
             } else {
@@ -85,8 +84,7 @@ public class PlayerEvents {
             // Not player, ignore
         }
 
-        // TODO: Reimplement
         // Add log should now change to base and full commands and change accordingly
-//        CommandsLogDB.addLog(name, uuid, commandBase.getName(), args, ip);
+        CommandsLogDB.addLog(name, uuid, commandBase, commandExecuted, ip);
     }
 }

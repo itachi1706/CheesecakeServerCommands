@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.commands;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
+import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
@@ -143,8 +144,7 @@ public class CCLoggerCommand extends BaseCommand {
     }
 
     private int getLoginsOfUser(CommandSourceStack sender, String playerName, int count) {
-        // TODO: To Implement
-        // LoginLogoutDB.checkLoginLogs(sender, playerName, count);
+        LoginLogoutDB.checkLoginLogs(sender, playerName, count);
 
         // Temp command
         sendFailureMessage(sender, COMING_SOON);
@@ -153,8 +153,7 @@ public class CCLoggerCommand extends BaseCommand {
     }
 
     private int deleteLoginHistory(CommandSourceStack sender, String playerName) {
-        // TODO: To implement
-        // LoginLogoutDB.deleteLogs(sender, playerName);
+        LoginLogoutDB.deleteLogs(sender, playerName);
 
         sendFailureMessage(sender, COMING_SOON);
 
@@ -162,7 +161,6 @@ public class CCLoggerCommand extends BaseCommand {
     }
 
     private int viewPlayerStatistics(CommandSourceStack sender, String playerName) {
-        // TODO: To implement
         UUID uuid = LastKnownUsernameJsonHelper.getLastKnownUUIDFromPlayerName(playerName);
         if (uuid == null){
             notOnServerError(playerName, sender);
@@ -175,7 +173,7 @@ public class CCLoggerCommand extends BaseCommand {
             return 0;
         }
 
-        // LoginLogoutDB.checkLoginStats(sender, playerName, uuid, convertTime(name.getFirstJoined()), convertTime(name.getLastSeen()));
+        LoginLogoutDB.checkLoginStats(sender, playerName, uuid, convertTime(name.getFirstJoined()), convertTime(name.getLastSeen()));
 
         sendFailureMessage(sender, COMING_SOON);
 

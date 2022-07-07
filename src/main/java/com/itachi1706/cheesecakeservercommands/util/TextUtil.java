@@ -47,6 +47,14 @@ public class TextUtil {
             sendChatMessage(player, getText(text));
     }
 
+    public static void sendChatMessage(CommandSourceStack sender, String translationKey, Object... args) {
+        sendMessage(sender, new TranslatableComponent(translationKey, args));
+    }
+
+    private static void sendMessage(CommandSourceStack sender, Component textComponent) {
+        sender.sendSuccess(textComponent, false);
+    }
+
     // Action Bar (Info Message)
 
     public static void sendActionMessage(ServerPlayer player, Component textComponent) {
