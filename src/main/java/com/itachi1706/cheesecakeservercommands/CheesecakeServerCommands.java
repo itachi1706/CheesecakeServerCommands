@@ -153,8 +153,8 @@ public class CheesecakeServerCommands
         if (LastKnownUsernameJsonHelper.fileExists())
             setLastKnownUsernames(LastKnownUsernameJsonHelper.readFromFile());
 
-       LoginLogoutDB.checkTablesExists();
-       CommandsLogDB.checkTablesExists();
+       LoginLogoutDB.getInstance().checkTablesExists();
+       CommandsLogDB.getInstance().checkTablesExists();
     }
 
     private static void setPlatformBean(MBeanServer myBean) {

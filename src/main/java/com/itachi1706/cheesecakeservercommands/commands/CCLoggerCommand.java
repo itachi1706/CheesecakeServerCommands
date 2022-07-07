@@ -144,7 +144,7 @@ public class CCLoggerCommand extends BaseCommand {
     }
 
     private int getLoginsOfUser(CommandSourceStack sender, String playerName, int count) {
-        LoginLogoutDB.checkLoginLogs(sender, playerName, count);
+        LoginLogoutDB.getInstance().checkLoginLogs(sender, playerName, count);
 
         // Temp command
         sendFailureMessage(sender, COMING_SOON);
@@ -153,7 +153,7 @@ public class CCLoggerCommand extends BaseCommand {
     }
 
     private int deleteLoginHistory(CommandSourceStack sender, String playerName) {
-        LoginLogoutDB.deleteLogs(sender, playerName);
+        LoginLogoutDB.getInstance().deleteLogs(sender, playerName);
 
         sendFailureMessage(sender, COMING_SOON);
 
@@ -173,7 +173,7 @@ public class CCLoggerCommand extends BaseCommand {
             return 0;
         }
 
-        LoginLogoutDB.checkLoginStats(sender, playerName, uuid, convertTime(name.getFirstJoined()), convertTime(name.getLastSeen()));
+        LoginLogoutDB.getInstance().checkLoginStats(sender, playerName, uuid, convertTime(name.getFirstJoined()), convertTime(name.getLastSeen()));
 
         sendFailureMessage(sender, COMING_SOON);
 

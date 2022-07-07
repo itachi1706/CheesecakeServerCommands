@@ -36,7 +36,7 @@ public class PlayerEvents {
 
         LastKnownUsernameJsonHelper.logUsernameToList(player);
         LastKnownUsernameJsonHelper.logLastSeenToList(player, true);
-        LoginLogoutDB.addLoginLog(player);
+        LoginLogoutDB.getInstance().addLoginLog(player);
     }
 
     @SubscribeEvent
@@ -47,7 +47,7 @@ public class PlayerEvents {
 
         LogHelper.info("Player " + player.getDisplayName().getString() + " with UUID " + player.getStringUUID() + " logged out");
         LastKnownUsernameJsonHelper.logLastSeenToList(player, false);
-        LoginLogoutDB.addLogoutLog(player);
+        LoginLogoutDB.getInstance().addLogoutLog(player);
         if (player instanceof ServerPlayer serverPlayer){
             LastKnownUsernameJsonHelper.logGamemodeToLit(serverPlayer);
         }
@@ -85,6 +85,6 @@ public class PlayerEvents {
         }
 
         // Add log should now change to base and full commands and change accordingly
-        CommandsLogDB.addLog(name, uuid, commandBase, commandExecuted, ip);
+        CommandsLogDB.getInstance().addLog(name, uuid, commandBase, commandExecuted, ip);
     }
 }
