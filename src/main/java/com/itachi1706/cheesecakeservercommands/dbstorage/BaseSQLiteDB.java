@@ -69,7 +69,7 @@ public abstract class BaseSQLiteDB {
             statement.executeUpdate(createSql);
             db.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             LogHelper.error("Unable to check table " + tableName + " exists");
             return false;
         }
@@ -83,7 +83,7 @@ public abstract class BaseSQLiteDB {
             db.commit();
             db.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             LogHelper.error(errorMsg);
         }
     }
@@ -114,11 +114,11 @@ public abstract class BaseSQLiteDB {
             throw e;
         } catch (NumberFormatException e){
             LogHelper.error(e.toString());
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             return -2;
         } catch (Exception e) {
             LogHelper.error(e.toString());
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             return -1;
         }
 
