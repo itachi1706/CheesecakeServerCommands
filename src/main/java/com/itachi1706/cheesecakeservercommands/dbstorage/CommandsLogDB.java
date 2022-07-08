@@ -62,14 +62,6 @@ public class CommandsLogDB extends BaseSQLiteDB {
         insertRecord(db, insertQuery, "Unable to insert command record");
     }
 
-    private int getCommandUsageByPlayerNameOrUuid(String name){
-        return getCount(name);
-    }
-
-    public int getCommandUsageByPlayerNameOrUuid(UUID uuid){
-        return getCommandUsageByPlayerNameOrUuid(uuid.toString());
-    }
-
     public boolean checkIfConsole(String target) {
         return (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"));
     }

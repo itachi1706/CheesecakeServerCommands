@@ -132,7 +132,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
             deleteRecord(db, sqlQuery);
             TextUtil.sendChatMessage(sender, ChatFormatting.GREEN + target + " logs for login/logout deleted!");
         } catch (Exception e) {
-            TextUtil.sendChatMessage(sender, ChatFormatting.RED + "An Error Occured trying to delete logs! (" + e + ")");
+            TextUtil.sendChatMessage(sender, ChatFormatting.RED + "An Error Occurred trying to delete logs! (" + e + ")");
             LogHelper.error("Error occurred deleting logs (" + e + ")");
             LogHelper.error(ERR_STACK_TRACE, e);
         }
@@ -184,7 +184,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
         String nick = target;
         String opStatus = ChatFormatting.RED + "Not Opped";
         String gamemode = ChatFormatting.GRAY + "Unknown";
-        String currentlocation = ChatFormatting.RED + "Offline";
+        String currentLocation = ChatFormatting.RED + "Offline";
         boolean isOnline = false;
 
         // Check if EntityPlayer is online
@@ -205,7 +205,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
                     opStatus = ChatFormatting.GREEN + "Opped";
                 }
 
-                currentlocation = pl.getX() + ", " + pl.getY() + ", " + pl.getZ();
+                currentLocation = pl.getX() + ", " + pl.getY() + ", " + pl.getZ();
                 break;
             }
         }
@@ -233,7 +233,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
         TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Login/Logout Counts: " + ChatFormatting.RESET + logins + "/" + logouts);
         TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "First Joined: " + ChatFormatting.RESET + firstPlayed);
         TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Last Played: " + ChatFormatting.RESET + lastPlayed);
-        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Current Location: " + ChatFormatting.RESET + currentlocation);
+        TextUtil.sendChatMessage(p, ChatFormatting.GOLD + "Current Location: " + ChatFormatting.RESET + currentLocation);
         TextUtil.sendChatMessage(p, ChatFormatting.GOLD + TextUtil.generateChatBreaks('-'));
     }
 
