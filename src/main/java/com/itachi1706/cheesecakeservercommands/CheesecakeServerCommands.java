@@ -191,7 +191,7 @@ public class CheesecakeServerCommands
         commands.add(new CCLoggerCommand("cclogger", CommandPermissionsLevel.SERVER, true));
         commands.add(new CCLoggerCommand("cheesecakelogger", CommandPermissionsLevel.SERVER, true));
         commands.add(new CCLoggerCommand("ccl", CommandPermissionsLevel.SERVER, true));
-        // event.registerServerCommand(new CommandUsageCommand());
+        commands.add(new CommandUsageCommand("commanduse", CommandPermissionsLevel.SERVER, true));
         commands.add(new ServerPropertiesCommand("serverproperties", CommandPermissionsLevel.CONSOLE, true));
         commands.add(new MainCommand("csc", CommandPermissionsLevel.ALL, true));
         commands.add(new MainCommand("cheesecakeservercommands", CommandPermissionsLevel.ALL, true));

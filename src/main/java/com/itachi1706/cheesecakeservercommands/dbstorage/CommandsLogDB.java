@@ -70,7 +70,7 @@ public class CommandsLogDB extends BaseSQLiteDB {
         return getCommandUsageByPlayerNameOrUuid(uuid.toString());
     }
 
-    private boolean checkIfConsole(String target) {
+    public boolean checkIfConsole(String target) {
         return (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"));
     }
 
@@ -137,7 +137,7 @@ public class CommandsLogDB extends BaseSQLiteDB {
         //1. name (uuid) executed command at datetime with IP
         return ChatFormatting.GOLD + "" + no + ". " +
                 ChatFormatting.AQUA + name + ChatFormatting.RESET + " (" + uuid + ") executed " +
-                ChatFormatting.GREEN + "/" + command + ChatFormatting.RESET + " at " +
+                ChatFormatting.GREEN + "" + command + ChatFormatting.RESET + " at " +
                 ChatFormatting.RESET + "" + ChatFormatting.ITALIC + datetime + " UTC" +
                 ChatFormatting.RESET + " with " + ChatFormatting.LIGHT_PURPLE + ip;
     }
@@ -179,7 +179,7 @@ public class CommandsLogDB extends BaseSQLiteDB {
         ArrayList<String> commandList = getFullEntityPlayerLogs(target);
         if (commandList.isEmpty()){
             //Exception
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get logs!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "Player does not exist or has not executed any commands");
         } else {
             parseMessages(commandList, p, no, target);
         }
@@ -193,10 +193,10 @@ public class CommandsLogDB extends BaseSQLiteDB {
     public void checkCommandStats(CommandSourceStack p, String target, UUID uuid){
         int commands = getCount(target);
         if (commands == -2){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to convert command usage count!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to convert command usage count!");
             return;
         } else if (commands == -1){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get command usage stats!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to get command usage stats!");
             return;
         }
 
