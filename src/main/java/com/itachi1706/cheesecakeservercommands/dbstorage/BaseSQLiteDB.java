@@ -11,9 +11,10 @@ import java.sql.*;
 import java.util.List;
 
 public abstract class BaseSQLiteDB {
-    // TODO: Use https://www.sqlitetutorial.net/sqlite-java/insert/ PreparedStatements instead to prevent SQL Injections
-
     private final String dbName;
+
+    protected static final String ERR_STACK_TRACE = "Stack Trace: ";
+    protected static final String QUERY_AND_UUID = "' OR UUID='";
 
     protected BaseSQLiteDB(String dbName) {
         this.dbName = dbName;

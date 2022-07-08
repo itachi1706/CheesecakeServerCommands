@@ -24,8 +24,6 @@ import java.util.UUID;
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.dbstorage
  */
 public class LoginLogoutDB extends BaseSQLiteDB {
-    // TODO: Use https://www.sqlitetutorial.net/sqlite-java/insert/ PreparedStatements instead to prevent SQL Injections
-
     private static LoginLogoutDB instance;
 
     private static final String TYPE_LOGIN = "LOGIN";
@@ -105,7 +103,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
     }
 
     private int getCount(String name, String type){
-        String queryString = "SELECT COUNT(*) FROM LOGINS WHERE (NAME='" + name + "' OR UUID='" + name + "') AND TYPE='" + type + "';";
+        String queryString = "SELECT COUNT(*) FROM LOGINS WHERE (NAME='" + name + QUERY_AND_UUID + name + "') AND TYPE='" + type + "';";
         Connection db = getSQLiteDBConnection();
         if (db == null){
             LogHelper.error("Unable to add log due to failed db connection");
@@ -116,7 +114,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
         try {
             loginCount = getCount(db, queryString);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             LogHelper.error("Unable to get " + type + " count from database");
         }
 
@@ -124,7 +122,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
     }
 
     public void deleteLogs(CommandSourceStack sender, String target){
-        String sqlQuery = "DELETE FROM LOGINS WHERE NAME='" + target + "' OR UUID='" + target + "';";
+        String sqlQuery = "DELETE FROM LOGINS WHERE NAME='" + target + QUERY_AND_UUID + target + "';";
         Connection db = getSQLiteDBConnection();
         if (db == null){
             LogHelper.error("Unable to delete logs due to failed db connection");
@@ -136,7 +134,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
         } catch (Exception e) {
             TextUtil.sendChatMessage(sender, ChatFormatting.RED + "An Error Occured trying to delete logs! (" + e + ")");
             LogHelper.error("Error occurred deleting logs (" + e + ")");
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
         }
     }
 
@@ -168,18 +166,18 @@ public class LoginLogoutDB extends BaseSQLiteDB {
     public void checkLoginStats(CommandSourceStack p, String target, UUID uuid, String firstPlayed, String lastPlayed){
         int logins = getLoginCount(target);
         if (logins == -2){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to convert login count!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to convert login count!");
             return;
         } else if (logins == -1){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get login stats!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to get login stats!");
             return;
         }
         int logouts = getLogoutCount(target);
         if (logouts == -2){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to convert logout count!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to convert logout count!");
             return;
         } else if (logouts == -1){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occured trying to get logout stats!");
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to get logout stats!");
             return;
         }
         String status = ChatFormatting.RED + "Offline";
@@ -213,18 +211,16 @@ public class LoginLogoutDB extends BaseSQLiteDB {
         }
 
         // Validate offline if crash or not
-        if (!isOnline){
-            LastKnownUsernames names = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
-            if (names != null) {
-                if (names.isLoginState()) status = ChatFormatting.DARK_RED + "SERVER CRASHED";
-                String s = names.hasLastKnownGamemode() ? names.getLastKnownGamemode() : "";
-                gamemode = switch (s) {
-                    case "creative" -> ChatFormatting.RED + "CREATIVE";
-                    case "survival" -> ChatFormatting.RED + "SURVIVAL";
-                    case "adventure" -> ChatFormatting.RED + "ADVENTURE";
-                    default -> ChatFormatting.GRAY + "UNSET (REQUIRES PLAYER LOGIN TO SET)";
-                };
-            }
+        LastKnownUsernames names = LastKnownUsernameJsonHelper.getLastKnownUsernameFromList(uuid);
+        if (!isOnline && names != null){
+            if (names.isLoginState()) status = ChatFormatting.DARK_RED + "SERVER CRASHED";
+            String s = names.hasLastKnownGamemode() ? names.getLastKnownGamemode() : "";
+            gamemode = switch (s) {
+                case "creative" -> ChatFormatting.RED + "CREATIVE";
+                case "survival" -> ChatFormatting.RED + "SURVIVAL";
+                case "adventure" -> ChatFormatting.RED + "ADVENTURE";
+                default -> ChatFormatting.GRAY + "UNSET (REQUIRES PLAYER LOGIN TO SET)";
+            };
         }
 
         //Present them all out
@@ -249,7 +245,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
             return new ArrayList<>();
         }
 
-        String querySQL = "SELECT NAME,UUID,TYPE,X,Y,Z,WORLD,TIME,IP FROM LOGINS WHERE (NAME='" + target + "' OR UUID='" + target + "') ORDER BY TIME DESC;";
+        String querySQL = "SELECT NAME,UUID,TYPE,X,Y,Z,WORLD,TIME,IP FROM LOGINS WHERE (NAME='" + target + QUERY_AND_UUID + target + "') ORDER BY TIME DESC;";
 
         try (Statement statement = db.createStatement()) {
             db.setAutoCommit(false);
@@ -271,7 +267,7 @@ public class LoginLogoutDB extends BaseSQLiteDB {
             return loginHist;
         } catch (Exception e) {
             LogHelper.error("Error Occurred parsing player logs (" + e + ")");
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             return new ArrayList<>();
         }
     }

@@ -19,8 +19,6 @@ import java.util.UUID;
  * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands.dbstorage
  */
 public class CommandsLogDB extends BaseSQLiteDB {
-    // TODO: Use https://www.sqlitetutorial.net/sqlite-java/insert/ PreparedStatements instead to prevent SQL Injections
-
     private static CommandsLogDB instance;
 
     public CommandsLogDB() {
@@ -72,9 +70,13 @@ public class CommandsLogDB extends BaseSQLiteDB {
         return getCommandUsageByPlayerNameOrUuid(uuid.toString());
     }
 
+    private boolean checkIfConsole(String target) {
+        return (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"));
+    }
+
     private int getCount(@Nonnull String nameOrUuid){
-        String queryString = "SELECT COUNT(*) FROM COMMANDS WHERE (NAME='" + nameOrUuid + "' OR UUID='" + nameOrUuid + "');";
-        if (nameOrUuid.equalsIgnoreCase("console") || nameOrUuid.equalsIgnoreCase("server"))
+        String queryString = "SELECT COUNT(*) FROM COMMANDS WHERE (NAME='" + nameOrUuid + QUERY_AND_UUID + nameOrUuid + "');";
+        if (checkIfConsole(nameOrUuid))
             queryString = "SELECT COUNT(*) FROM COMMANDS WHERE (IP='localhost');";
         Connection db = getSQLiteDBConnection();
         if (db == null){
@@ -86,7 +88,7 @@ public class CommandsLogDB extends BaseSQLiteDB {
         try {
             commandUsageCount = getCount(db, queryString);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             LogHelper.error("Unable to get commands usage count for " + nameOrUuid + " from database");
         }
 
@@ -105,7 +107,7 @@ public class CommandsLogDB extends BaseSQLiteDB {
         try {
             commandUsageCount = getCount(db, queryString);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogHelper.error(ERR_STACK_TRACE, e);
             LogHelper.error("Unable to get commands usage count from database");
         }
 
@@ -113,8 +115,8 @@ public class CommandsLogDB extends BaseSQLiteDB {
     }
 
     public void deleteLogs(CommandSourceStack sender, String target){
-        String sqlQuery = "DELETE FROM COMMANDS WHERE NAME='" + target + "' OR UUID='" + target + "';";
-        if (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"))
+        String sqlQuery = "DELETE FROM COMMANDS WHERE NAME='" + target + QUERY_AND_UUID + target + "';";
+        if (checkIfConsole(target))
             sqlQuery = "DELETE FROM COMMANDS WHERE IP='localhost';";
         Connection db = getSQLiteDBConnection();
         if (db == null){
@@ -125,9 +127,9 @@ public class CommandsLogDB extends BaseSQLiteDB {
             deleteRecord(db, sqlQuery);
             TextUtil.sendChatMessage(sender, ChatFormatting.GREEN + target + " command usage logs deleted!");
         } catch (Exception e) {
-            TextUtil.sendChatMessage(sender, ChatFormatting.RED + "An Error Occured trying to delete logs! (" + e.toString() + ")");
-            LogHelper.error("Error occurred deleting logs (" + e.toString() + ")");
-            e.printStackTrace();
+            TextUtil.sendChatMessage(sender, ChatFormatting.RED + "An Error Occured trying to delete logs! (" + e + ")");
+            LogHelper.error("Error occurred deleting logs (" + e + ")");
+            LogHelper.error(ERR_STACK_TRACE, e);
         }
     }
 
@@ -148,10 +150,10 @@ public class CommandsLogDB extends BaseSQLiteDB {
             return new ArrayList<>();
         }
 
-        String querySQL = "SELECT NAME,UUID,FULL_COMMAND,TIME,IP FROM COMMANDS WHERE (NAME='" + target + "' OR UUID='" + target + "') ORDER BY TIME DESC;";
+        String querySQL = "SELECT NAME,UUID,FULL_COMMAND,TIME,IP FROM COMMANDS WHERE (NAME='" + target + QUERY_AND_UUID + target + "') ORDER BY TIME DESC;";
 
         // Check if CONSOLE
-        if (target.equalsIgnoreCase("console") || target.equalsIgnoreCase("server"))
+        if (checkIfConsole(target))
             querySQL = "SELECT NAME,UUID,FULL_COMMAND,TIME,IP FROM COMMANDS WHERE (IP='localhost') ORDER BY TIME DESC;";
 
         try (Statement statement = db.createStatement()) {
@@ -167,8 +169,8 @@ public class CommandsLogDB extends BaseSQLiteDB {
             db.close();
             return commandHist;
         } catch (Exception e) {
-            LogHelper.error("Error Occurred parsing player logs (" + e.toString() + ")");
-            e.printStackTrace();
+            LogHelper.error("Error Occurred parsing player logs (" + e + ")");
+            LogHelper.error(ERR_STACK_TRACE, e);
             return new ArrayList<>();
         }
     }
@@ -207,7 +209,7 @@ public class CommandsLogDB extends BaseSQLiteDB {
     }
 
     @Nonnull
-    public ArrayList<String> getPlayerNames() {
+    public List<String> getPlayerNames() {
         Connection db = getSQLiteDBConnection();
         if (db == null) {
             LogHelper.error("Unable to get list of player names from DB");
@@ -227,8 +229,8 @@ public class CommandsLogDB extends BaseSQLiteDB {
             db.close();
             return playerList;
         } catch (Exception e) {
-            LogHelper.error("Error Occurred getting player names (" + e.toString() + ")");
-            e.printStackTrace();
+            LogHelper.error("Error Occurred getting player names (" + e + ")");
+            LogHelper.error(ERR_STACK_TRACE, e);
             return new ArrayList<>();
         }
     }
