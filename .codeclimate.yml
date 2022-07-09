@@ -10,6 +10,9 @@ checks:
     enabled: false
   method-lines:
     enabled: false
+  return-statements:
+    config:
+      threshold: 8
 plugins:
   fixme:
     enabled: true
@@ -18,7 +21,13 @@ plugins:
   sonar-java:
     enabled: true
     config:
-      sonar.java.source: 8
+      sonar.java.source: 17
+  duplication:
+    enabled: true
+    config:
+      languages:
+        java:
+          mass_threshold: 60
 ratings:
   paths:
   - "**.java"

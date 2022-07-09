@@ -1,34 +1,36 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
-import com.itachi1706.cheesecakeservercommands.commons.selections.WorldPoint;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.itachi1706.cheesecakeservercommands.libs.selections.WorldPoint;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Created by Kenneth on 2/5/2016.
  * for com.itachi1706.cheesecakeservercommands.util in CheesecakeServerCommands
  */
 public class WorldUtil {
+    private WorldUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Checks if the blocks from [x,y,z] to [x,y+h-1,z] are either air or replacable
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param h
+     * @param world Level object
+     * @param x X coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @param h height of the block
      * @return y value
      */
-    public static boolean isFree(World world, int x, int y, int z, int h)
+    public static boolean isFree(Level world, int x, int y, int z, int h)
     {
         for (int i = 0; i < h; i++)
         {
-            Block block = world.getBlockState(new BlockPos(x, y + i, z)).getBlock();
-            IBlockState state = world.getBlockState(new BlockPos(x, y+i, z));
-            if (block.getMaterial(state).isSolid() || block.getMaterial(state).isLiquid())
+            BlockState state = world.getBlockState(new BlockPos(x, y+i, z));
+            if (state.getMaterial().isSolid() || state.getMaterial().isLiquid())
                 return false;
         }
         return true;
@@ -39,14 +41,14 @@ public class WorldUtil {
      * it returns the next location that is on the ground. If the blocks at [x,y,z] are not free, it goes up until it
      * finds a free spot.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param h
+     * @param world Level object
+     * @param x X coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @param h height of the block
      * @return y value
      */
-    public static int placeInWorld(World world, int x, int y, int z, int h)
+    public static int placeInWorld(Level world, int x, int y, int z, int h)
     {
         if (y >= 0 && isFree(world, x, y, z, h))
         {
@@ -66,31 +68,18 @@ public class WorldUtil {
         return y;
     }
 
-    /**
-     * Returns a free spot of height 2 in the world at the coordinates [x,z] near y. If the blocks at [x,y,z] are free,
-     * it returns the next location that is on the ground. If the blocks at [x,y,z] are not free, it goes up until it
-     * finds a free spot.
-     *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @return y value
-     */
-    public static int placeInWorld(World world, int x, int y, int z)
-    {
-        return placeInWorld(world, x, y, z, 2);
-    }
-
     public static WorldPoint placeInWorld(WorldPoint p)
     {
-        return p.setY(placeInWorld(p.getWorld(), p.getX(), p.getY(), p.getZ(), 2));
+       return p.setY(placeInWorld(p.getWorld(), p.getX(), p.getY(), p.getZ(), 2));
     }
 
-    public static void placeInWorld(EntityPlayer player)
+    public static void placeInWorld(Player player)
     {
+        int getY = placeInWorld(player.getLevel(), player.getBlockX(), player.getBlockY(), player.getBlockZ(), 2);
+
+        player.setPos(player.getX() + 0.5, getY, player.getZ() + 0.5);
         WorldPoint p = placeInWorld(new WorldPoint(player));
-        player.setPositionAndUpdate(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+        player.moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
     }
 
     /* ------------------------------------------------------------ */

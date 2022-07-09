@@ -6,17 +6,16 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJson
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.CommandEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
@@ -29,68 +28,63 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void playerLoginEvent(PlayerEvent.PlayerLoggedInEvent event){
-        EntityPlayer player = event.player;
+        Player player = event.getPlayer();
         if (player == null)
             return;
 
-        LogHelper.info("Player " + player.getDisplayNameString() + " with UUID " + player.getUniqueID().toString() + " logged in");
+        LogHelper.info("Player " + player.getDisplayName().getString() + " with UUID " + player.getStringUUID() + " logged in");
+
         LastKnownUsernameJsonHelper.logUsernameToList(player);
         LastKnownUsernameJsonHelper.logLastSeenToList(player, true);
-        LoginLogoutDB.addLoginLog(player);
+        LoginLogoutDB.getInstance().addLoginLog(player);
     }
 
     @SubscribeEvent
     public void playerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event){
-        EntityPlayer player = event.player;
+        Player player = event.getPlayer();
         if (player == null)
             return;
 
-        LogHelper.info("Player " + player.getDisplayNameString() + " with UUID " + player.getUniqueID().toString() + " logged out");
+        LogHelper.info("Player " + player.getDisplayName().getString() + " with UUID " + player.getStringUUID() + " logged out");
         LastKnownUsernameJsonHelper.logLastSeenToList(player, false);
-        LoginLogoutDB.addLogoutLog(player);
-        if (player instanceof EntityPlayerMP){
-            LastKnownUsernameJsonHelper.logGamemodeToLit((EntityPlayerMP)player);
+        LoginLogoutDB.getInstance().addLogoutLog(player);
+        if (player instanceof ServerPlayer serverPlayer){
+            LastKnownUsernameJsonHelper.logGamemodeToLit(serverPlayer);
         }
     }
 
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent event) {
-        if (NoteblockSongs.playing)
-            NoteblockSongs.player.onTick();
+       if (NoteblockSongs.isPlaying())
+           NoteblockSongs.getPlayer().onTick();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onCommandUse(CommandEvent event) {
-        ICommandSender sender = event.getSender();
+        CommandSourceStack sender = event.getParseResults().getContext().getSource();
         if (ServerUtil.checkIfAdminSilenced(sender)) return; // Don't log admin silenced players
 
-        ICommand commandBase = event.getCommand();
-        String[] args = event.getParameters();
+        String commandExecuted = event.getParseResults().getReader().getString();
+        String commandBase = commandExecuted.split(" ")[0].substring(1);
         String ip = "localhost";
-        String name = sender.getName();
+        String name = sender.getTextName();
+
         if (ServerUtil.checkIfCommandUseIgnored(name)) return; // Don't log ignored users
         UUID uuid = UUID.randomUUID();
-        if (sender instanceof EntityPlayerMP) {
-            // Check if fake player
-            if (sender instanceof FakePlayer) {
-                FakePlayer fp = (FakePlayer) sender;
+        try {
+            ServerPlayer playerMP = sender.getPlayerOrException();
+            if (playerMP instanceof FakePlayer fp) {
                 name = "FP-" + fp.getClass().getSimpleName();
-                ip = "fp-" + fp.getClass().getSimpleName() + "-" + sender.getName();
-            } else
-                ip = ((EntityPlayerMP) sender).getPlayerIP();
-            uuid = ((EntityPlayerMP) sender).getUniqueID();
+                ip = "fp-" + fp.getClass().getSimpleName() + "-" + playerMP.getName();
+            } else {
+                ip = playerMP.getIpAddress();
+            }
+            uuid = playerMP.getUUID();
+        } catch (CommandSyntaxException e) {
+            // Not player, ignore
         }
-        CommandsLogDB.addLog(name, uuid, commandBase.getName(), args, ip);
-    }
 
-    /**
-     * Somehow only gets called if client times out, disconnect or stuff (Ignore)
-     * When want to use, call @SubscribeEvent
-     * @param event The Server Disconnection Event
-     */
-    public void serverDisconnectFromClientEvent(FMLNetworkEvent.ServerDisconnectionFromClientEvent event){
-        LogHelper.info(">>> Server Disconnection From Client Event Called");
-        LogHelper.info(">>> " + event.getManager().getExitMessage());
-        //PlayerMPUtil.getServerInstance().getPlayerList().sendChatMsg(new TextComponentString("Client DC"));
+        // Add log should now change to base and full commands and change accordingly
+        CommandsLogDB.getInstance().addLog(name, uuid, commandBase, commandExecuted, ip);
     }
 }

@@ -1,10 +1,11 @@
 package com.itachi1706.cheesecakeservercommands.reference;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.ZeusCommand;
-import net.minecraft.util.DamageSource;
+import com.itachi1706.cheesecakeservercommands.commands.admin.ZeusCommand;
+import net.minecraft.world.damagesource.DamageSource;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Kenneth on 27/1/2018.
@@ -12,28 +13,38 @@ import java.util.HashMap;
  */
 public class InitDamageSources {
 
+    private InitDamageSources() {
+        throw new IllegalStateException("Reference class");
+    }
+
     public static void initalizeDamages() {
-        CheesecakeServerCommands.knownDamageSources = new HashMap<>();
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.IN_FIRE.getDamageType(), DamageSource.IN_FIRE);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.LIGHTNING_BOLT.getDamageType(), DamageSource.LIGHTNING_BOLT);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.ON_FIRE.getDamageType(), DamageSource.ON_FIRE);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.LAVA.getDamageType(), DamageSource.LAVA);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.HOT_FLOOR.getDamageType(), DamageSource.HOT_FLOOR);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.IN_WALL.getDamageType(), DamageSource.IN_WALL);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.CRAMMING.getDamageType(), DamageSource.CRAMMING);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.DROWN.getDamageType(), DamageSource.DROWN);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.STARVE.getDamageType(), DamageSource.STARVE);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.CACTUS.getDamageType(), DamageSource.CACTUS);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.FALL.getDamageType(), DamageSource.FALL);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.FLY_INTO_WALL.getDamageType(), DamageSource.FLY_INTO_WALL);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.OUT_OF_WORLD.getDamageType(), DamageSource.OUT_OF_WORLD);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.GENERIC.getDamageType(), DamageSource.GENERIC);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.MAGIC.getDamageType(), DamageSource.MAGIC);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.WITHER.getDamageType(), DamageSource.WITHER);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.ANVIL.getDamageType(), DamageSource.ANVIL);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.FALLING_BLOCK.getDamageType(), DamageSource.FALLING_BLOCK);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.DRAGON_BREATH.getDamageType(), DamageSource.DRAGON_BREATH);
-        CheesecakeServerCommands.knownDamageSources.put(DamageSource.FIREWORKS.getDamageType(), DamageSource.FIREWORKS);
-        CheesecakeServerCommands.knownDamageSources.put("zeus", ZeusCommand.getDamageSource());
+        Map<String, DamageSource> knownDamageSource = new HashMap<>();
+        knownDamageSource.put(DamageSource.IN_FIRE.getMsgId(), DamageSource.IN_FIRE);
+        knownDamageSource.put(DamageSource.LIGHTNING_BOLT.getMsgId(), DamageSource.LIGHTNING_BOLT);
+        knownDamageSource.put(DamageSource.ON_FIRE.getMsgId(), DamageSource.ON_FIRE);
+        knownDamageSource.put(DamageSource.LAVA.getMsgId(), DamageSource.LAVA);
+        knownDamageSource.put(DamageSource.HOT_FLOOR.getMsgId(), DamageSource.HOT_FLOOR);
+        knownDamageSource.put(DamageSource.IN_WALL.getMsgId(), DamageSource.IN_WALL);
+        knownDamageSource.put(DamageSource.CRAMMING.getMsgId(), DamageSource.CRAMMING);
+        knownDamageSource.put(DamageSource.DROWN.getMsgId(), DamageSource.DROWN);
+        knownDamageSource.put(DamageSource.STARVE.getMsgId(), DamageSource.STARVE);
+        knownDamageSource.put(DamageSource.CACTUS.getMsgId(), DamageSource.CACTUS);
+        knownDamageSource.put(DamageSource.FALL.getMsgId(), DamageSource.FALL);
+        knownDamageSource.put(DamageSource.FLY_INTO_WALL.getMsgId(), DamageSource.FLY_INTO_WALL);
+        knownDamageSource.put(DamageSource.OUT_OF_WORLD.getMsgId(), DamageSource.OUT_OF_WORLD);
+        knownDamageSource.put(DamageSource.GENERIC.getMsgId(), DamageSource.GENERIC);
+        knownDamageSource.put(DamageSource.MAGIC.getMsgId(), DamageSource.MAGIC);
+        knownDamageSource.put(DamageSource.WITHER.getMsgId(), DamageSource.WITHER);
+        knownDamageSource.put(DamageSource.ANVIL.getMsgId(), DamageSource.ANVIL);
+        knownDamageSource.put(DamageSource.FALLING_BLOCK.getMsgId(), DamageSource.FALLING_BLOCK);
+        knownDamageSource.put(DamageSource.DRAGON_BREATH.getMsgId(), DamageSource.DRAGON_BREATH);
+        knownDamageSource.put(DamageSource.DRY_OUT.getMsgId(), DamageSource.DRY_OUT);
+        knownDamageSource.put(DamageSource.SWEET_BERRY_BUSH.getMsgId(), DamageSource.SWEET_BERRY_BUSH);
+        knownDamageSource.put(DamageSource.FREEZE.getMsgId(), DamageSource.FREEZE);
+        knownDamageSource.put(DamageSource.FALLING_STALACTITE.getMsgId(), DamageSource.FALLING_STALACTITE);
+        knownDamageSource.put(DamageSource.STALAGMITE.getMsgId(), DamageSource.STALAGMITE);
+        knownDamageSource.put("zeus", ZeusCommand.getDamageSource());
+
+        CheesecakeServerCommands.setKnownDamageSources(knownDamageSource);
     }
 }

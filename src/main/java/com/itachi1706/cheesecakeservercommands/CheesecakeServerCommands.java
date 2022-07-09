@@ -1,5 +1,10 @@
 package com.itachi1706.cheesecakeservercommands;
 
+import com.itachi1706.cheesecakeservercommands.commands.*;
+import com.itachi1706.cheesecakeservercommands.commands.admin.*;
+import com.itachi1706.cheesecakeservercommands.commands.admin.item.*;
+import com.itachi1706.cheesecakeservercommands.commands.admin.server.*;
+import com.itachi1706.cheesecakeservercommands.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.dbstorage.CommandsLogDB;
 import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.events.PlayerEvents;
@@ -8,163 +13,270 @@ import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
+import com.itachi1706.cheesecakeservercommands.proxy.ClientProxy;
 import com.itachi1706.cheesecakeservercommands.proxy.IProxy;
+import com.itachi1706.cheesecakeservercommands.proxy.ServerProxy;
+import com.itachi1706.cheesecakeservercommands.reference.CommandPermissionsLevel;
 import com.itachi1706.cheesecakeservercommands.reference.InitDamageSources;
 import com.itachi1706.cheesecakeservercommands.reference.References;
-import com.itachi1706.cheesecakeservercommands.server.commands.*;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.*;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.item.*;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.server.*;
-import com.itachi1706.cheesecakeservercommands.server.commands.admin.world.BiomeInfoCommand;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
-import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
-import net.minecraft.util.DamageSource;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.logging.LogUtils;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.GameType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
+import org.slf4j.Logger;
 
 import javax.management.MBeanServer;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/**
- * Created by Kenneth on 9/11/2015.
- * for CheesecakeServerCommands in package com.itachi1706.cheesecakeservercommands
- */
-@Mod(modid = References.MOD_ID, name=References.MOD_NAME, version=References.VERSION, acceptableRemoteVersions = "*")
-public class CheesecakeServerCommands {
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(References.MOD_ID)
+public class CheesecakeServerCommands
+{
+    // Directly reference a slf4j logger
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private static List<LastKnownUsernames> lastKnownUsernames = new ArrayList<>();
+    private static File configFileDirectory;
+    private static Map<String, DamageSource> knownDamageSources;
+    private static final ArrayList<BaseCommand> commands = new ArrayList<>();
+    public static final IProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
-    public static List<LastKnownUsernames> lastKnownUsernames;
-    public static File configFileDirectory;
-    public static HashMap<String, DamageSource> knownDamageSources;
+    public CheesecakeServerCommands()
+    {
+        // Register the setup method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        // Register the enqueueIMC method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        // Register the processIMC method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
 
-    @Mod.Instance(References.MOD_ID)
-    public static CheesecakeServerCommands instance;
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new PlayerEvents());
 
-    @SidedProxy(clientSide = References.CLIENT_PROXY, serverSide = References.SERVER_PROXY)
-    public static IProxy proxy;
+        PROXY.init();
+    }
 
-    @Mod.EventHandler
-    public void FMLPreInitEvent(FMLPreInitializationEvent event){
-        File file = new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "cheesecakeserver");
+    private void setup(final FMLCommonSetupEvent event)
+    {
+        // some preinit code
+        LOGGER.info("Preinitializing mod");
+
+        // Setup configuration object
+        File file = new File(FMLPaths.CONFIGDIR.get() + File.separator + "cheesecakeserver");
         LogHelper.info(">>> Folder name: " + file.getAbsolutePath());
         if (!file.exists() && file.mkdir()){
             LogHelper.info("Created Cheesecake Server Internal Directory");
         }
 
+        setConfigFileDirectory(file);
+    }
+
+    private static void setConfigFileDirectory(File file){
         configFileDirectory = file;
-
     }
 
-    @Mod.EventHandler
-    public void FMLInitEvent(FMLInitializationEvent event){
-        MinecraftForge.EVENT_BUS.register(new PlayerEvents());
-        MinecraftForge.EVENT_BUS.register(new TeleportHelper());
+    public static File getConfigFileDirectory(){
+        return configFileDirectory;
     }
 
-    public static MBeanServer platformBean;
+    public static Map<String, DamageSource> getKnownDamageSources() {
+        return knownDamageSources;
+    }
 
-    @Mod.EventHandler
-    public void serverStartingEvent(FMLServerStartingEvent event){
-        //Register Loggers
+    public static List<LastKnownUsernames> getLastKnownUsernames() {
+        return lastKnownUsernames;
+    }
+
+    public static void setLastKnownUsernames(List<LastKnownUsernames> lastKnownUsernames) {
+        CheesecakeServerCommands.lastKnownUsernames = lastKnownUsernames;
+    }
+
+    public static void setKnownDamageSources(Map<String, DamageSource> knownDamageSources) {
+        CheesecakeServerCommands.knownDamageSources = knownDamageSources;
+    }
+
+    private void enqueueIMC(final InterModEnqueueEvent event)
+    {
+        // Some example code to dispatch IMC to another mod
+        InterModComms.sendTo(References.MOD_ID, "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
+    }
+
+    private void processIMC(final InterModProcessEvent event)
+    {
+        // Some example code to receive and process InterModComms from other mods
+        LOGGER.info("Got IMC {}", event.getIMCStream().
+                map(m->m.messageSupplier().get()).toList());
+    }
+
+    // Init OS Bean
+    private static MBeanServer platformBean;
+
+    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    @SubscribeEvent
+    public void onServerStarting(ServerStartingEvent event)
+    {
+        // Do something when the server starts
+        LOGGER.info("HELLO from server starting");
+
+        // Register Loggers
         registerLoggers();
-        CSCAdminSilenceWorldSavedData.get(event.getServer().getEntityWorld(), true);
+        CSCAdminSilenceWorldSavedData.get();
         LogHelper.info("Admin Silenced List: " + AdminSilenced.getState());
 
         // Init OS Bean
-        platformBean = ManagementFactory.getPlatformMBeanServer();
+        setPlatformBean(ManagementFactory.getPlatformMBeanServer());
 
-        //Register Commands
-        //event.registerServerCommand(new SampleCommand());
-        event.registerServerCommand(new CCLoggerCommand());
-        event.registerServerCommand(new CommandUsageCommand());
-        event.registerServerCommand(new MojangServerCommand());
-        event.registerServerCommand(new ServerPropertiesCommand());
-        event.registerServerCommand(new MainCommand());
+        InitDamageSources.initalizeDamages();
+        NoteblockSongs.refreshSongs();
+    }
+
+    private void registerLoggers(){
+        if (LastKnownUsernameJsonHelper.fileExists())
+            setLastKnownUsernames(LastKnownUsernameJsonHelper.readFromFile());
+
+       LoginLogoutDB.getInstance().checkTablesExists();
+       CommandsLogDB.getInstance().checkTablesExists();
+    }
+
+    private static void setPlatformBean(MBeanServer myBean) {
+        platformBean = myBean;
+    }
+
+    public static MBeanServer getPlatformBean() {
+        return platformBean;
+    }
+
+    // Register commands here
+
+    /**
+     * Register Commands here and set their permission level
+     *
+     * <a href="https://minecraft.fandom.com/wiki/Permission_level">Permission Levels</a> (see {@link CommandPermissionsLevel})
+     * 0 - Normal Player
+     * 1 - Player can bypass spawn protection.
+     * 2 - Player or executor can use more commands (see Commands) and player can use command blocks. (Cheat commands)
+     * 3 - Player or executor can use more commands. (Multiplayer management)
+     * 4 - Player or executor can use all the commands. (Server management)
+     *
+     * From Command Code checkPermission
+     * return true -> 0
+     * return isOperatorOrConsole -> 2
+     *
+     * @param event Register Commands Event
+     */
+    @SubscribeEvent
+    public void registerCommands(RegisterCommandsEvent event) {
+        LOGGER.info("Starting command registration");
+
+        // Add commands
+        commands.add(new CCLoggerCommand("cclogger", CommandPermissionsLevel.SERVER, true));
+        commands.add(new CCLoggerCommand("cheesecakelogger", CommandPermissionsLevel.SERVER, true));
+        commands.add(new CCLoggerCommand("ccl", CommandPermissionsLevel.SERVER, true));
+        commands.add(new CommandUsageCommand("commanduse", CommandPermissionsLevel.SERVER, true));
+        commands.add(new ServerPropertiesCommand("serverproperties", CommandPermissionsLevel.CONSOLE, true));
+        commands.add(new MainCommand("csc", CommandPermissionsLevel.ALL, true));
+        commands.add(new MainCommand("cheesecakeservercommands", CommandPermissionsLevel.ALL, true));
+        commands.add(new AdminSilenceCommand("adminsilence", CommandPermissionsLevel.CONSOLE, true));
 
         // Admin Commands
-        event.registerServerCommand(new GMCCommand());
-        event.registerServerCommand(new GMSCommand());
-        event.registerServerCommand(new GMACommand());
-        event.registerServerCommand(new GMSPCommand());
-        event.registerServerCommand(new ZeusCommand());
-        event.registerServerCommand(new WowCommand());
-        event.registerServerCommand(new FlingCommand());
-        event.registerServerCommand(new KickCommand());
+        commands.add(new GMCommand("gmc", CommandPermissionsLevel.OPS, true, GameType.CREATIVE, "Creative Mode"));
+        commands.add(new GMCommand("gms", CommandPermissionsLevel.OPS, true, GameType.SURVIVAL, "Survival Mode"));
+        commands.add(new GMCommand("gma", CommandPermissionsLevel.OPS, true, GameType.ADVENTURE, "Adventure Mode"));
+        commands.add(new GMCommand("gmsp", CommandPermissionsLevel.OPS, true, GameType.SPECTATOR, "Spectator Mode"));
+        commands.add(new ZeusCommand("zeus", CommandPermissionsLevel.OPS, true));
+        commands.add(new WowCommand("wow", CommandPermissionsLevel.ALL, true));
+        commands.add(new WowCommand("doge", CommandPermissionsLevel.ALL, true));
+        commands.add(new FlingCommand("fling", CommandPermissionsLevel.OPS, true));
+        commands.add(new KickCommand("pkick", CommandPermissionsLevel.OPS, true));
 
-        event.registerServerCommand(new EnchantForceCommand());
-        event.registerServerCommand(new InvSeeEnderChestCommand());
-        event.registerServerCommand(new ClearInventoryCommand());
-        event.registerServerCommand(new GiveItemCommand());
-        event.registerServerCommand(new MoreItemsCommand());
+        commands.add(new InvSeeEnderChestCommand("invseeender", CommandPermissionsLevel.OPS, true));
+        commands.add(new ClearInventoryCommand("clearinventory", CommandPermissionsLevel.OPS, true));
+        commands.add(new ClearInventoryCommand("ci", CommandPermissionsLevel.OPS, true));
+        commands.add(new GiveItemCommand("giveitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new GiveItemCommand("i", CommandPermissionsLevel.OPS, true));
+        commands.add(new MoreItemsCommand("more", CommandPermissionsLevel.OPS, true));
 
         // Adapted from Essentials
 
         // Essentials Server Commands
-        event.registerServerCommand(new FlyCommand());
-        event.registerServerCommand(new GodCommand());
-        event.registerServerCommand(new SpeedCommand());
-        event.registerServerCommand(new HealCommand());
-        event.registerServerCommand(new FeedCommand());
-        event.registerServerCommand(new SmiteCommand());
-        event.registerServerCommand(new KillCommand());
-        event.registerServerCommand(new InvSeeCommand());
-        event.registerServerCommand(new BurnCommand());
-        event.registerServerCommand(new LocateCommand());
-        event.registerServerCommand(new SudoCommand());
-        event.registerServerCommand(new GamemodeCommand());
-        event.registerServerCommand(new TpToCommand());
-        event.registerServerCommand(new TpHereCommand());
+        commands.add(new FlyCommand("fly", CommandPermissionsLevel.OPS, true));
+        commands.add(new GodCommand("god", CommandPermissionsLevel.OPS, true));
+        commands.add(new SpeedCommand("speed", CommandPermissionsLevel.OPS, true));
+        commands.add(new HealCommand("heal", CommandPermissionsLevel.OPS, true));
+        commands.add(new FeedCommand("feed", CommandPermissionsLevel.OPS, true));
+        commands.add(new SmiteCommand("smite", CommandPermissionsLevel.OPS, true));
+        commands.add(new KillCommand("pkill", CommandPermissionsLevel.OPS, true));
+        commands.add(new InvSeeCommand("invsee", CommandPermissionsLevel.OPS, true));
+        commands.add(new BurnCommand("burn", CommandPermissionsLevel.OPS, true));
+        commands.add(new LocateCommand("loc", CommandPermissionsLevel.OPS, true));
+        commands.add(new LocateCommand("locateplayer", CommandPermissionsLevel.OPS, true));
+        commands.add(new LocateCommand("gps", CommandPermissionsLevel.OPS, true));
+        commands.add(new SudoCommand("sudo", CommandPermissionsLevel.OPS, true));
+        commands.add(new GamemodeCommand("gm", CommandPermissionsLevel.OPS, true));
+        commands.add(new TpToCommand("tpto", CommandPermissionsLevel.OPS, true));
+        commands.add(new TpHereCommand("tphere", CommandPermissionsLevel.OPS, true));
 
         // Essentials Items
-        event.registerServerCommand(new CraftCommand());
-        event.registerServerCommand(new DechantCommand());
-        event.registerServerCommand(new EnchantCommand());
-        event.registerServerCommand(new DuplicateCommand());
-        event.registerServerCommand(new EnderChestCommand());
-        event.registerServerCommand(new RenameCommand());
-        event.registerServerCommand(new RepairCommand());
+        commands.add(new CraftCommand("craft", CommandPermissionsLevel.OPS, true));
+        commands.add(new DechantCommand("dechantitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new EnchantCommand("enchantitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new DuplicateCommand("duplicate", CommandPermissionsLevel.OPS, true));
+        commands.add(new EnderChestCommand("enderchest", CommandPermissionsLevel.OPS, true));
+        commands.add(new RenameCommand("renameitem", CommandPermissionsLevel.OPS, true));
+        commands.add(new RepairCommand("repairitem", CommandPermissionsLevel.OPS, true));
 
         // Essentials Server
-        event.registerServerCommand(new ModlistCommand());
-        event.registerServerCommand(new ServerSettingsCommand());
-        event.registerServerCommand(new ServerStatisticsCommand());
-        event.registerServerCommand(new GarbageCollectorCommand());
-        event.registerServerCommand(new GetCommandBookCommand());
+        commands.add(new ModlistCommand("modlist", CommandPermissionsLevel.OPS, true));
+        commands.add(new ServerSettingsCommand("serversettings", CommandPermissionsLevel.CONSOLE, true));
+        commands.add(new ServerStatisticsCommand("serverstats", CommandPermissionsLevel.CONSOLE, true));
+        commands.add(new GarbageCollectorCommand("gc", CommandPermissionsLevel.CONSOLE, true));
+        commands.add(new GetCommandBookCommand("getcommandbook", CommandPermissionsLevel.OPS, true));
 
         // Essentials World
-        event.registerServerCommand(new BiomeInfoCommand());
+        commands.add(new BiomeInfoCommand("biomeinfo", CommandPermissionsLevel.OPS, true));
 
         // General Commands (For all players)
-        event.registerServerCommand(new PingCommand());
-
-        // Initialize Damage Sources
-        InitDamageSources.initalizeDamages();
+        commands.add(new PingCommand("ping", CommandPermissionsLevel.ALL, true));
 
         // NBS Player
-        event.registerServerCommand(new NoteblockSongsCommand());
-        NoteblockSongs.refreshSongs();
+        commands.add(new NoteblockSongsCommand("noteblocksongs", CommandPermissionsLevel.OPS, true));
+        commands.add(new NoteblockSongsCommand("midi", CommandPermissionsLevel.OPS, true));
+        commands.add(new NoteblockSongsCommand("nbs", CommandPermissionsLevel.OPS, true));
+
+        // Register to Forge
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        commands.forEach(cmd -> {
+            if (cmd.setExecution() != null) {
+                LOGGER.info("Added command: {}", cmd.getName());
+                dispatcher.register(cmd.getBuilder());
+            }
+        });
+        LOGGER.info("Command registration complete");
     }
 
-    @Mod.EventHandler
-    public void serverStoppingEvent(FMLServerStoppingEvent event){
+    // Server stopping event. Save stuff here
+    @SubscribeEvent
+    public void onServerStopping(ServerStoppingEvent event) {
+        LOGGER.info("Server stopping... Flushing last known usernames to file");
         LastKnownUsernameJsonHelper.writeToFile();
     }
-
-    private void registerLoggers(){
-        lastKnownUsernames = new ArrayList<>();
-        if (LastKnownUsernameJsonHelper.fileExists())
-            lastKnownUsernames = LastKnownUsernameJsonHelper.readFromFile();
-
-        LoginLogoutDB.checkTablesExists();
-        CommandsLogDB.checkTablesExists();
-    }
-
 }

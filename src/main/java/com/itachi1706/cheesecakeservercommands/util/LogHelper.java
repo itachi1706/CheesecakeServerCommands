@@ -1,7 +1,10 @@
 package com.itachi1706.cheesecakeservercommands.util;
 
 import com.itachi1706.cheesecakeservercommands.reference.References;
-import org.apache.logging.log4j.*;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 /**
  * Created by Kenneth on 9/11/2015.
@@ -9,51 +12,36 @@ import org.apache.logging.log4j.*;
  */
 public class LogHelper {
 
-    public static final Marker MOD_MARKER = MarkerManager.getMarker(References.MOD_ID);
-    private static final Logger LOGGER = LogManager.getLogger(References.MOD_ID);
-
-    public static void log(Level level, Marker marker, Object  object) {
-        LOGGER.log(level, marker, object);
+    private LogHelper() {
+        throw new IllegalStateException("Utility class");
     }
 
-    public static void all(Object object)
+    public static final Marker MOD_MARKER = MarkerFactory.getMarker(References.MOD_ID);
+    private static final Logger LOGGER = LogUtils.getLogger();
+
+    public static void debug(String message, Object... object)
     {
-        log(Level.ALL, MOD_MARKER, object);
+        LOGGER.debug(MOD_MARKER, message, object);
     }
 
-    public static void debug(Object object)
+    public static void error(String message, Object... object)
     {
-        log(Level.DEBUG, MOD_MARKER, object);
+        LOGGER.error(MOD_MARKER, message, object);
     }
 
-    public static void error(Object object)
+    public static void info(String message, Object... object)
     {
-        log(Level.ERROR, MOD_MARKER, object);
+        LOGGER.info(MOD_MARKER, message, object);
     }
 
-    public static void fatal(Object object)
+    public static void trace(String message, Object... object)
     {
-        log(Level.FATAL, MOD_MARKER, object);
+        LOGGER.trace(MOD_MARKER, message, object);
     }
 
-    public static void info(Object object)
+    public static void warn(String message, Object... object)
     {
-        log(Level.INFO, MOD_MARKER, object);
-    }
-
-    public static void off(Object object)
-    {
-        log(Level.OFF, MOD_MARKER, object);
-    }
-
-    public static void trace(Object object)
-    {
-        log(Level.TRACE, MOD_MARKER, object);
-    }
-
-    public static void warn(Object object)
-    {
-        log(Level.WARN, MOD_MARKER, object);
+        LOGGER.warn(MOD_MARKER, message, object);
     }
 
 }

@@ -10,6 +10,10 @@ import java.util.UUID;
  */
 public class AdminSilenced {
 
+    private AdminSilenced() {
+        throw new IllegalStateException("Utility Class");
+    }
+
     static List<UUID> silencedList = new ArrayList<>();
     static List<String> ignoredCommandUser = new ArrayList<>();
     static boolean enabled = false;
@@ -23,14 +27,14 @@ public class AdminSilenced {
     public static boolean addUUID(CSCAdminSilenceWorldSavedData nbt, UUID uuid) {
         if (silencedList.contains(uuid)) return false;
         silencedList.add(uuid);
-        nbt.markDirty();
+        nbt.setDirty();
         return true;
     }
 
     public static boolean removeUUID(CSCAdminSilenceWorldSavedData nbt, UUID uuid) {
         if (!silencedList.contains(uuid)) return false;
         silencedList.remove(uuid);
-        nbt.markDirty();
+        nbt.setDirty();
         return true;
     }
 
@@ -45,25 +49,25 @@ public class AdminSilenced {
     public static boolean enable(CSCAdminSilenceWorldSavedData nbt) {
         if (enabled) return false;
         enabled = true;
-        nbt.markDirty();
+        nbt.setDirty();
         return true;
     }
 
     public static boolean disable(CSCAdminSilenceWorldSavedData nbt) {
         if (!enabled) return false;
         enabled = false;
-        nbt.markDirty();
+        nbt.setDirty();
         return true;
     }
 
     public static void ignoreCommandUser(CSCAdminSilenceWorldSavedData nbt, String userName) {
         ignoredCommandUser.add(userName);
-        nbt.markDirty();
+        nbt.setDirty();
     }
 
     public static void unignoreCommandUser(CSCAdminSilenceWorldSavedData nbt, String userName) {
         ignoredCommandUser.remove(userName);
-        nbt.markDirty();
+        nbt.setDirty();
     }
 
     public static boolean isIgnored(String userName) {

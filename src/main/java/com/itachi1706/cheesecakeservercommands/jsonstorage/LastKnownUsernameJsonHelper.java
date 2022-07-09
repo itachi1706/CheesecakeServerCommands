@@ -3,8 +3,8 @@ package com.itachi1706.cheesecakeservercommands.jsonstorage;
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,16 +18,20 @@ import java.util.UUID;
  */
 public class LastKnownUsernameJsonHelper {
 
+    private LastKnownUsernameJsonHelper() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    private static final String USERNAME_FILE = "usernames.json";
+
     public static void writeToFile(){
-        LastKnownUsernames[] loginArray = CheesecakeServerCommands.lastKnownUsernames.toArray(new LastKnownUsernames[0]);
+        LastKnownUsernames[] loginArray = CheesecakeServerCommands.getLastKnownUsernames().toArray(new LastKnownUsernames[0]);
 
         Gson gson = new Gson();
         String jsonString = gson.toJson(loginArray);
 
-        try{
-            FileWriter writer = new FileWriter(CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + File.separator + "usernames.json");
+        try (FileWriter writer = new FileWriter(CheesecakeServerCommands.getConfigFileDirectory().getAbsolutePath() + File.separator + USERNAME_FILE)) {
             writer.write(jsonString);
-            writer.close();
         } catch (IOException e) {
             LogHelper.error("Cannot write usernames file");
             e.printStackTrace();
@@ -37,7 +41,7 @@ public class LastKnownUsernameJsonHelper {
     public static List<LastKnownUsernames> readFromFile(){
         Gson gson = new Gson();
         try{
-            BufferedReader br = new BufferedReader(new FileReader(CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + File.separator + "usernames.json"));
+            BufferedReader br = new BufferedReader(new FileReader(CheesecakeServerCommands.getConfigFileDirectory().getAbsolutePath() + File.separator + USERNAME_FILE));
 
             LastKnownUsernames[] loginses = gson.fromJson(br, LastKnownUsernames[].class);
             LogHelper.info("Loaded " + loginses.length + " usernames from file");
@@ -50,31 +54,31 @@ public class LastKnownUsernameJsonHelper {
     }
 
     public static boolean fileExists() {
-        File file = new File(CheesecakeServerCommands.configFileDirectory.getAbsolutePath() + File.separator + "usernames.json");
+        File file = new File(CheesecakeServerCommands.getConfigFileDirectory().getAbsolutePath() + File.separator + USERNAME_FILE);
         return file.exists();
     }
 
-    public static void logGamemodeToLit(EntityPlayerMP player){
-        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayNameString(), System.currentTimeMillis());
-        for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
-            if (i.getUuid().equals(player.getUniqueID())) {
-                CheesecakeServerCommands.lastKnownUsernames.remove(i);
+    public static void logGamemodeToLit(ServerPlayer player){
+        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUUID(), player.getDisplayName().getString(), System.currentTimeMillis());
+        for (LastKnownUsernames i : CheesecakeServerCommands.getLastKnownUsernames()) {
+            if (i.getUuid().equals(player.getUUID())) {
+                CheesecakeServerCommands.getLastKnownUsernames().remove(i);
                 playerLastSeen = i;
                 break;
             }
         }
 
-        playerLastSeen.setLastKnownGamemode(player.interactionManager.getGameType().getName());
+        playerLastSeen.setLastKnownGamemode(player.gameMode.getGameModeForPlayer().getName());
 
-        CheesecakeServerCommands.lastKnownUsernames.add(playerLastSeen);
+        CheesecakeServerCommands.getLastKnownUsernames().add(playerLastSeen);
         writeToFile();
     }
 
-    public static void logLastSeenToList(EntityPlayer player, boolean state){
-        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUniqueID(), player.getDisplayNameString(), System.currentTimeMillis());
-        for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
-            if (i.getUuid().equals(player.getUniqueID())) {
-                CheesecakeServerCommands.lastKnownUsernames.remove(i);
+    public static void logLastSeenToList(Player player, boolean state){
+        LastKnownUsernames playerLastSeen = new LastKnownUsernames(player.getUUID(), player.getDisplayName().getString(), System.currentTimeMillis());
+        for (LastKnownUsernames i : CheesecakeServerCommands.getLastKnownUsernames()) {
+            if (i.getUuid().equals(player.getUUID())) {
+                CheesecakeServerCommands.getLastKnownUsernames().remove(i);
                 playerLastSeen = i;
                 break;
             }
@@ -84,33 +88,31 @@ public class LastKnownUsernameJsonHelper {
             playerLastSeen.setFirstJoined(System.currentTimeMillis());
         }
 
-        if (state)
-            playerLastSeen.setLoginState(true); //Login
-        else
-            playerLastSeen.setLoginState(false); // Logout
+        // true if Login, false if Logout
+        playerLastSeen.setLoginState(state);
 
         playerLastSeen.updateLastSeen();
-        CheesecakeServerCommands.lastKnownUsernames.add(playerLastSeen);
+        CheesecakeServerCommands.getLastKnownUsernames().add(playerLastSeen);
         writeToFile();
     }
 
-    public static void logUsernameToList(EntityPlayer player){
-        LastKnownUsernames playerUsername = new LastKnownUsernames(player.getUniqueID(), player.getDisplayNameString(), System.currentTimeMillis());
-        for (LastKnownUsernames i : CheesecakeServerCommands.lastKnownUsernames) {
-            if (i.getUuid().equals(player.getUniqueID())) {
-                CheesecakeServerCommands.lastKnownUsernames.remove(i);
+    public static void logUsernameToList(Player player){
+        LastKnownUsernames playerUsername = new LastKnownUsernames(player.getUUID(), player.getDisplayName().getString(), System.currentTimeMillis());
+        for (LastKnownUsernames i : CheesecakeServerCommands.getLastKnownUsernames()) {
+            if (i.getUuid().equals(player.getUUID())) {
+                CheesecakeServerCommands.getLastKnownUsernames().remove(i);
                 playerUsername = i;
                 break;
             }
         }
 
-        playerUsername.updateDisplayName(player.getDisplayNameString());
-        CheesecakeServerCommands.lastKnownUsernames.add(playerUsername);
+        playerUsername.updateDisplayName(player.getDisplayName().getString());
+        CheesecakeServerCommands.getLastKnownUsernames().add(playerUsername);
         writeToFile();
     }
 
     public static UUID getLastKnownUUIDFromPlayerName(String playerName){
-        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.lastKnownUsernames){
+        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.getLastKnownUsernames()){
             if (lastKnownUsernames.getLastKnownUsername().equals(playerName)){
                 return lastKnownUsernames.getUuid();
             }
@@ -120,7 +122,7 @@ public class LastKnownUsernameJsonHelper {
     }
 
     public static LastKnownUsernames getLastKnownUsernameFromList(UUID uuid){
-        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.lastKnownUsernames){
+        for (LastKnownUsernames lastKnownUsernames : CheesecakeServerCommands.getLastKnownUsernames()){
             if (lastKnownUsernames.getUuid().equals(uuid)){
                 return lastKnownUsernames;
             }

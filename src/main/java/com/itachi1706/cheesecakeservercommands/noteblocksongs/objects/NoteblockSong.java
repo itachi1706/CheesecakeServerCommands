@@ -4,24 +4,34 @@ import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Layer;
 import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Note;
 import com.itachi1706.cheesecakeservercommands.libs.nbsapi.Song;
 import com.itachi1706.cheesecakeservercommands.noteblocksongs.NoteblockSongs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.SPacketCustomSound;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
+import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
+import net.minecraft.network.protocol.game.ClientboundCustomSoundPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteblockSong {
-	public Song song;
+	private final Song song;
 	private boolean playing = false;
-	private int speed; // Default 4
+	private final int speed; // Default 4
 	private int currentTick = 0;
-	public int length;
+	private final int length;
 	private static final String[] names = {"harp", "bass", "basedrum", "snare", "hat", "guitar", "flute", "bell", "chime", "xylophone"};
-	
+
+	// Getters and Setters
+	public Song getSong() {
+		return song;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	// Methods
 	public void onTick() {
 		if (playing) currentTick++;
 		if (currentTick > length) {
@@ -30,18 +40,15 @@ public class NoteblockSong {
 		}
 		// Plays the notes at the current tick.
 		List<NoteblockNote> toPlay = getNotesAt(currentTick/speed);
-		if (toPlay.size() > 0) for (NoteblockNote n : getNotesAt(currentTick/speed)) {
-			float pitch = (float)Math.pow(2.0D, (double)(n.note.getPitch() - 45) / 12.0D);
-			for (WorldServer s : DimensionManager.getWorlds()) {
-				if (!s.playerEntities.isEmpty()) {
-					for (EntityPlayer player : s.playerEntities) {
-                        if (player instanceof EntityPlayerMP) {
-                            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-                            playerMP.connection.sendPacket(new SPacketCustomSound("minecraft:block.note." +
-                                    names[n.note.getInstrument().getID()], SoundCategory.RECORDS, playerMP.posX, playerMP.posY, playerMP.posZ,
-                                    NoteblockSongs.volume * n.volume, pitch));
-                        }
-					}
+		if (toPlay.isEmpty()) return;
+		for (NoteblockNote n : getNotesAt(currentTick/speed)) {
+			float pitch = (float)Math.pow(2.0D, (n.getNote().getPitch() - 45) / 12.0D);
+
+			for (ServerLevel s : ServerUtil.getServerInstance().getAllLevels()) {
+				if (s.players().isEmpty()) continue;
+				for (ServerPlayer player : s.players()) {
+					ResourceLocation sound = new ResourceLocation("minecraft", "block.note_block." + names[n.getNote().getInstrument().getID()]);
+					player.connection.send(new ClientboundCustomSoundPacket(sound, SoundSource.RECORDS, player.position(), NoteblockSongs.getVolume() * n.getVolume(), pitch));
 				}
 			}
 		}
