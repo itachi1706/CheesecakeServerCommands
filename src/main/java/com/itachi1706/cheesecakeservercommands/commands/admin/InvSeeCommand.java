@@ -43,7 +43,7 @@ public class InvSeeCommand extends BaseCommand {
 
     private int openOthersInventory(CommandSourceStack sender, ServerPlayer player) {
         ServerPlayer source = ensureIsPlayer(sender, "CONSOLE cannot use invsee. Sorry :(", "Cannot see other's inventory of " + sender.getTextName());
-        if (player == null) {
+        if (source == null) {
             return 0;
         }
 

@@ -39,7 +39,7 @@ public class InvSeeEnderChestCommand extends BaseCommand {
 
     private int openEnderChestForPlayer(CommandSourceStack sender, ServerPlayer player) {
         ServerPlayer source = ensureIsPlayer(sender, "Cannot invsee other's ender chest for CONSOLE", "Cannot invsee other's ender chests for " + sender.getTextName());
-        if (player == null) {
+        if (source == null) {
             return 0;
         }
         ServerPlayerUtil.openEnderChest(source, player, player.getName().getString() + "'s Ender Chest");

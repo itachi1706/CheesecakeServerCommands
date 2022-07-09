@@ -44,6 +44,7 @@ public class ServerPlayerUtil {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isPlayer(CommandSourceStack sender){
         return castToPlayer(sender) != null;
     }

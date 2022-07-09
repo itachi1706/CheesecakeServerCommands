@@ -101,14 +101,14 @@ public abstract class BaseSQLiteDB {
         int count = 0;
         try (Statement statement = db.createStatement()) {
             db.setAutoCommit(false);
-            ResultSet rs = statement.executeQuery(statementString);
-            while (rs.next()){
-                String tmp = rs.getString(1);
-                if (tmp != null){
-                    count = Integer.parseInt(tmp);
+            try (ResultSet rs = statement.executeQuery(statementString)) {
+                while (rs.next()){
+                    String tmp = rs.getString(1);
+                    if (tmp != null){
+                        count = Integer.parseInt(tmp);
+                    }
                 }
             }
-            rs.close();
             db.close();
         } catch (SQLException e) {
             throw e;
