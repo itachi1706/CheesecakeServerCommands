@@ -1,12 +1,12 @@
 package com.itachi1706.cheesecakeservercommands.commands;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
+import com.itachi1706.cheesecakeservercommands.commands.templates.LoggingBase;
 import com.itachi1706.cheesecakeservercommands.dbstorage.CommandsLogDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.AdminSilenced;
 import com.itachi1706.cheesecakeservercommands.nbtstorage.CSCAdminSilenceWorldSavedData;
-import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-public class CommandUsageCommand extends BaseCommand {
+public class CommandUsageCommand extends LoggingBase {
     /* Commands List
     /commanduse viewlogs <player> <#>
     /commanduse viewplayerstats <player>
@@ -77,11 +77,7 @@ public class CommandUsageCommand extends BaseCommand {
     }
     
     private int viewGeneralStats(CommandSourceStack sender) {
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.centerText("General Stats"));
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
-        sendSuccessMessage(sender, "Total Commands Logged: " + ChatFormatting.AQUA + CommandsLogDB.getInstance().getTotalCount());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
+        super.viewStats(sender, CommandsLogDB.getInstance().getTotalCount(), "Commands");
         return Command.SINGLE_SUCCESS;
     }
 

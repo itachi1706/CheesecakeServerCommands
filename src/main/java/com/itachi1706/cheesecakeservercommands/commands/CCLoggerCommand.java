@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeservercommands.commands;
 
 import com.itachi1706.cheesecakeservercommands.CheesecakeServerCommands;
+import com.itachi1706.cheesecakeservercommands.commands.templates.LoggingBase;
 import com.itachi1706.cheesecakeservercommands.dbstorage.LoginLogoutDB;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
@@ -22,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class CCLoggerCommand extends BaseCommand {
+public class CCLoggerCommand extends LoggingBase {
 
     /*
     Commands List
@@ -192,12 +193,7 @@ public class CCLoggerCommand extends BaseCommand {
     }
     
     private int viewLoggerStatistics(CommandSourceStack sender) {
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.centerText("General Stats"));
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
-        sendSuccessMessage(sender, "Total Players Logged: " + ChatFormatting.AQUA + CheesecakeServerCommands.getLastKnownUsernames().size());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
-        
+        super.viewStats(sender, CheesecakeServerCommands.getLastKnownUsernames().size(), "Players");
         return Command.SINGLE_SUCCESS;
     }
     
