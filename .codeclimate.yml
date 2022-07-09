@@ -22,6 +22,12 @@ plugins:
     enabled: true
     config:
       sonar.java.source: 17
+  duplication:
+    enabled: true
+    config:
+      languages:
+        java:
+          mass_threshold: 55
 ratings:
   paths:
   - "**.java"
