@@ -82,7 +82,7 @@ public class Point {
      */
     public double length()
     {
-        return Math.sqrt(x * x + y * y + z * z);
+        return Math.sqrt((double)x * x + y * y + z * z);
     }
 
     public void add(Point v)
@@ -100,7 +100,7 @@ public class Point {
         return "[" + x + ", " + y + ", " + z + "]";
     }
 
-    private static final Pattern pattern = Pattern.compile("\\s*\\[\\s*(-?\\d+)\\s*,\\s*(-?\\d+)\\s*,\\s*(-?\\d+)\\s*\\]\\s*");
+    private static final Pattern pattern = Pattern.compile("\\s*\\[\\s*(-?\\d+)\\s*,\\s*(-?\\d+)\\s*,\\s*(-?\\d+)\\s*]\\s*");
 
     public static Point fromString(String value)
     {

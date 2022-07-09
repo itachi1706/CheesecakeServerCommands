@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.dbstorage;
 
+import com.itachi1706.cheesecakeservercommands.exceptions.DataNotFoundException;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernameJsonHelper;
 import com.itachi1706.cheesecakeservercommands.jsonstorage.LastKnownUsernames;
 import com.itachi1706.cheesecakeservercommands.util.LogHelper;
@@ -163,23 +164,37 @@ public class LoginLogoutDB extends BaseSQLiteDB {
         parseMessages(stringList, sender, arg, target, "Login History");
     }
 
-    public void checkLoginStats(CommandSourceStack p, String target, UUID uuid, String firstPlayed, String lastPlayed){
+    private int getLoginOrException(String target) throws DataNotFoundException {
         int logins = getLoginCount(target);
         if (logins == -2){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to convert login count!");
-            return;
+            throw new DataNotFoundException("An Error Occurred trying to convert login count!");
         } else if (logins == -1){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to get login stats!");
-            return;
+            throw new DataNotFoundException("An Error Occurred trying to get login stats!");
         }
+        return logins;
+    }
+
+    private int getLogoutOrException(String target) throws DataNotFoundException {
         int logouts = getLogoutCount(target);
         if (logouts == -2){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to convert logout count!");
-            return;
+            throw new DataNotFoundException("An Error Occurred trying to convert logout count!");
         } else if (logouts == -1){
-            TextUtil.sendChatMessage(p, ChatFormatting.RED + "An Error Occurred trying to get logout stats!");
+            throw new DataNotFoundException("An Error Occurred trying to get logout stats!");
+        }
+        return logouts;
+    }
+
+    public void checkLoginStats(CommandSourceStack p, String target, UUID uuid, String firstPlayed, String lastPlayed){
+        int logins;
+        int logouts;
+        try {
+            logins = getLoginOrException(target);
+            logouts = getLogoutOrException(target);
+        } catch (DataNotFoundException e) {
+            TextUtil.sendChatMessage(p, ChatFormatting.RED + e.getMessage());
             return;
         }
+
         String status = ChatFormatting.RED + "Offline";
         String nick = target;
         String opStatus = ChatFormatting.RED + "Not Opped";

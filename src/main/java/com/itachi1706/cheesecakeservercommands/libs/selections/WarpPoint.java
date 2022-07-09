@@ -83,7 +83,7 @@ public class WarpPoint {
 
     public String toReadableString()
     {
-        return String.format("%.0f %.0f %.0f dim=%d", xd, yd, zd, dim);
+        return String.format("%.0f %.0f %.0f dim=%s", xd, yd, zd, dim);
     }
 
     @Override
@@ -96,10 +96,6 @@ public class WarpPoint {
         if (object instanceof Point p)
         {
             return (int) xd == p.getX() && (int) yd == p.getY() && (int) zd == p.getZ();
-        }
-        if (object instanceof WorldPoint p)
-        {
-            return dim.equals(p.getDimension()) && (int) xd == p.getX() && (int) yd == p.getY() && (int) zd == p.getZ();
         }
         return false;
     }
