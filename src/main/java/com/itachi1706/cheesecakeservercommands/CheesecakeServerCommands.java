@@ -225,7 +225,7 @@ public class CheesecakeServerCommands
         commands.add(new FeedCommand("feed", CommandPermissionsLevel.OPS, true));
         commands.add(new SmiteCommand("smite", CommandPermissionsLevel.OPS, true));
         commands.add(new KillCommand("pkill", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new InvSeeCommand());
+        commands.add(new InvSeeEnderChestCommand("invseeender", CommandPermissionsLevel.OPS, true));
         commands.add(new BurnCommand("burn", CommandPermissionsLevel.OPS, true));
         commands.add(new LocateCommand("loc", CommandPermissionsLevel.OPS, true));
         commands.add(new LocateCommand("locateplayer", CommandPermissionsLevel.OPS, true));
@@ -240,7 +240,7 @@ public class CheesecakeServerCommands
         commands.add(new DechantCommand("dechantitem", CommandPermissionsLevel.OPS, true));
         commands.add(new EnchantCommand("enchantitem", CommandPermissionsLevel.OPS, true));
         commands.add(new DuplicateCommand("duplicate", CommandPermissionsLevel.OPS, true));
-        // event.registerServerCommand(new EnderChestCommand());
+        commands.add(new EnderChestCommand("enderchest", CommandPermissionsLevel.OPS, true));
         commands.add(new RenameCommand("renameitem", CommandPermissionsLevel.OPS, true));
         commands.add(new RepairCommand("repairitem", CommandPermissionsLevel.OPS, true));
 

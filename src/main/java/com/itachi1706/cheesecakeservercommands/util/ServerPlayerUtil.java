@@ -3,10 +3,14 @@ package com.itachi1706.cheesecakeservercommands.util;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
@@ -133,6 +137,17 @@ public class ServerPlayerUtil {
         Vec3 pos2 = playerPos.add(lookAt.scale(maxDistance));
 
         return player.getLevel().clip(new ClipContext(playerPos, pos2, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, null));
+    }
+
+    /**
+     * View Player Ender Chest
+     * @param player Player viewing ender chest
+     * @param victim Player whose ender chest is being viewed
+     * @param name Name of container
+     */
+    public static void openEnderChest(ServerPlayer player, ServerPlayer victim, String name) {
+        PlayerEnderChestContainer container = victim.getEnderChestInventory();
+        player.openMenu(new SimpleMenuProvider((i, inventory, player1) -> ChestMenu.threeRows(i, inventory, container), new TextComponent(name)));
     }
 
 }
