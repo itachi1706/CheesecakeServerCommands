@@ -35,8 +35,12 @@ public class ServerSettingsCommand extends BaseCommand {
                 ;
     }
 
-    private boolean isNotDedicatedServer() {
-        return !ServerUtil.getServerInstance().isDedicatedServer();
+    private boolean isNotDedicatedServer(CommandSourceStack sender) {
+        if (!ServerUtil.getServerInstance().isDedicatedServer()) {
+            sendFailureMessage(sender, DEDICATED_ONLY);
+            return false;
+        }
+        return true;
     }
 
     private void sendLimitationMessage(CommandSourceStack sender, String parameter) {
@@ -48,20 +52,14 @@ public class ServerSettingsCommand extends BaseCommand {
 
     // allowflight
     private int getAllowFlight(CommandSourceStack sender) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
 
         sendSuccessMessage(sender, String.format("Allow flight: %b", ServerUtil.getDedicatedServerInstance().isFlightAllowed()));
         return Command.SINGLE_SUCCESS;
     }
 
     private int setAllowFlight(CommandSourceStack sender, boolean value) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
 
         ServerUtil.getDedicatedServerInstance().setFlightAllowed(value);
         sendSuccessMessage(sender, String.format("Allow flight set to %b", value));
@@ -72,10 +70,7 @@ public class ServerSettingsCommand extends BaseCommand {
 
     // allowpvp
     private int getAllowPVP(CommandSourceStack sender) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
 
         sendSuccessMessage(sender, String.format("Allow PvP: %b", ServerUtil.getDedicatedServerInstance().isPvpAllowed()));
 
@@ -83,10 +78,7 @@ public class ServerSettingsCommand extends BaseCommand {
     }
 
     private int setAllowPVP(CommandSourceStack sender, boolean value) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
         
         ServerUtil.getDedicatedServerInstance().setPvpAllowed(value);
         sendSuccessMessage(sender, String.format("PvP set to %b", value));
@@ -97,10 +89,7 @@ public class ServerSettingsCommand extends BaseCommand {
 
     // gamemode
     private int getGamemode(CommandSourceStack sender) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
 
         sendSuccessMessage(sender, String.format("Default Gamemode: %s", ServerUtil.getDedicatedServerInstance().getDefaultGameType().getName()));
 
@@ -108,10 +97,7 @@ public class ServerSettingsCommand extends BaseCommand {
     }
 
     private int setGamemode(CommandSourceStack sender, String value) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
 
         GameType gamemode = GameType.byId(getGamemode(value));
         ServerUtil.getDedicatedServerInstance().setDefaultGameType(gamemode);
@@ -123,10 +109,7 @@ public class ServerSettingsCommand extends BaseCommand {
 
     // difficulty
     private int getDifficulty(CommandSourceStack sender) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
 
         sendSuccessMessage(sender, String.format("Difficulty: %s", ServerUtil.getDedicatedServerInstance().getWorldData().getDifficulty().getDisplayName().getString()));
 
@@ -134,10 +117,7 @@ public class ServerSettingsCommand extends BaseCommand {
     }
 
     private int setDifficulty(CommandSourceStack sender, String value) {
-        if (isNotDedicatedServer()) {
-            sendFailureMessage(sender, DEDICATED_ONLY);
-            return 0;
-        }
+        if (isNotDedicatedServer(sender)) return 0;
 
         Difficulty difficulty = Difficulty.byId(getDifficulty(value));
         ServerUtil.getDedicatedServerInstance().setDifficulty(difficulty, true);
