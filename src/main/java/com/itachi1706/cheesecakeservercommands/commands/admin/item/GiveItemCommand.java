@@ -47,15 +47,9 @@ public class GiveItemCommand extends BaseCommand {
     }
 
     private int giveSelf(CommandSourceStack sender, Item item, int qty, int damage) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot give items to CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot give items to CONSOLE", "Cannot give items to " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot give items to " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         ItemStack stack = getItemStack(item, qty, damage);

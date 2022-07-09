@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.damagesource.ZeusDamage;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
+import com.itachi1706.cheesecakeservercommands.util.LogHelper;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -30,12 +30,11 @@ public class ZeusCommand extends BaseCommand {
     }
 
     private int strikeYourself(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "CONSOLE cannot feel the wrath of Zeus");
-            return 0;
+        ServerPlayer player = ensureIsPlayer(sender, "CONSOLE cannot feel the wrath of Zeus", null);
+        if (player == null) {
+            return 0; // Already sent message
         }
 
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
         kaboom(player);
         TextUtil.sendAdminChatMessage(sender, "Made own self suffer the wrath of Zeus");
 
@@ -57,6 +56,10 @@ public class ZeusCommand extends BaseCommand {
 
     private void kaboom(ServerPlayer player) {
         LightningBolt kaboom = EntityType.LIGHTNING_BOLT.create(player.getLevel());
+        if (kaboom == null) {
+            LogHelper.error("An error occurred spawning Zeus's lightning bolt on " + player.getName().getString());
+            return; // Don't do anything
+        }
         kaboom.moveTo(Vec3.atBottomCenterOf(player.blockPosition()));
         kaboom.setVisualOnly(true);
         player.getLevel().addFreshEntity(kaboom);

@@ -10,6 +10,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class BaseCommand {
@@ -71,7 +72,7 @@ public abstract class BaseCommand {
         TextUtil.sendGlobalChatMessage(players, translationKey, args);
     }
 
-    protected ServerPlayer ensureIsPlayer(CommandSourceStack sender, String consoleError, String notPlayerError) {
+    protected ServerPlayer ensureIsPlayer(CommandSourceStack sender, String consoleError, @Nullable String notPlayerError) {
         if (!ServerPlayerUtil.isPlayer(sender)) {
             sendFailureMessage(sender, consoleError);
             return null;
@@ -79,7 +80,7 @@ public abstract class BaseCommand {
 
         ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
         if (player == null) {
-            sendFailureMessage(sender, notPlayerError);
+            sendFailureMessage(sender, (notPlayerError != null) ? notPlayerError : consoleError);
             return null;
         }
 

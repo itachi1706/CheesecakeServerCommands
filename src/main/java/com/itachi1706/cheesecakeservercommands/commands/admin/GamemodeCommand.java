@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -34,15 +33,9 @@ public class GamemodeCommand extends BaseCommand {
     }
 
     private int setOwnGamemode(CommandSourceStack sender, String gamemode) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot set gamemode on CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot set gamemode on CONSOLE", "Cannot set gamemode on " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot set gamemode on " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         GameType gameType = getGameMode(gamemode);

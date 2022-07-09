@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -25,15 +24,9 @@ public class HealCommand extends BaseCommand {
     }
 
     private int healMe(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot heal CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot heal CONSOLE", "Cannot heal " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot heal " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         float toHeal = player.getMaxHealth() - player.getHealth();

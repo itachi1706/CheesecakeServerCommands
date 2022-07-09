@@ -21,15 +21,9 @@ public class MoreItemsCommand extends BaseCommand {
     }
 
     private int moreItems(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot duplicate max stack items for CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot duplicate max stack items for CONSOLE", "Cannot duplicate max stacks items for " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot duplicate max stack items for " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         ItemStack stack = player.getMainHandItem();

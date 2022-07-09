@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin.server;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
@@ -35,15 +34,9 @@ public class GetCommandBookCommand extends BaseCommand {
     }
 
     private int giveBook(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot give command book to CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot give command book to CONSOLE", "An internal server error occurred");
         if (player == null) {
-            sendFailureMessage(sender, "An internal server error occurred");
-            return 0;
+            return 0; // Already sent message
         }
 
         return giveBook(sender, player, true);

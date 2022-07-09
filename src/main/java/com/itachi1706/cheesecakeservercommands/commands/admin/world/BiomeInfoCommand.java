@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin.world;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.ServerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
@@ -33,15 +32,9 @@ public class BiomeInfoCommand extends BaseCommand {
     }
 
     private int getCurrentBiomeSelf(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot find current biome for CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot find current biome for CONSOLE", "Cannot find current biome for " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot find current biome for " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         Vec3 vec = getPlayerLocation(player);

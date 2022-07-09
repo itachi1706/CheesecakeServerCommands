@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -32,15 +31,9 @@ public class DechantCommand extends BaseCommand {
     }
 
     private int dechant(CommandSourceStack sender, @Nullable Enchantment enchantment) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot dechant for CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot dechant for CONSOLE", "Cannot dechant for " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot dechant for " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         ItemStack stack = player.getMainHandItem();

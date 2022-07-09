@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.itachi1706.cheesecakeservercommands.util.WorldUtil;
 import com.mojang.brigadier.Command;
@@ -29,15 +28,9 @@ public class FlyCommand extends BaseCommand {
     }
 
     private int toggleMyFlight(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot set flight status of CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot set flight status of CONSOLE", "Cannot set " + sender.getTextName() + "'s flight status");
         if (player == null) {
-            sendFailureMessage(sender, "Cannot set " + sender.getTextName() + "'s flight status");
-            return 0;
+            return 0; // Already sent message
         }
 
         player.getAbilities().mayfly = !player.getAbilities().mayfly;

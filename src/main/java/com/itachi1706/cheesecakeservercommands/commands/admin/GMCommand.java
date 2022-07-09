@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -31,15 +30,9 @@ public class GMCommand extends BaseCommand {
     }
 
     private int setOwnGamemode(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot set CONSOLE as " + gameTypeName);
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot set CONSOLE as " + gameTypeName, "Cannot set " + sender.getTextName() + " as " + gameTypeName);
         if (player == null) {
-            sendFailureMessage(sender, "Cannot set " + sender.getTextName() + " as " + gameTypeName);
-            return 0;
+            return 0; // Already sent message
         }
 
         player.setGameMode(gameType);

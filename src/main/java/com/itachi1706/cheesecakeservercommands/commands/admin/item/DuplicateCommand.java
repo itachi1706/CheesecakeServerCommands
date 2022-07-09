@@ -30,15 +30,9 @@ public class DuplicateCommand extends BaseCommand {
     }
 
     private int duplicateItem(CommandSourceStack sender, int amount, boolean spillover) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot duplicate for CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot duplicate for CONSOLE", "Cannot duplicate for " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot duplicate for " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         ItemStack stack = player.getMainHandItem();

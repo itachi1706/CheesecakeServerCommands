@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.objects.TeleportLocation;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
@@ -26,15 +25,9 @@ public class TpToCommand extends BaseCommand {
     }
 
     private int teleportToPlayer(CommandSourceStack sender, ServerPlayer player) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "CONSOLE cannot teleport");
-            return 0;
-        }
-
-        ServerPlayer source = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer source = ensureIsPlayer(sender, "CONSOLE cannot teleport", sender.getTextName() + " cannot teleport");
         if (source == null) {
-            sendFailureMessage(sender,  sender.getTextName() + " cannot teleport");
-            return 0;
+            return 0; // Already sent message
         }
 
         TeleportLocation tp = TeleportHelper.getTeleportLocation(player);

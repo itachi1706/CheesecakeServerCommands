@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.objects.TeleportLocation;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TeleportHelper;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
@@ -30,15 +29,9 @@ public class TpHereCommand extends BaseCommand {
     }
 
     private int teleportToMe(CommandSourceStack sender, Collection<ServerPlayer> players) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot teleport players to CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer source = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer source = ensureIsPlayer(sender, "Cannot teleport player to CONSOLE", "Cannot teleport player to " + sender.getTextName());
         if (source == null) {
-            sendFailureMessage(sender,  "Cannot teleport player to " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         TeleportLocation tp = TeleportHelper.getTeleportLocation(source);

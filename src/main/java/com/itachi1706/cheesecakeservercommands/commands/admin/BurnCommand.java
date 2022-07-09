@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -25,15 +24,9 @@ public class BurnCommand extends BaseCommand {
     }
 
     private int burnMe(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot burn CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot burn CONSOLE", "Cannot burn " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot burn " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         player.setSecondsOnFire(15);

@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -30,15 +29,9 @@ public class GodCommand extends BaseCommand {
     }
 
     private int toggleGodModeToMe(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot set invulnerability status of CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot set invulnerability status of CONSOLE", "Cannot set " + sender.getTextName() + "'s invulnerability status");
         if (player == null) {
-            sendFailureMessage(sender, "Cannot set " + sender.getTextName() + "'s invulnerability status");
-            return 0;
+            return 0; // Already sent message
         }
 
         player.getAbilities().invulnerable = !player.getAbilities().invulnerable;

@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -35,15 +34,9 @@ public class EnchantCommand extends BaseCommand {
     }
 
     private int enchantItem(CommandSourceStack sender, Enchantment enchantment, int level) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot enchant item for CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot enchant item for CONSOLE", "Cannot enchant item for " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot enchant item for " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         ItemStack item = player.getMainHandItem();

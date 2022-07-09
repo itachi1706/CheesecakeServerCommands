@@ -102,13 +102,11 @@ public class CCLoggerCommand extends LoggingBase {
     }
 
     private int testCommand(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "You must be a player to use this command!");
-            return 0;
+        ServerPlayer player = ensureIsPlayer(sender, "You must be a player to use this command", null);
+        if (player == null) {
+            return 0; // Already sent message
         }
 
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
-        assert player != null; // Validated above already
         player.getAbilities().mayfly = !player.getAbilities().mayfly;
         if (!player.isOnGround()) {
             player.getAbilities().flying = player.getAbilities().mayfly;

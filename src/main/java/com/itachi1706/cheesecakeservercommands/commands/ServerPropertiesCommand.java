@@ -12,6 +12,9 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ServerPropertiesCommand extends BaseCommand {
 
     public ServerPropertiesCommand(String name, int permissionLevel, boolean enabled) {
@@ -24,7 +27,6 @@ public class ServerPropertiesCommand extends BaseCommand {
     }
 
     private int getServerProperties(CommandSourceStack sender) {
-
         boolean serverSide = FMLEnvironment.dist.isDedicatedServer();
         DedicatedServer dedicatedServer = null;
         if (serverSide) {
@@ -33,29 +35,32 @@ public class ServerPropertiesCommand extends BaseCommand {
             ;
         }
 
-
         MinecraftServer tmp = ServerUtil.getServerInstance();
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
-        sendSuccessMessage(sender, ChatFormatting.BLUE + TextUtil.centerText("Server Status"));
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server: " + ChatFormatting.AQUA + tmp.getServerModName());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Type: " + ChatFormatting.AQUA + ( serverSide ? "Dedicated Server (MP)" : "Single Player World (SP)"));
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Version: " + ChatFormatting.AQUA + tmp.getServerVersion());
-        if (serverSide) sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Online Mode: " + ChatFormatting.AQUA + dedicatedServer.getProperties().onlineMode);
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Modded State: " + ChatFormatting.AQUA + tmp.getModdedStatus().confidence().name());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server MOTD: " + ChatFormatting.AQUA + tmp.getMotd());
-        if (serverSide) sendSuccessMessage(sender, ChatFormatting.GOLD + "Server IP: " + ChatFormatting.AQUA + dedicatedServer.getServerIp() + ":" + dedicatedServer.getServerPort());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Max Allowed Players: " + ChatFormatting.AQUA + tmp.getMaxPlayers());
-        if (serverSide) sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Spawn Protection Size: " + ChatFormatting.AQUA + tmp.getSpawnProtectionRadius());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server View Distance: " + ChatFormatting.AQUA + tmp.getPlayerList().getViewDistance());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server World: " + ChatFormatting.AQUA + tmp.overworld().dimension().location());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Allow Nether: " + ChatFormatting.AQUA + tmp.isNetherEnabled());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Allow Flight: " + ChatFormatting.AQUA + tmp.isFlightAllowed());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Default Gamemode: " + ChatFormatting.AQUA + StringUtils.capitalize(tmp.getDefaultGameType().getName()));
-        if (serverSide) sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Generate Structure: " + ChatFormatting.AQUA + dedicatedServer.getProperties().getWorldGenSettings(dedicatedServer.registryAccess()).generateFeatures());
-        if (serverSide) sendSuccessMessage(sender, ChatFormatting.GOLD + "Server Whitelist: " + ChatFormatting.AQUA + tmp.getPlayerList().isUsingWhitelist());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Hardcore Mode: " + ChatFormatting.AQUA + tmp.isHardcore());
-        sendSuccessMessage(sender, ChatFormatting.GOLD + TextUtil.generateChatBreaks());
+        List<String> messagesToSend = new ArrayList<>();
+
+        messagesToSend.add(ChatFormatting.GOLD + TextUtil.generateChatBreaks());
+        messagesToSend.add(ChatFormatting.BLUE + TextUtil.centerText("Server Status"));
+        messagesToSend.add(ChatFormatting.GOLD + TextUtil.generateChatBreaks());
+        messagesToSend.add(ChatFormatting.GOLD + "Server: " + ChatFormatting.AQUA + tmp.getServerModName());
+        messagesToSend.add(ChatFormatting.GOLD + "Server Type: " + ChatFormatting.AQUA + ( serverSide ? "Dedicated Server (MP)" : "Single Player World (SP)"));
+        messagesToSend.add(ChatFormatting.GOLD + "Server Version: " + ChatFormatting.AQUA + tmp.getServerVersion());
+        if (serverSide) messagesToSend.add(ChatFormatting.GOLD + "Server Online Mode: " + ChatFormatting.AQUA + dedicatedServer.getProperties().onlineMode);
+        messagesToSend.add(ChatFormatting.GOLD + "Server Modded State: " + ChatFormatting.AQUA + tmp.getModdedStatus().confidence().name());
+        messagesToSend.add(ChatFormatting.GOLD + "Server MOTD: " + ChatFormatting.AQUA + tmp.getMotd());
+        if (serverSide) messagesToSend.add(ChatFormatting.GOLD + "Server IP: " + ChatFormatting.AQUA + dedicatedServer.getServerIp() + ":" + dedicatedServer.getServerPort());
+        messagesToSend.add(ChatFormatting.GOLD + "Server Max Allowed Players: " + ChatFormatting.AQUA + tmp.getMaxPlayers());
+        if (serverSide) messagesToSend.add(ChatFormatting.GOLD + "Server Spawn Protection Size: " + ChatFormatting.AQUA + tmp.getSpawnProtectionRadius());
+        messagesToSend.add(ChatFormatting.GOLD + "Server View Distance: " + ChatFormatting.AQUA + tmp.getPlayerList().getViewDistance());
+        messagesToSend.add(ChatFormatting.GOLD + "Server World: " + ChatFormatting.AQUA + tmp.overworld().dimension().location());
+        messagesToSend.add(ChatFormatting.GOLD + "Server Allow Nether: " + ChatFormatting.AQUA + tmp.isNetherEnabled());
+        messagesToSend.add(ChatFormatting.GOLD + "Server Allow Flight: " + ChatFormatting.AQUA + tmp.isFlightAllowed());
+        messagesToSend.add(ChatFormatting.GOLD + "Server Default Gamemode: " + ChatFormatting.AQUA + StringUtils.capitalize(tmp.getDefaultGameType().getName()));
+        if (serverSide) messagesToSend.add(ChatFormatting.GOLD + "Server Generate Structure: " + ChatFormatting.AQUA + dedicatedServer.getProperties().getWorldGenSettings(dedicatedServer.registryAccess()).generateFeatures());
+        if (serverSide) messagesToSend.add(ChatFormatting.GOLD + "Server Whitelist: " + ChatFormatting.AQUA + tmp.getPlayerList().isUsingWhitelist());
+        messagesToSend.add(ChatFormatting.GOLD + "Hardcore Mode: " + ChatFormatting.AQUA + tmp.isHardcore());
+        messagesToSend.add(ChatFormatting.GOLD + TextUtil.generateChatBreaks());
+
+        sendSuccessMessage(sender, messagesToSend);
 
         return Command.SINGLE_SUCCESS;
     }

@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -43,15 +42,9 @@ public class ClearInventoryCommand extends BaseCommand {
     }
 
     private int clearOwnInventory(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot clear inventory of CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot clear inventory of CONSOLE", "Cannot clear inventory of " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot clear inventory of " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         int clearedCount = clearInventory(player, item -> true, -1);

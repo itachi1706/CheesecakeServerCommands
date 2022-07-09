@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
 import com.itachi1706.cheesecakeservercommands.libs.selections.WorldPoint;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -24,15 +23,9 @@ public class LocateCommand extends BaseCommand {
     }
 
     private int findYourself(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot locate CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot locate CONSOLE", "Cannot locate " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot locate " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         WorldPoint point = new WorldPoint(player);

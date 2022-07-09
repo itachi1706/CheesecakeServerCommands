@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -32,15 +31,9 @@ public class FlingCommand extends BaseCommand {
     }
 
     private int flingMyself(CommandSourceStack sender) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot fling CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot fling CONSOLE", "Cannot fling " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot fling " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         flingPlayer(player);

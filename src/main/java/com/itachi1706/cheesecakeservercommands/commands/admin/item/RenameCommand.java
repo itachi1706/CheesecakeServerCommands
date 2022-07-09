@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands.admin.item;
 
 import com.itachi1706.cheesecakeservercommands.commands.BaseCommand;
-import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -26,15 +25,9 @@ public class RenameCommand extends BaseCommand {
     }
 
     private int renameItem(CommandSourceStack sender, String newName) {
-        if (!ServerPlayerUtil.isPlayer(sender)) {
-            sendFailureMessage(sender, "Cannot rename items for CONSOLE");
-            return 0;
-        }
-
-        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        ServerPlayer player = ensureIsPlayer(sender, "Cannot rename items for CONSOLE", "Cannot rename items for " + sender.getTextName());
         if (player == null) {
-            sendFailureMessage(sender, "Cannot rename items for " + sender.getTextName());
-            return 0;
+            return 0; // Already sent message
         }
 
         ItemStack item = player.getMainHandItem();
