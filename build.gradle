@@ -255,7 +255,7 @@ sonarqube {
 }
 
 artifactory {
-    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    contextUrl = System.getenv("ARTIFACTORY_CONTEXTURL")   //The base Artifactory URL if not overridden by the publisher/resolver
     publish {
         repository {
             repoKey = 'ccn-mc-forge-mods'
