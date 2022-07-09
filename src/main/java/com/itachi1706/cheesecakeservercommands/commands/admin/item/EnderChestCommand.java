@@ -12,6 +12,8 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 
 public class EnderChestCommand extends BaseCommand {
+    private static final String MSG_ENDER_CHEST_OPENED = "Opened Ender Chest";
+
     public EnderChestCommand(String name, int permissionLevel, boolean enabled) {
         super(name, permissionLevel, enabled);
     }
@@ -31,8 +33,8 @@ public class EnderChestCommand extends BaseCommand {
 
         ServerPlayerUtil.openEnderChest(player, player, "Ender Chest");
 
-        sendSuccessMessage(sender, ChatFormatting.GOLD + "Opened Ender Chest");
-        TextUtil.sendAdminChatMessage(sender, "Opened Ender Chest");
+        sendSuccessMessage(sender, ChatFormatting.GOLD + MSG_ENDER_CHEST_OPENED);
+        TextUtil.sendAdminChatMessage(sender, MSG_ENDER_CHEST_OPENED);
 
         return Command.SINGLE_SUCCESS;
     }
@@ -42,7 +44,7 @@ public class EnderChestCommand extends BaseCommand {
 
         sendSuccessMessage(sender, ChatFormatting.GOLD + "Opened Ender Chest for " + player.getDisplayName().getString());
         TextUtil.sendAdminChatMessage(sender, "Opened Ender Chest for " + player.getDisplayName().getString());
-        sendMessage(player, ChatFormatting.GOLD + "Opened Ender Chest");
+        sendMessage(player, ChatFormatting.GOLD + MSG_ENDER_CHEST_OPENED);
 
         return Command.SINGLE_SUCCESS;
     }

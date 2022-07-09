@@ -208,7 +208,7 @@ public class CheesecakeServerCommands
         commands.add(new FlingCommand("fling", CommandPermissionsLevel.OPS, true));
         commands.add(new KickCommand("pkick", CommandPermissionsLevel.OPS, true));
 
-        // event.registerServerCommand(new InvSeeEnderChestCommand());
+        commands.add(new InvSeeEnderChestCommand("invseeender", CommandPermissionsLevel.OPS, true));
         commands.add(new ClearInventoryCommand("clearinventory", CommandPermissionsLevel.OPS, true));
         commands.add(new ClearInventoryCommand("ci", CommandPermissionsLevel.OPS, true));
         commands.add(new GiveItemCommand("giveitem", CommandPermissionsLevel.OPS, true));
@@ -225,7 +225,7 @@ public class CheesecakeServerCommands
         commands.add(new FeedCommand("feed", CommandPermissionsLevel.OPS, true));
         commands.add(new SmiteCommand("smite", CommandPermissionsLevel.OPS, true));
         commands.add(new KillCommand("pkill", CommandPermissionsLevel.OPS, true));
-        commands.add(new InvSeeEnderChestCommand("invseeender", CommandPermissionsLevel.OPS, true));
+        commands.add(new InvSeeCommand("invsee", CommandPermissionsLevel.OPS, true));
         commands.add(new BurnCommand("burn", CommandPermissionsLevel.OPS, true));
         commands.add(new LocateCommand("loc", CommandPermissionsLevel.OPS, true));
         commands.add(new LocateCommand("locateplayer", CommandPermissionsLevel.OPS, true));
