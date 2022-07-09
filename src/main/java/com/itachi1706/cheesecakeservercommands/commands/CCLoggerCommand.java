@@ -107,13 +107,7 @@ public class CCLoggerCommand extends LoggingBase {
             return 0; // Already sent message
         }
 
-        player.getAbilities().mayfly = !player.getAbilities().mayfly;
-        if (!player.isOnGround()) {
-            player.getAbilities().flying = player.getAbilities().mayfly;
-        }
-        player.onUpdateAbilities();
-
-
+        sendSuccessMessage(sender, "This is an internal test command");
         return Command.SINGLE_SUCCESS;
     }
 
