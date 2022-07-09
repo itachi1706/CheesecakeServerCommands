@@ -3,9 +3,18 @@ buildscript {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
+        maven {
+            url 'https://itachi1706.jfrog.io/artifactory/ccn-mc-forge-mods-virt'
+            credentials {
+                username = System.getenv("ARTIFACTORY_USER")
+                password = System.getenv("ARTIFACTORY_PASSWORD")
+            }
+        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
     }
 }
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -15,6 +24,7 @@ plugins {
     id "org.sonarqube" version "3.4.0.2513"
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: "com.jfrog.artifactory"
 
 
 version = '1.18.2-4.0'
@@ -221,6 +231,14 @@ publishing {
         maven {
             url "file://${project.projectDir}/mcmodsrepo"
         }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/itachi1706/CheesecakeServerCommands"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
 
@@ -233,5 +251,27 @@ sonarqube {
         property "sonar.projectKey", "itachi1706_CheesecakeServerCommands"
         property "sonar.organization", "itachi1706"
         property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+
+artifactory {
+    contextUrl = System.getenv("ARTIFACTORY_CONTEXTURL")   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'ccn-mc-forge-mods'
+            username = System.getenv("ARTIFACTORY_USER")
+            password = System.getenv("ARTIFACTORY_PASSWORD")
+            maven = true
+
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'ccn-mc-forge-mods-virt'
+            username = System.getenv("ARTIFACTORY_USER")
+            password = System.getenv("ARTIFACTORY_PASSWORD")
+            maven = true
+
+        }
     }
 }
