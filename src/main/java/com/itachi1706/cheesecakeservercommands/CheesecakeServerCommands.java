@@ -236,7 +236,7 @@ public class CheesecakeServerCommands
         commands.add(new TpHereCommand("tphere", CommandPermissionsLevel.OPS, true));
 
         // Essentials Items
-        // event.registerServerCommand(new CraftCommand());
+        commands.add(new CraftCommand("craft", CommandPermissionsLevel.OPS, true));
         commands.add(new DechantCommand("dechantitem", CommandPermissionsLevel.OPS, true));
         commands.add(new EnchantCommand("enchantitem", CommandPermissionsLevel.OPS, true));
         commands.add(new DuplicateCommand("duplicate", CommandPermissionsLevel.OPS, true));

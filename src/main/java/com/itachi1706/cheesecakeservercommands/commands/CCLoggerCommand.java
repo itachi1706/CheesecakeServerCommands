@@ -107,7 +107,7 @@ public class CCLoggerCommand extends LoggingBase {
             return 0; // Already sent message
         }
 
-        sendSuccessMessage(sender, "This is an internal test command");
+        sendSuccessMessage(sender, "This is a test command and does not do anything");
         return Command.SINGLE_SUCCESS;
     }
 
