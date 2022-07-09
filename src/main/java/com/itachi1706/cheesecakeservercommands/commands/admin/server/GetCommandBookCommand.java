@@ -49,10 +49,7 @@ public class GetCommandBookCommand extends BaseCommand {
         if (player.getInventory().contains(new ItemStack(Items.WRITTEN_BOOK))) {
             for (int i = 0; i < player.getInventory().items.size(); i++) {
                 ItemStack stack = player.getInventory().items.get(i);
-                if (!stack.equals(ItemStack.EMPTY) && stack.getItem() == Items.WRITTEN_BOOK
-                        && stack.hasTag() && stack.getTag() != null && stack.getTag().contains(TAG_TITLE)
-                        && stack.getTag().contains(TAG_AUTHOR) && stack.getTag().getString(TAG_TITLE).equals("CommandBook")
-                        && stack.getTag().getString(TAG_AUTHOR).equals("Cheesecake Network")) {
+                if (checkIfHasItemAndIsBookWithTag(stack) && checkTitle(stack) && checkAuthor(stack)) {
                     player.getInventory().setItem(i, ItemStack.EMPTY);
                 }
             }
@@ -89,5 +86,20 @@ public class GetCommandBookCommand extends BaseCommand {
         }
 
         return Command.SINGLE_SUCCESS;
+    }
+
+    // Checks
+    private boolean checkIfHasItemAndIsBookWithTag(ItemStack stack) {
+        return !stack.equals(ItemStack.EMPTY) && stack.getItem() == Items.WRITTEN_BOOK && stack.hasTag() && stack.getTag() != null;
+    }
+
+    private boolean checkTitle(ItemStack stack) {
+        assert stack.getTag() != null; // Checked in previous method
+        return stack.getTag().contains(TAG_TITLE) && stack.getTag().getString(TAG_TITLE).equals("CommandBook");
+    }
+
+    private boolean checkAuthor(ItemStack stack) {
+        assert stack.getTag() != null; // Checked in previous method
+        return stack.getTag().contains(TAG_AUTHOR) && stack.getTag().getString(TAG_AUTHOR).equals("Cheesecake Network");
     }
 }
