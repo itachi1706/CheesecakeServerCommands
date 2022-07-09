@@ -264,8 +264,13 @@ artifactory {
             username = System.getenv("ARTIFACTORY_USER")
             password = System.getenv("ARTIFACTORY_PASSWORD")
             maven = true
-
         }
+        defaults {
+            publications('mavenJava')
+        }
+        publishBuildInfo = true
+        publishArtifacts = true
+        publishPom = true
     }
     resolve {
         repository {
