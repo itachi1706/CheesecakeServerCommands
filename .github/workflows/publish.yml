@@ -9,7 +9,7 @@ name: Publish Mods to Package Repos
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   publish:
