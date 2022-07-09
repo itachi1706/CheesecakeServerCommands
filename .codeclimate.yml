@@ -27,7 +27,7 @@ plugins:
     config:
       languages:
         java:
-          mass_threshold: 55
+          mass_threshold: 60
 ratings:
   paths:
   - "**.java"
