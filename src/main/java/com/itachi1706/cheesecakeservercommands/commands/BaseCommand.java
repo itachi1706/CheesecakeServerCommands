@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeservercommands.commands;
 
+import com.itachi1706.cheesecakeservercommands.util.ServerPlayerUtil;
 import com.itachi1706.cheesecakeservercommands.util.TextUtil;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
@@ -68,5 +69,20 @@ public abstract class BaseCommand {
 
     public void sendGlobalMessage(PlayerList players, String translationKey, Object... args) {
         TextUtil.sendGlobalChatMessage(players, translationKey, args);
+    }
+
+    protected ServerPlayer ensureIsPlayer(CommandSourceStack sender, String consoleError, String notPlayerError) {
+        if (!ServerPlayerUtil.isPlayer(sender)) {
+            sendFailureMessage(sender, consoleError);
+            return null;
+        }
+
+        ServerPlayer player = ServerPlayerUtil.castToPlayer(sender);
+        if (player == null) {
+            sendFailureMessage(sender, notPlayerError);
+            return null;
+        }
+
+        return player;
     }
 }

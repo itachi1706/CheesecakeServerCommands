@@ -4,9 +4,14 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 
 import java.util.List;
 
@@ -92,6 +97,42 @@ public class ServerPlayerUtil {
         if (entityitem == null) return;
         entityitem.setNoPickUpDelay();
         entityitem.setOwner(player.getUUID());
+    }
+
+    /**
+     * Get player's looking-at spot.
+     *
+     * @param player Player Entity
+     * @param obeyReach Whether to obey player reach position or just assume distance of 100
+     * @return The position as a RayTraceResult Null if not existent.
+     */
+    public static HitResult getPlayerLookingSpot(Player player, boolean obeyReach)
+    {
+        AttributeInstance reachDistance = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        if (reachDistance == null) return null;
+
+        double distance = 100;
+        if (obeyReach) {
+            distance = reachDistance.getValue();
+        }
+        return getPlayerLookingSpot(player, distance);
+    }
+
+    /**
+     * Get player's looking spot.
+     *
+     * @param player Player Entity
+     * @param maxDistance How far entity can reach
+     *            Keep max distance to 5.
+     * @return The position as a RayTraceResult Null if not existent.
+     */
+    public static HitResult getPlayerLookingSpot(Player player, double maxDistance)
+    {
+        Vec3 lookAt = player.getLookAngle();
+        Vec3 playerPos = player.getEyePosition(0);
+        Vec3 pos2 = playerPos.add(lookAt.scale(maxDistance));
+
+        return player.getLevel().clip(new ClipContext(playerPos, pos2, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, null));
     }
 
 }
